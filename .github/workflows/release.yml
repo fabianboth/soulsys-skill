@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-soulsys-skill
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check version and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(jq -r '.version // empty' package.json)
+          if [ -z "$VERSION" ]; then
+            echo "No version found in package.json"
+            exit 0
+          fi
+          TAG="v${VERSION}"
+          if git tag -l "$TAG" | grep -q .; then
+            echo "Tag $TAG already exists, skipping"
+            exit 0
+          fi
+          echo "Creating release $TAG"
+          gh release create "$TAG" --generate-notes --title "$TAG"
