@@ -12,7 +12,7 @@
     "build": "pnpm generate && tsc --noEmit && bun scripts/generate-skill-md.ts",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
-    "format": "biome format --write .",
+    "format": "biome check --fix .",
     "test": "bun test",
     "test:watch": "bun test --watch"
   },
