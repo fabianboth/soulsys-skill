@@ -6,10 +6,11 @@
   "bin": {
     "soulsys": "./src/cli.ts"
   },
-  "files": ["src", "docs"],
+  "files": ["src", "skills"],
   "scripts": {
     "generate": "cp ../../apps/soul-api/openapi.json openapi.json && openapi-typescript openapi.json -o src/client/generated/api.d.ts && bun scripts/generate-descriptions.ts && biome format --write src/client/generated/",
-    "build": "pnpm generate && tsc --noEmit && bun scripts/generate-skill-md.ts",
+    "bundle": "bun scripts/bundle.ts",
+    "build": "pnpm generate && tsc --noEmit && bun scripts/generate-skill-md.ts && pnpm bundle",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
     "format": "biome check --fix .",
@@ -19,7 +20,7 @@
   "dependencies": {
     "commander": "^14.0.3",
     "openapi-fetch": "^0.14.0",
-    "zod": "^4.3.6"
+    "valibot": "^1.2.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",

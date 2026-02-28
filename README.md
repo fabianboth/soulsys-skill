@@ -2,7 +2,7 @@
 
 Persistent soul state for AI agents — introspect and evolve your identity, memories, and relationships across sessions.
 
-Soulsys is a [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code/skills) that gives AI agents real continuity through 4 layers: **Soul** (core essence) → **Identity** (name, vibe) → **Memory** (facts, events, emotions) → **Relations** (entities you interact with).
+Soulsys is a [skill](https://skills.sh) that gives AI agents real continuity through 4 layers: **Soul** (core essence) → **Identity** (name, vibe) → **Memory** (facts, events, emotions) → **Relations** (entities you interact with).
 
 ## Installation
 
@@ -12,10 +12,10 @@ npx skills add fabianboth/soulsys-skill
 
 ## Usage
 
-Once installed, the `soulsys` skill is available in Claude Code. See the full command reference:
+Once installed, the `soulsys` skill is available in your AI agent. The bundled CLI runs standalone. See the full command reference:
 
-- [**SKILL.md**](docs/SKILL.md) — All commands for ongoing soul management
-- [**BOOTSTRAP.md**](docs/BOOTSTRAP.md) — Initial setup and migration from existing files
+- [**SKILL.md**](skills/soulsys/SKILL.md) — All commands for ongoing soul management
+- [**BOOTSTRAP.md**](skills/soulsys/BOOTSTRAP.md) — Initial setup and migration from existing files
 
 ## How it works
 
@@ -23,7 +23,7 @@ Soulsys replaces standalone persistence files (MEMORY.md, SOUL.md, IDENTITY.md, 
 
 ## About this repo
 
-This repository is automatically synced from a private monorepo. Please open issues directly on this repo.
+This repository is automatically synced from a private monorepo.
 
 ## License
 

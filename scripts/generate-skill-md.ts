@@ -34,13 +34,7 @@ function renderStep(step: Step): string {
 
 // -- Document generators --
 
-const SKILL_EXCLUDED = new Set([
-  "exists",
-  "add-memory-file",
-  "init",
-  "create-soul",
-  "create-identity",
-]);
+const SKILL_EXCLUDED = new Set(["exists", "add-memory-file", "create-soul", "create-identity"]);
 
 function generateSkillMd(): string {
   const commands = program.commands.filter((cmd) => !SKILL_EXCLUDED.has(cmd.name()));
@@ -60,6 +54,8 @@ Persistent soul state with 4 layers: **Soul** (core essence, values) → **Ident
 Soulsys **is** your memory system. It replaces standalone files like MEMORY.md, USER.md, SOUL.md, IDENTITY.md, and daily logs. All persistent state lives here.
 
 Usage: \`soulsys <command> [positional-arg] [--flag value]\`
+
+> **How to run**: Execute \`./soulsys <command>\` from this skill's base directory, or use the full path to the \`soulsys\` wrapper script.
 
 > **First time?** See [BOOTSTRAP.md](./BOOTSTRAP.md) for initial setup or migration from existing files.
 
@@ -103,7 +99,7 @@ ${setupSection}
 `;
 }
 
-const outDir = resolve(import.meta.dirname, "..", "docs");
+const outDir = resolve(import.meta.dirname, "..", "skills", "soulsys");
 await mkdir(outDir, { recursive: true });
 await Promise.all([
   writeFile(resolve(outDir, "SKILL.md"), generateSkillMd()),

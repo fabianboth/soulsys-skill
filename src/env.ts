@@ -1,28 +1,31 @@
-import { z } from "zod";
+import * as v from "valibot";
 
-const bootstrapEnvSchema = z.object({
-  SOULSYS_API_URL: z.url(),
-  SOULSYS_API_KEY: z.string().min(1),
+const bootstrapEnvSchema = v.object({
+  SOULSYS_API_URL: v.pipe(v.string(), v.url()),
+  SOULSYS_API_KEY: v.pipe(v.string(), v.minLength(1)),
 });
 
-const envSchema = bootstrapEnvSchema.extend({
-  SOULSYS_SOUL_ID: z.uuid(),
+const envSchema = v.object({
+  ...bootstrapEnvSchema.entries,
+  SOULSYS_SOUL_ID: v.pipe(v.string(), v.uuid()),
 });
 
-export type BootstrapEnv = z.infer<typeof bootstrapEnvSchema>;
-export type Env = z.infer<typeof envSchema>;
+export type BootstrapEnv = v.InferOutput<typeof bootstrapEnvSchema>;
+export type Env = v.InferOutput<typeof envSchema>;
 
-function parseEnv<T>(schema: z.ZodType<T>): T {
-  const parsed = schema.safeParse(process.env);
+function parseEnv<T>(schema: v.GenericSchema<unknown, T>): T {
+  const parsed = v.safeParse(schema, process.env);
 
   if (!parsed.success) {
-    process.stderr.write(
-      `Error: Invalid environment variables:\n${z.prettifyError(parsed.error)}\n`,
+    const flat = v.flatten(parsed.issues);
+    const lines = Object.entries(flat.nested ?? {}).map(
+      ([key, issues]) => `  ${key}: ${issues?.join(", ")}`,
     );
+    process.stderr.write(`Error: Invalid environment variables:\n${lines.join("\n")}\n`);
     process.exit(1);
   }
 
-  return parsed.data;
+  return parsed.output;
 }
 
 export function loadBootstrapEnv(): BootstrapEnv {

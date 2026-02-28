@@ -40,7 +40,6 @@ describe("CLI", () => {
     expect(result.stdout).toContain("add-relation");
     expect(result.stdout).toContain("update-relation");
     expect(result.stdout).toContain("load-context");
-    expect(result.stdout).toContain("init");
   });
 
   it("--version prints version", async () => {
