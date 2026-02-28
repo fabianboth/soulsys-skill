@@ -47,6 +47,16 @@ function formatRelations(
   return lines.join("\n");
 }
 
+export function formatCoreContext(opts: ContextResponse): string {
+  const sections: string[] = [formatSoul(opts.soul)];
+
+  if (opts.identity) {
+    sections.push(formatIdentity(opts.identity));
+  }
+
+  return `${sections.join("\n\n")}\n`;
+}
+
 export function formatContext(opts: ContextResponse): string {
   const sections: string[] = [formatSoul(opts.soul)];
 
@@ -73,11 +83,12 @@ export function register(program: Command): Command {
   return program
     .command("load-context")
     .description("Output the full soul state as compact markdown for context injection")
-    .action(async () => {
+    .option("--core", "Output only soul essence/values and identity (lightweight)")
+    .action(async (opts: { core?: boolean }) => {
       try {
         const { client } = createApiClient(resolveConfig());
         const data = requireData(await client.GET("/api/context"));
-        process.stdout.write(formatContext(data));
+        process.stdout.write(opts.core ? formatCoreContext(data) : formatContext(data));
       } catch (error) {
         handleError(error);
       }

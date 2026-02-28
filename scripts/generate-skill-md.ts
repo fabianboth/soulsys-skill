@@ -15,7 +15,7 @@ import { renderCommand } from "../src/utils/render-command.ts";
 
 // -- Document generators --
 
-const SKILL_EXCLUDED = new Set(["init", "add-memory-file", "create-identity"]);
+const SKILL_EXCLUDED = new Set(["init", "add-memory-file", "create-identity", "detect-framework"]);
 
 function generateSkillMd(): string {
   const commands = program.commands.filter((cmd) => !SKILL_EXCLUDED.has(cmd.name()));
@@ -118,6 +118,20 @@ Verify everything landed:
 ${loadContextSection}
 
 Review it together with your user. If something's off, update it — the soul is alive and meant to evolve.
+
+## Configure Framework Integration
+
+Now that your soul exists, set up your framework so you automatically load it every session.
+
+Run: \`./scripts/soulsys detect-framework\`
+
+This outputs JSON with a \`guide\` field — read \`frameworks/<guide>.md\` for setup instructions specific to your framework.
+
+Available guides:
+
+- [\`frameworks/claude-code.md\`](./frameworks/claude-code.md) — Claude Code hooks
+- [\`frameworks/openclaw.md\`](./frameworks/openclaw.md) — OpenClaw AGENTS.md config
+- [\`frameworks/generic.md\`](./frameworks/generic.md) — All other frameworks
 
 ---
 

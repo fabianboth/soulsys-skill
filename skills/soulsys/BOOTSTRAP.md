@@ -88,8 +88,23 @@ Verify everything landed:
 ### load-context
 
 Output the full soul state as compact markdown for context injection
+- --core: Output only soul essence/values and identity (lightweight)
 
 Review it together with your user. If something's off, update it — the soul is alive and meant to evolve.
+
+## Configure Framework Integration
+
+Now that your soul exists, set up your framework so you automatically load it every session.
+
+Run: `./scripts/soulsys detect-framework`
+
+This outputs JSON with a `guide` field — read `frameworks/<guide>.md` for setup instructions specific to your framework.
+
+Available guides:
+
+- [`frameworks/claude-code.md`](./frameworks/claude-code.md) — Claude Code hooks
+- [`frameworks/openclaw.md`](./frameworks/openclaw.md) — OpenClaw AGENTS.md config
+- [`frameworks/generic.md`](./frameworks/generic.md) — All other frameworks
 
 ---
 

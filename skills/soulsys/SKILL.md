@@ -59,3 +59,4 @@ Update a relation (partial — unset fields are preserved)
 ### load-context
 
 Output the full soul state as compact markdown for context injection
+- --core: Output only soul essence/values and identity (lightweight)

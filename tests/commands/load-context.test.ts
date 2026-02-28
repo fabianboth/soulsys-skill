@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import type { paths } from "../../src/client/generated/api.d.ts";
-import { formatContext } from "../../src/commands/load-context.ts";
+import { formatContext, formatCoreContext } from "../../src/commands/load-context.ts";
 import { describe, expect, it } from "bun:test";
 
 type ContextResponse =
@@ -130,5 +130,50 @@ describe("relation formatting", () => {
       relations: { relations: [] },
     });
     expect(output).not.toContain("## Relations");
+  });
+});
+
+describe("formatCoreContext (--core flag)", () => {
+  it("outputs soul and identity only", () => {
+    const output = formatCoreContext({
+      soul: makeSoul("my essence"),
+      identity: makeIdentity(),
+      memory: {
+        keyMemories: [makeMemory("important-fact")],
+        recentMemories: [makeMemory("just-happened")],
+      },
+      relations: {
+        relations: [
+          {
+            id: randomUUID(),
+            entityType: "human",
+            name: "Alice",
+            summary: "A friend",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        ],
+      },
+    });
+    expect(output).toContain("# Soul");
+    expect(output).toContain("my essence");
+    expect(output).toContain("## Identity");
+    expect(output).toContain("Name: Test");
+    expect(output).not.toContain("Key Memories");
+    expect(output).not.toContain("Recent Memories");
+    expect(output).not.toContain("Relations");
+    expect(output).not.toContain("Alice");
+  });
+
+  it("handles missing identity", () => {
+    const output = formatCoreContext({
+      soul: makeSoul("core essence"),
+      identity: null,
+      memory: null,
+      relations: null,
+    });
+    expect(output).toContain("# Soul");
+    expect(output).toContain("core essence");
+    expect(output).not.toContain("## Identity");
   });
 });
