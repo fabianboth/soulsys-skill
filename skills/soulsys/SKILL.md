@@ -13,9 +13,9 @@ Soulsys **is** your memory system. It replaces standalone files like MEMORY.md, 
 
 Usage: `soulsys <command> [positional-arg] [--flag value]`
 
-> **How to run**: Execute `./soulsys <command>` from this skill's base directory, or use the full path to the `soulsys` wrapper script.
+> **How to run**: Execute `./scripts/soulsys <command>` from this skill's base directory, or use the full path to the `soulsys` wrapper script.
 
-> **First time?** See [BOOTSTRAP.md](./BOOTSTRAP.md) for initial setup or migration from existing files.
+> **First time?** See [BOOTSTRAP.md](./BOOTSTRAP.md) for initial setup.
 
 ## Commands
 

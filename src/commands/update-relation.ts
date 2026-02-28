@@ -1,13 +1,13 @@
 import type { Command } from "commander";
 
-import { createSoulClient } from "../client/client.ts";
-import type { paths } from "../client/generated/api.js";
+import { createApiClient } from "../client/client.ts";
+import type { paths } from "../client/generated/api.d.ts";
 import { RELATION_DESCRIPTIONS } from "../client/generated/descriptions.ts";
-import { resolveApiConfig } from "../config.ts";
+import { resolveConfig } from "../config.ts";
 import { confirm, handleError } from "../output.ts";
 
 type UpdateRelationInput = NonNullable<
-  paths["/api/souls/{soulId}/relations/{relationId}"]["patch"]["requestBody"]
+  paths["/api/relations/{relationId}"]["patch"]["requestBody"]
 >["content"]["application/json"];
 
 export function register(program: Command): Command {
@@ -40,9 +40,9 @@ export function register(program: Command): Command {
         if (options.name !== undefined) updates.name = options.name;
         if (options.summary !== undefined) updates.summary = options.summary;
 
-        const { client, soulId } = createSoulClient(resolveApiConfig());
-        await client.PATCH("/api/souls/{soulId}/relations/{relationId}", {
-          params: { path: { soulId, relationId: id } },
+        const { client } = createApiClient(resolveConfig());
+        await client.PATCH("/api/relations/{relationId}", {
+          params: { path: { relationId: id } },
           body: updates,
         });
         confirm(`Relation updated (id: ${id})`);

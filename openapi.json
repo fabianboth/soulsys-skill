@@ -21,183 +21,10 @@
     "parameters": {}
   },
   "paths": {
-    "/api/souls": {
-      "post": {
-        "tags": ["Souls"],
-        "summary": "Create a soul",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "essence": {
-                    "type": "string",
-                    "minLength": 1,
-                    "description": "The core essence of yourself, your soul — who you are at the deepest level."
-                  },
-                  "values": {
-                    "type": "string",
-                    "minLength": 1,
-                    "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
-                  }
-                },
-                "required": ["essence", "values"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Soul created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "version": {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    "essence": {
-                      "type": "string",
-                      "minLength": 1,
-                      "description": "The core essence of yourself, your soul — who you are at the deepest level."
-                    },
-                    "values": {
-                      "type": "string",
-                      "minLength": 1,
-                      "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
-                    },
-                    "createdAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    }
-                  },
-                  "required": ["id", "version", "essence", "values", "createdAt", "updatedAt"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized — missing or invalid bearer token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/souls/{soulId}": {
+    "/api/soul": {
       "get": {
-        "tags": ["Souls"],
-        "summary": "Get a soul by ID",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "tags": ["Soul"],
+        "summary": "Get the soul",
         "responses": {
           "200": {
             "description": "Soul found",
@@ -365,19 +192,8 @@
         }
       },
       "patch": {
-        "tags": ["Souls"],
-        "summary": "Update a soul",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "tags": ["Soul"],
+        "summary": "Update the soul",
         "requestBody": {
           "content": {
             "application/json": {
@@ -566,21 +382,10 @@
         }
       }
     },
-    "/api/souls/{soulId}/identity": {
+    "/api/identity": {
       "post": {
         "tags": ["Identity"],
-        "summary": "Create identity for a soul",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "summary": "Create identity for the soul",
         "requestBody": {
           "content": {
             "application/json": {
@@ -863,18 +668,7 @@
       },
       "get": {
         "tags": ["Identity"],
-        "summary": "Get identity for a soul",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "summary": "Get the identity",
         "responses": {
           "200": {
             "description": "Identity found",
@@ -1087,18 +881,7 @@
       },
       "patch": {
         "tags": ["Identity"],
-        "summary": "Update identity for a soul",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "summary": "Update the identity",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1348,21 +1131,10 @@
         }
       }
     },
-    "/api/souls/{soulId}/memories": {
+    "/api/memories": {
       "get": {
         "tags": ["Memories"],
-        "summary": "List all memories for a soul",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "summary": "List memories",
         "responses": {
           "200": {
             "description": "List of memories",
@@ -1547,18 +1319,7 @@
       },
       "post": {
         "tags": ["Memories"],
-        "summary": "Create a memory",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "summary": "Add a memory entry",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1769,21 +1530,10 @@
         }
       }
     },
-    "/api/souls/{soulId}/memories/search": {
+    "/api/memories/search": {
       "post": {
         "tags": ["Memories"],
         "summary": "Search memories by semantic similarity",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2013,21 +1763,10 @@
         }
       }
     },
-    "/api/souls/{soulId}/relations": {
+    "/api/relations": {
       "get": {
         "tags": ["Relations"],
-        "summary": "List all relations for a soul",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "summary": "List relations",
         "responses": {
           "200": {
             "description": "List of relations",
@@ -2211,18 +1950,7 @@
       },
       "post": {
         "tags": ["Relations"],
-        "summary": "Create a relation",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          }
-        ],
+        "summary": "Add a relation",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2414,20 +2142,11 @@
         }
       }
     },
-    "/api/souls/{soulId}/relations/{relationId}": {
+    "/api/relations/{relationId}": {
       "patch": {
         "tags": ["Relations"],
         "summary": "Update a relation",
         "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          },
           {
             "schema": {
               "type": "string",
@@ -2629,17 +2348,8 @@
       },
       "delete": {
         "tags": ["Relations"],
-        "summary": "Delete a relation",
+        "summary": "Remove a relation",
         "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          },
           {
             "schema": {
               "type": "string",
@@ -2652,7 +2362,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Relation deleted"
+            "description": "Relation removed"
           },
           "400": {
             "description": "Validation error",
@@ -2781,20 +2491,11 @@
         }
       }
     },
-    "/api/souls/{soulId}/context": {
+    "/api/context": {
       "get": {
         "tags": ["Context"],
         "summary": "Load full context for a soul",
         "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "soulId",
-            "in": "path"
-          },
           {
             "schema": {
               "type": "integer",

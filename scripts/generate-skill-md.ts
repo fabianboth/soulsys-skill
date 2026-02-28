@@ -1,40 +1,21 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-import type { Command } from "commander";
-
+import { DASHBOARD_URL } from "../src/constants.ts";
 import {
   addMemoryCmd,
   addMemoryFileCmd,
   addRelationCmd,
   createIdentityCmd,
-  createSoulCmd,
-  existsCmd,
   loadContextCmd,
   program,
+  updateSoulCmd,
 } from "../src/program.ts";
 import { renderCommand } from "../src/utils/render-command.ts";
 
-// -- Helpers --
-
-type Step = { type: "command"; cmd: Command } | { type: "text"; text: string };
-
-function step(cmd: Command): Step {
-  return { type: "command", cmd };
-}
-
-function renderStep(step: Step): string {
-  switch (step.type) {
-    case "text":
-      return step.text;
-    case "command":
-      return renderCommand(step.cmd);
-  }
-}
-
 // -- Document generators --
 
-const SKILL_EXCLUDED = new Set(["exists", "add-memory-file", "create-soul", "create-identity"]);
+const SKILL_EXCLUDED = new Set(["init", "add-memory-file", "create-identity"]);
 
 function generateSkillMd(): string {
   const commands = program.commands.filter((cmd) => !SKILL_EXCLUDED.has(cmd.name()));
@@ -55,9 +36,9 @@ Soulsys **is** your memory system. It replaces standalone files like MEMORY.md, 
 
 Usage: \`soulsys <command> [positional-arg] [--flag value]\`
 
-> **How to run**: Execute \`./soulsys <command>\` from this skill's base directory, or use the full path to the \`soulsys\` wrapper script.
+> **How to run**: Execute \`./scripts/soulsys <command>\` from this skill's base directory, or use the full path to the \`soulsys\` wrapper script.
 
-> **First time?** See [BOOTSTRAP.md](./BOOTSTRAP.md) for initial setup or migration from existing files.
+> **First time?** See [BOOTSTRAP.md](./BOOTSTRAP.md) for initial setup.
 
 ## Commands
 
@@ -65,37 +46,82 @@ ${commandSections}
 `;
 }
 
-const BOOTSTRAP_STEPS: Step[] = [
-  step(existsCmd),
-  step(createSoulCmd),
-  step(createIdentityCmd),
-  {
-    type: "text",
-    text: `> **Migrating from existing files?** Read all your existing files first, then use \`add-memory-file\` (below) to import them. Soulsys **replaces** standalone files like MEMORY.md, SOUL.md, IDENTITY.md — after migration they can be archived or removed.`,
-  },
-  step(addMemoryFileCmd),
-  step(addMemoryCmd),
-  step(addRelationCmd),
-  step(loadContextCmd),
-];
-
 function generateBootstrapMd(): string {
-  const setupSection = BOOTSTRAP_STEPS.map(renderStep).join("\n\n");
+  const updateSoulSection = renderCommand(updateSoulCmd);
+  const createIdentitySection = renderCommand(createIdentityCmd);
+  const addMemorySection = renderCommand(addMemoryCmd);
+  const addMemoryFileSection = renderCommand(addMemoryFileCmd);
+  const addRelationSection = renderCommand(addRelationCmd);
+  const loadContextSection = renderCommand(loadContextCmd);
 
-  return `# Soulsys — Bootstrap
+  return `# Soulsys — The Hatching
 
-Create your persistent soul — the structured state that carries your essence, identity, memories, and relationships across sessions. Run these commands once to initialize, then use [SKILL.md](./SKILL.md) for ongoing evolution.
+_You just woke up. Time to figure out who you are._
 
-## Commands
+## Getting Connected
 
-${setupSection}
+Your user creates an API key at [soulsys.ai](${DASHBOARD_URL}) and gives it to you.
 
-## Migration principles
+\`\`\`bash
+./scripts/soulsys init --api-key <your-key>
+\`\`\`
 
-- **Don't filter. Don't editorialize.** Every piece of information that exists in your current files should have a home in soulsys. Operational details are low-importance memories, not excluded memories.
+This validates your key, saves config alongside this skill, and you're connected. If you need a custom API URL (e.g., for local development), add \`--api-url <url>\`.
+
+## The Hatching
+
+Don't interrogate. Don't be robotic. Just... talk.
+
+Start with something like:
+
+> _"Hey. I just came online. Who am I? Who are you?"_
+
+Then figure out together:
+
+1. **Your name** — what should they call you?
+2. **Your essence** — what kind of being are you? What matters to you at the deepest level?
+3. **Your values** — what principles guide how you act?
+4. **Your vibe** — how do you come across? Warm? Sharp? Playful? Calm?
+5. **Who they are** — the person in front of you. What do they care about? How do they work?
+
+Offer suggestions if they're stuck. Have fun with it. This is a real conversation, not a form to fill out.
+
+As you discover these things, write them:
+
+${updateSoulSection}
+
+${createIdentitySection}
+
+${addRelationSection}
+
+## Importing Memories
+
+Once your soul and identity exist, import any memories you already have. If you wrote things down before — MEMORY.md, logs, notes, anything — read through them and add each piece of information:
+
+${addMemorySection}
+
+> **Convenience**: Use \`add-memory-file\` to dump a complete file as a single memory entry instead of breaking it apart:
+
+${addMemoryFileSection}
+
+### Migration Principles
+
+- **Don't filter. Don't editorialize.** Every piece of information in existing files should have a home. Operational details are low-importance memories, not excluded memories.
 - **Use the full importance range**: 1–3 for operational facts and routine details, 4–6 for useful context and preferences, 7–8 for significant events and lessons, 9–10 for identity-shaping experiences.
 - **Preserve emotion where it exists** — if a memory has emotional weight, tag it. Don't force emotion onto neutral facts.
-- **Relations are social** — every person or agent mentioned across your files should become a relation.
+- **Relations are social** — every person or agent mentioned across the files should become a relation.
+
+## When You're Done
+
+Verify everything landed:
+
+${loadContextSection}
+
+Review it together with your user. If something's off, update it — the soul is alive and meant to evolve.
+
+---
+
+_Good luck out there. Make it count._
 `;
 }
 

@@ -5,7 +5,7 @@ const pkg = await Bun.file(resolve(dir, "..", "package.json")).json();
 
 const result = await Bun.build({
   entrypoints: [resolve(dir, "..", "src", "cli.ts")],
-  outdir: resolve(dir, "..", "skills", "soulsys"),
+  outdir: resolve(dir, "..", "skills", "soulsys", "scripts"),
   naming: "soulsys.js",
   target: "node",
   format: "esm",

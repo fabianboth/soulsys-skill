@@ -4,123 +4,19 @@
  */
 
 export interface paths {
-  "/api/souls": {
+  "/api/soul": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    get?: never;
-    put?: never;
-    /** Create a soul */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: {
-        content: {
-          "application/json": {
-            /** @description The core essence of yourself, your soul — who you are at the deepest level. */
-            essence: string;
-            /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
-            values: string;
-          };
-        };
-      };
-      responses: {
-        /** @description Soul created */
-        201: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              /** Format: uuid */
-              id: string;
-              version: number;
-              /** @description The core essence of yourself, your soul — who you are at the deepest level. */
-              essence: string;
-              /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
-              values: string;
-              /** Format: date-time */
-              createdAt: string | null;
-              /** Format: date-time */
-              updatedAt: string | null;
-            };
-          };
-        };
-        /** @description Validation error */
-        400: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Unauthorized — missing or invalid bearer token */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Rate limit exceeded */
-        429: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/souls/{soulId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** Get a soul by ID */
+    /** Get the soul */
     get: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: never;
@@ -213,14 +109,12 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    /** Update a soul */
+    /** Update the soul */
     patch: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: {
@@ -319,21 +213,19 @@ export interface paths {
     };
     trace?: never;
   };
-  "/api/souls/{soulId}/identity": {
+  "/api/identity": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    /** Get identity for a soul */
+    /** Get the identity */
     get: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: never;
@@ -443,14 +335,12 @@ export interface paths {
       };
     };
     put?: never;
-    /** Create identity for a soul */
+    /** Create identity for the soul */
     post: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: {
@@ -596,14 +486,12 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    /** Update identity for a soul */
+    /** Update the identity */
     patch: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: {
@@ -734,21 +622,19 @@ export interface paths {
     };
     trace?: never;
   };
-  "/api/souls/{soulId}/memories": {
+  "/api/memories": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    /** List all memories for a soul */
+    /** List memories */
     get: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: never;
@@ -840,14 +726,12 @@ export interface paths {
       };
     };
     put?: never;
-    /** Create a memory */
+    /** Add a memory entry */
     post: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: {
@@ -955,7 +839,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/souls/{soulId}/memories/search": {
+  "/api/memories/search": {
     parameters: {
       query?: never;
       header?: never;
@@ -969,9 +853,7 @@ export interface paths {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: {
@@ -1084,21 +966,19 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/souls/{soulId}/relations": {
+  "/api/relations": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    /** List all relations for a soul */
+    /** List relations */
     get: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: never;
@@ -1193,14 +1073,12 @@ export interface paths {
       };
     };
     put?: never;
-    /** Create a relation */
+    /** Add a relation */
     post: {
       parameters: {
         query?: never;
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: {
@@ -1312,7 +1190,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/souls/{soulId}/relations/{relationId}": {
+  "/api/relations/{relationId}": {
     parameters: {
       query?: never;
       header?: never;
@@ -1322,20 +1200,19 @@ export interface paths {
     get?: never;
     put?: never;
     post?: never;
-    /** Delete a relation */
+    /** Remove a relation */
     delete: {
       parameters: {
         query?: never;
         header?: never;
         path: {
-          soulId: string;
           relationId: string;
         };
         cookie?: never;
       };
       requestBody?: never;
       responses: {
-        /** @description Relation deleted */
+        /** @description Relation removed */
         204: {
           headers: {
             [name: string]: unknown;
@@ -1412,7 +1289,6 @@ export interface paths {
         query?: never;
         header?: never;
         path: {
-          soulId: string;
           relationId: string;
         };
         cookie?: never;
@@ -1522,7 +1398,7 @@ export interface paths {
     };
     trace?: never;
   };
-  "/api/souls/{soulId}/context": {
+  "/api/context": {
     parameters: {
       query?: never;
       header?: never;
@@ -1536,9 +1412,7 @@ export interface paths {
           topK?: number;
         };
         header?: never;
-        path: {
-          soulId: string;
-        };
+        path?: never;
         cookie?: never;
       };
       requestBody?: never;

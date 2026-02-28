@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILL_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+export SOULSYS_CONFIG_DIR="$SKILL_DIR"
 if command -v bun &> /dev/null; then
   exec bun "$SCRIPT_DIR/soulsys.js" "$@"
 else

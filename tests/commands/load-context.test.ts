@@ -5,7 +5,7 @@ import { formatContext } from "../../src/commands/load-context.ts";
 import { describe, expect, it } from "bun:test";
 
 type ContextResponse =
-  paths["/api/souls/{soulId}/context"]["get"]["responses"]["200"]["content"]["application/json"];
+  paths["/api/context"]["get"]["responses"]["200"]["content"]["application/json"];
 
 function makeSoul(essence = "test"): ContextResponse["soul"] {
   const now = new Date().toISOString();

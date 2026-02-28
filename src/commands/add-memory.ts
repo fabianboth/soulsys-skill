@@ -1,8 +1,8 @@
 import type { Command } from "commander";
 
-import { createSoulClient, requireData } from "../client/client.ts";
+import { createApiClient, requireData } from "../client/client.ts";
 import { IMPORTANCE_DESCRIPTION, MEMORY_DESCRIPTIONS } from "../client/generated/descriptions.ts";
-import { resolveApiConfig } from "../config.ts";
+import { resolveConfig } from "../config.ts";
 import { confirm, handleError } from "../output.ts";
 import { parseImportance } from "../utils/parse-importance.ts";
 
@@ -17,10 +17,9 @@ export function register(program: Command): Command {
       try {
         const importance = parseImportance(options.importance);
 
-        const { client, soulId } = createSoulClient(resolveApiConfig());
+        const { client } = createApiClient(resolveConfig());
         const data = requireData(
-          await client.POST("/api/souls/{soulId}/memories", {
-            params: { path: { soulId } },
+          await client.POST("/api/memories", {
             body: {
               content,
               importance,

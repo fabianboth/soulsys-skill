@@ -32,8 +32,9 @@ describe("CLI", () => {
   it("--help lists all commands", async () => {
     const result = await run(["--help"]);
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toContain("exists");
+    expect(result.stdout).toContain("init");
     expect(result.stdout).toContain("update-soul");
+    expect(result.stdout).toContain("create-identity");
     expect(result.stdout).toContain("update-identity");
     expect(result.stdout).toContain("add-memory");
     expect(result.stdout).toContain("add-memory-file");

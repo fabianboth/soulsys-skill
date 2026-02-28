@@ -3,21 +3,8 @@ import createClient, { type Middleware } from "openapi-fetch";
 import { ApiError, NetworkError } from "./errors.ts";
 import type { paths } from "./generated/api.d.ts";
 
-export interface BootstrapClientConfig {
-  apiUrl: string;
-  apiKey: string;
-}
-
-export interface SoulClientConfig extends BootstrapClientConfig {
-  soulId: string;
-}
-
-export type BootstrapClient = {
+export type ApiClient = {
   client: ReturnType<typeof createClient<paths>>;
-};
-
-export type SoulClient = BootstrapClient & {
-  soulId: string;
 };
 
 const errorMiddleware: Middleware = {
@@ -46,15 +33,11 @@ export function requireData<T>(result: { data?: T; error?: unknown }): T {
   throw new Error("Unexpected empty response from API");
 }
 
-export function createBootstrapClient(config: BootstrapClientConfig): BootstrapClient {
+export function createApiClient(config: { apiUrl: string; apiKey: string }): ApiClient {
   const client = createClient<paths>({
     baseUrl: config.apiUrl,
     headers: { Authorization: `Bearer ${config.apiKey}` },
   });
   client.use(errorMiddleware);
   return { client };
-}
-
-export function createSoulClient(config: SoulClientConfig): SoulClient {
-  return { ...createBootstrapClient(config), soulId: config.soulId };
 }

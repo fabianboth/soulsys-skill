@@ -78,10 +78,10 @@ function extractOrFail(path: string, method: string) {
   return extract(path, method);
 }
 
-const soul = extractOrFail("/api/souls", "post");
-const identity = extractOrFail("/api/souls/{soulId}/identity", "post");
-const memory = extractOrFail("/api/souls/{soulId}/memories", "post");
-const relation = extractOrFail("/api/souls/{soulId}/relations", "post");
+const soul = extractOrFail("/api/soul", "patch");
+const identity = extractOrFail("/api/identity", "post");
+const memory = extractOrFail("/api/memories", "post");
+const relation = extractOrFail("/api/relations", "post");
 
 const descriptions = {
   SOUL_DESCRIPTIONS: {

@@ -7,8 +7,7 @@ import { register as registerAddMemory } from "./commands/add-memory.ts";
 import { register as registerAddMemoryFile } from "./commands/add-memory-file.ts";
 import { register as registerAddRelation } from "./commands/add-relation.ts";
 import { register as registerCreateIdentity } from "./commands/create-identity.ts";
-import { register as registerCreateSoul } from "./commands/create-soul.ts";
-import { register as registerExists } from "./commands/exists.ts";
+import { register as registerInit } from "./commands/init.ts";
 import { register as registerLoadContext } from "./commands/load-context.ts";
 import { register as registerUpdateIdentity } from "./commands/update-identity.ts";
 import { register as registerUpdateRelation } from "./commands/update-relation.ts";
@@ -32,8 +31,7 @@ export const program = new Command();
 
 program.name("soulsys").version(version, "-v, --version").description("Soul System CLI");
 
-export const existsCmd = registerExists(program);
-export const createSoulCmd = registerCreateSoul(program);
+export const initCmd = registerInit(program);
 export const updateSoulCmd = registerUpdateSoul(program);
 export const createIdentityCmd = registerCreateIdentity(program);
 export const updateIdentityCmd = registerUpdateIdentity(program);

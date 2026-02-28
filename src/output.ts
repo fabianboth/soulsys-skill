@@ -12,7 +12,9 @@ export function handleError(error: unknown): never {
       const details = error.details ? `: ${JSON.stringify(error.details)}` : "";
       process.stderr.write(`Error: Validation error${details}\n`);
     } else if (error.status === 401) {
-      process.stderr.write("Error: Authentication failed: check SOULSYS_API_KEY\n");
+      process.stderr.write(
+        "Error: Authentication failed. Run `soulsys init --api-key <key>` to connect to a soul.\n",
+      );
     } else {
       process.stderr.write(`Error: ${error.message}\n`);
     }

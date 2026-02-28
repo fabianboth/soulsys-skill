@@ -1,8 +1,8 @@
 import type { Command } from "commander";
 
-import { createSoulClient } from "../client/client.ts";
+import { createApiClient } from "../client/client.ts";
 import { SOUL_DESCRIPTIONS } from "../client/generated/descriptions.ts";
-import { resolveApiConfig } from "../config.ts";
+import { resolveConfig } from "../config.ts";
 import { confirm, handleError } from "../output.ts";
 
 export function register(program: Command): Command {
@@ -22,11 +22,8 @@ export function register(program: Command): Command {
         if (options.essence !== undefined) updates.essence = options.essence;
         if (options.values !== undefined) updates.values = options.values;
 
-        const { client, soulId } = createSoulClient(resolveApiConfig());
-        await client.PATCH("/api/souls/{soulId}", {
-          params: { path: { soulId } },
-          body: updates,
-        });
+        const { client } = createApiClient(resolveConfig());
+        await client.PATCH("/api/soul", { body: updates });
         confirm("Soul updated");
       } catch (error) {
         handleError(error);

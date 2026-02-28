@@ -1,12 +1,12 @@
 import type { Command } from "commander";
 
-import { createSoulClient, requireData } from "../client/client.ts";
+import { createApiClient, requireData } from "../client/client.ts";
 import type { paths } from "../client/generated/api.d.ts";
-import { resolveApiConfig } from "../config.ts";
+import { resolveConfig } from "../config.ts";
 import { handleError } from "../output.ts";
 
 type ContextResponse =
-  paths["/api/souls/{soulId}/context"]["get"]["responses"]["200"]["content"]["application/json"];
+  paths["/api/context"]["get"]["responses"]["200"]["content"]["application/json"];
 
 function formatSoul(soul: ContextResponse["soul"]): string {
   return `# Soul\n\n${soul.essence}\nValues: ${soul.values}`;
@@ -75,12 +75,8 @@ export function register(program: Command): Command {
     .description("Output the full soul state as compact markdown for context injection")
     .action(async () => {
       try {
-        const { client, soulId } = createSoulClient(resolveApiConfig());
-        const data = requireData(
-          await client.GET("/api/souls/{soulId}/context", {
-            params: { path: { soulId } },
-          }),
-        );
+        const { client } = createApiClient(resolveConfig());
+        const data = requireData(await client.GET("/api/context"));
         process.stdout.write(formatContext(data));
       } catch (error) {
         handleError(error);

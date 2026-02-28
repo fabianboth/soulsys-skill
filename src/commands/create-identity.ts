@@ -1,11 +1,11 @@
 import type { Command } from "commander";
 
-import { createSoulClient } from "../client/client.ts";
+import { createApiClient } from "../client/client.ts";
 import {
   APPEARANCE_DESCRIPTIONS,
   IDENTITY_DESCRIPTIONS,
 } from "../client/generated/descriptions.ts";
-import { resolveApiConfig } from "../config.ts";
+import { resolveConfig } from "../config.ts";
 import { confirm, handleError } from "../output.ts";
 
 export function register(program: Command): Command {
@@ -33,9 +33,8 @@ export function register(program: Command): Command {
               ? { emoji: emoji ?? "\u{1F916}", avatarUrl }
               : undefined;
 
-          const { client, soulId } = createSoulClient(resolveApiConfig());
-          await client.POST("/api/souls/{soulId}/identity", {
-            params: { path: { soulId } },
+          const { client } = createApiClient(resolveConfig());
+          await client.POST("/api/identity", {
             body: { name, vibe, description, appearance },
           });
           confirm("Identity created");
