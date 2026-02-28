@@ -1,7 +1,11 @@
 import { randomUUID } from "node:crypto";
 
 import type { paths } from "../../src/client/generated/api.d.ts";
-import { formatContext, formatCoreContext } from "../../src/commands/load-context.ts";
+import {
+  formatContext,
+  formatCoreContext,
+  formatMemoryInstructions,
+} from "../../src/commands/load-context.ts";
 import { describe, expect, it } from "bun:test";
 
 type ContextResponse =
@@ -133,8 +137,61 @@ describe("relation formatting", () => {
   });
 });
 
+describe("memory instructions", () => {
+  it("full context includes ## Memory section with soulsys reference", () => {
+    const output = formatContext({
+      soul: makeSoul(),
+      identity: makeIdentity(),
+      memory: {
+        keyMemories: [makeMemory("something")],
+        recentMemories: [],
+      },
+      relations: { relations: [] },
+    });
+    expect(output).toContain("## Memory");
+    expect(output).toContain("soulsys");
+    expect(output).toContain("soulsys search-memory");
+  });
+
+  it("core context includes ## Memory instructions", () => {
+    const output = formatCoreContext({
+      soul: makeSoul(),
+      identity: makeIdentity(),
+      memory: {
+        keyMemories: [makeMemory("something")],
+        recentMemories: [],
+      },
+      relations: { relations: [] },
+    });
+    expect(output).toContain("## Memory");
+    expect(output).toContain("soulsys");
+    expect(output).toContain("soulsys search-memory");
+  });
+
+  it("memory instructions appear even when memory data is null", () => {
+    const output = formatContext({
+      soul: makeSoul(),
+      identity: makeIdentity(),
+      memory: null,
+      relations: null,
+    });
+    expect(output).toContain("## Memory");
+    expect(output).toContain("soulsys");
+  });
+
+  it("formatMemoryInstructions returns static markdown with command syntax", () => {
+    const instructions = formatMemoryInstructions();
+    expect(instructions).toContain("## Memory");
+    expect(instructions).toContain("soulsys");
+    expect(instructions).toContain("soulsys add-memory");
+    expect(instructions).toContain("soulsys search-memory");
+    expect(instructions).toContain("Dispatch a subagent");
+    expect(instructions).toContain("Read the soulsys skill before first use");
+  });
+});
+
 describe("formatCoreContext (--core flag)", () => {
-  it("outputs soul and identity only", () => {
+  it("outputs soul, identity, and memory instructions but not memory data or relations", () => {
     const output = formatCoreContext({
       soul: makeSoul("my essence"),
       identity: makeIdentity(),
@@ -159,13 +216,17 @@ describe("formatCoreContext (--core flag)", () => {
     expect(output).toContain("my essence");
     expect(output).toContain("## Identity");
     expect(output).toContain("Name: Test");
+    expect(output).toContain("## Memory");
+    expect(output).toContain("soulsys");
     expect(output).not.toContain("Key Memories");
     expect(output).not.toContain("Recent Memories");
+    expect(output).not.toContain("important-fact");
+    expect(output).not.toContain("just-happened");
     expect(output).not.toContain("Relations");
     expect(output).not.toContain("Alice");
   });
 
-  it("handles missing identity", () => {
+  it("handles missing identity but still includes memory instructions", () => {
     const output = formatCoreContext({
       soul: makeSoul("core essence"),
       identity: null,
@@ -175,5 +236,7 @@ describe("formatCoreContext (--core flag)", () => {
     expect(output).toContain("# Soul");
     expect(output).toContain("core essence");
     expect(output).not.toContain("## Identity");
+    expect(output).toContain("## Memory");
+    expect(output).toContain("soulsys search-memory");
   });
 });

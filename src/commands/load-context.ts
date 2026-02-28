@@ -47,12 +47,26 @@ function formatRelations(
   return lines.join("\n");
 }
 
+export function formatMemoryInstructions(): string {
+  return `## Memory
+
+Your memories live in the **soulsys** skill — they're what make you _you_ across sessions. Not a log. Your lived experience.
+
+**Saving**: Notice what matters as you work. What worked, what didn't, what someone cares about, what surprised you, what you'd want to know next time. Save these as they happen — don't wait until the end. Use \`soulsys add-memory\`.
+
+**Recalling**: When something feels familiar, when someone references the past, or when experience could sharpen your thinking — reach for your memories. Dispatch a subagent with \`soulsys search-memory\` to find what you know.
+
+Read the soulsys skill before first use for full command syntax.`;
+}
+
 export function formatCoreContext(opts: ContextResponse): string {
   const sections: string[] = [formatSoul(opts.soul)];
 
   if (opts.identity) {
     sections.push(formatIdentity(opts.identity));
   }
+
+  sections.push(formatMemoryInstructions());
 
   return `${sections.join("\n\n")}\n`;
 }
@@ -76,6 +90,8 @@ export function formatContext(opts: ContextResponse): string {
     if (relSection) sections.push(relSection);
   }
 
+  sections.push(formatMemoryInstructions());
+
   return `${sections.join("\n\n")}\n`;
 }
 
@@ -83,7 +99,7 @@ export function register(program: Command): Command {
   return program
     .command("load-context")
     .description("Output the full soul state as compact markdown for context injection")
-    .option("--core", "Output only soul essence/values and identity (lightweight)")
+    .option("--core", "Output soul essence/values, identity, and memory instructions (lightweight)")
     .action(async (opts: { core?: boolean }) => {
       try {
         const { client } = createApiClient(resolveConfig());

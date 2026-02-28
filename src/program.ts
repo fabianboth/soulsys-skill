@@ -10,6 +10,7 @@ import { register as registerCreateIdentity } from "./commands/create-identity.t
 import { register as registerDetectFramework } from "./commands/detect-framework.ts";
 import { register as registerInit } from "./commands/init.ts";
 import { register as registerLoadContext } from "./commands/load-context.ts";
+import { register as registerSearchMemory } from "./commands/search-memory.ts";
 import { register as registerUpdateIdentity } from "./commands/update-identity.ts";
 import { register as registerUpdateRelation } from "./commands/update-relation.ts";
 import { register as registerUpdateSoul } from "./commands/update-soul.ts";
@@ -42,3 +43,4 @@ export const addMemoryFileCmd = registerAddMemoryFile(program);
 export const addRelationCmd = registerAddRelation(program);
 export const updateRelationCmd = registerUpdateRelation(program);
 export const loadContextCmd = registerLoadContext(program);
+export const searchMemoryCmd = registerSearchMemory(program);

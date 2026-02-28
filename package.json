@@ -15,7 +15,8 @@
     "lint": "biome check .",
     "format": "biome check --fix .",
     "test": "bun test",
-    "test:watch": "bun test --watch"
+    "test:watch": "bun test --watch",
+    "local-install": "pnpm build && bash scripts/local-install.sh"
   },
   "dependencies": {
     "commander": "^14.0.3",
