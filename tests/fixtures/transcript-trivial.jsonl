@@ -1,0 +1,8 @@
+{"type":"user","message":{"role":"user","content":"hello"},"uuid":"c1","timestamp":"2026-03-01T10:00:00.000Z","sessionId":"test-session-3"}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":"Hello! How can I help you today?"}]},"uuid":"c2","timestamp":"2026-03-01T10:00:10.000Z","sessionId":"test-session-3"}
+{"type":"user","message":{"role":"user","content":"run the tests"},"uuid":"c3","timestamp":"2026-03-01T10:00:30.000Z","sessionId":"test-session-3"}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"tool_use","id":"toolu_01XYZ","name":"Bash","input":{"command":"pnpm test"}}]},"uuid":"c4","timestamp":"2026-03-01T10:00:35.000Z","sessionId":"test-session-3"}
+{"type":"user","message":{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01XYZ","content":"All 42 tests passed."}]},"uuid":"c5","timestamp":"2026-03-01T10:01:00.000Z","sessionId":"test-session-3"}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":"All 42 tests passed. Everything looks good!"}]},"uuid":"c6","timestamp":"2026-03-01T10:01:05.000Z","sessionId":"test-session-3"}
+{"type":"user","message":{"role":"user","content":"thanks"},"uuid":"c7","timestamp":"2026-03-01T10:01:30.000Z","sessionId":"test-session-3"}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":"You're welcome! Let me know if you need anything else."}]},"uuid":"c8","timestamp":"2026-03-01T10:01:35.000Z","sessionId":"test-session-3"}

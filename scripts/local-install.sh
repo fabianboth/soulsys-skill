@@ -6,8 +6,15 @@ set -euo pipefail
 
 TARGET="${1:?Usage: pnpm local-install -- <target-skill-dir>}"
 SRC="$(cd "$(dirname "$0")/../skills/soulsys" && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 
-mkdir -p "$TARGET/scripts"
-cp "$SRC/SKILL.md" "$SRC/BOOTSTRAP.md" "$TARGET/"
-cp "$SRC/scripts/soulsys.js" "$TARGET/scripts/"
+# Resolve relative paths from repo root, not package dir
+if [[ "$TARGET" != /* ]]; then
+  TARGET="$REPO_ROOT/$TARGET"
+fi
+
+mkdir -p "$TARGET/scripts" "$TARGET/frameworks"
+cp "$SRC/SKILL.md" "$SRC/BOOTSTRAP.md" "$SRC/package.json" "$TARGET/"
+cp "$SRC/scripts/soulsys" "$SRC/scripts/soulsys.js" "$TARGET/scripts/"
+cp "$SRC/frameworks/"*.md "$TARGET/frameworks/"
 echo "✓ Installed to $TARGET"

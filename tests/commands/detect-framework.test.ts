@@ -1,4 +1,4 @@
-import { detectFramework } from "../../src/commands/detect-framework.ts";
+import { detectFramework } from "../../src/framework/detect.ts";
 import { describe, expect, it } from "bun:test";
 
 describe("detectFramework", () => {

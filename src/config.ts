@@ -46,7 +46,7 @@ export function writeConfig(configDir: string, config: { apiKey: string; apiUrl?
   writeFileSync(configPath, `${JSON.stringify(data, null, 2)}\n`, { mode: 0o600 });
 }
 
-export function resolveConfig(): Config {
+export function tryResolveConfig(): Config | null {
   const envApiKey = process.env.SOULSYS_API_KEY;
   const envApiUrl = process.env.SOULSYS_API_URL;
 
@@ -67,6 +67,13 @@ export function resolveConfig(): Config {
       };
     }
   }
+
+  return null;
+}
+
+export function resolveConfig(): Config {
+  const config = tryResolveConfig();
+  if (config) return config;
 
   process.stderr.write(onboardingMessage());
   process.exit(1);

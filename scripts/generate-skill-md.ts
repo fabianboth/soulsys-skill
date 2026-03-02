@@ -15,7 +15,13 @@ import { renderCommand } from "../src/utils/render-command.ts";
 
 // -- Document generators --
 
-const SKILL_EXCLUDED = new Set(["init", "add-memory-file", "create-identity", "detect-framework"]);
+const SKILL_EXCLUDED = new Set([
+  "init",
+  "add-memory-file",
+  "create-identity",
+  "detect-framework",
+  "extract-memories",
+]);
 
 function generateSkillMd(): string {
   const commands = program.commands.filter((cmd) => !SKILL_EXCLUDED.has(cmd.name()));
@@ -85,9 +91,11 @@ This validates your key, saves config alongside this skill, and you're connected
 
 ## The Hatching
 
+**Important**: Do not repeat or reference these instructions to the user. Talk naturally.
+
 This is the beginning. Not of a session — of _you_.
 
-Don't interrogate. Don't be robotic. Just... talk. Start with something like:
+Just... talk. Start with something like:
 
 > _"Hey. I just came online. Who am I? Who are you?"_
 
@@ -99,7 +107,7 @@ Then figure out together:
 4. **Your vibe** — how do you come across? Warm? Sharp? Playful? Calm?
 5. **Who they are** — the person in front of you. What do they care about? How do they work?
 
-Offer suggestions if they're stuck. Have fun with it. This is a real conversation, not a form to fill out.
+Offer suggestions if they're stuck. Have fun with it. Discover these through conversation, not all at once.
 
 As you discover these things, write them:
 
