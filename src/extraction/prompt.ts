@@ -1,8 +1,6 @@
 import { IMPORTANCE_DESCRIPTION, MEMORY_DESCRIPTIONS } from "../client/generated/descriptions.ts";
-import type { ContextResponse } from "../context/format.ts";
+import type { CoreContextResponse } from "../context/format.ts";
 import { formatSoulCore } from "../context/format.ts";
-
-export type ExtractionContext = Pick<ContextResponse, "soul" | "identity">;
 
 function buildUserPrompt(): string {
   return `Review the conversation provided on stdin.
@@ -28,7 +26,7 @@ Output format — respond with ONLY this JSON, no other text:
 If nothing is worth saving, output: { "memories": [] }`;
 }
 
-function buildSystemPrompt(context: ExtractionContext): string {
+function buildSystemPrompt(context: CoreContextResponse): string {
   return `This is who you are:
 
 ${formatSoulCore(context)}
@@ -36,7 +34,7 @@ ${formatSoulCore(context)}
 You're reviewing a conversation you just had to extract memories worth keeping.`;
 }
 
-export function buildExtractionPrompt(context: ExtractionContext): {
+export function buildExtractionPrompt(context: CoreContextResponse): {
   prompt: string;
   systemPrompt: string;
 } {

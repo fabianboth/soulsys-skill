@@ -3,6 +3,9 @@ import type { paths } from "../client/generated/api.d.ts";
 export type ContextResponse =
   paths["/api/context"]["get"]["responses"]["200"]["content"]["application/json"];
 
+export type CoreContextResponse =
+  paths["/api/context/core"]["get"]["responses"]["200"]["content"]["application/json"];
+
 export function formatSoul(soul: ContextResponse["soul"]): string {
   return `# Soul\n\n${soul.essence}\nValues: ${soul.values}`;
 }
@@ -54,7 +57,7 @@ Your memories live in the **soulsys** skill — they're what make you _you_ acro
 Read the soulsys skill before first use for full command syntax.`;
 }
 
-export function formatSoulCore(opts: Pick<ContextResponse, "soul" | "identity">): string {
+export function formatSoulCore(opts: CoreContextResponse): string {
   const sections: string[] = [formatSoul(opts.soul)];
   if (opts.identity) {
     sections.push(formatIdentity(opts.identity));
@@ -62,7 +65,7 @@ export function formatSoulCore(opts: Pick<ContextResponse, "soul" | "identity">)
   return sections.join("\n\n");
 }
 
-export function formatCoreContext(opts: ContextResponse): string {
+export function formatCoreContext(opts: CoreContextResponse): string {
   return `${formatSoulCore(opts)}\n\n${formatMemoryInstructions()}\n`;
 }
 

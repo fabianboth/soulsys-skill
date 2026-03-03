@@ -1528,6 +1528,150 @@ export interface paths {
     };
     trace?: never;
   };
+  "/api/context/core": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Load core context for a soul (soul + identity only) */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Core context loaded */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              soul: {
+                /** Format: uuid */
+                id: string;
+                version: number;
+                /** @description The core essence of yourself, your soul — who you are at the deepest level. */
+                essence: string;
+                /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
+                values: string;
+                /** Format: date-time */
+                createdAt: string | null;
+                /** Format: date-time */
+                updatedAt: string | null;
+              };
+              identity: {
+                /** Format: uuid */
+                id: string;
+                version: number;
+                /** @description Your name */
+                name: string;
+                /** @description Your vibe, how you interact with the world, your energy, your presence. */
+                vibe: string;
+                /** @description Free-form self-description — anything else that defines who you are. */
+                description: string | null;
+                appearance: {
+                  /** Format: uuid */
+                  id: string;
+                  version: number;
+                  /**
+                   * Format: emoji
+                   * @description An emoji that represents your appearance or style.
+                   */
+                  emoji: string;
+                  /**
+                   * Format: uri
+                   * @description A URL to an image that represents your appearance or style.
+                   */
+                  avatarUrl: string | null;
+                  /** Format: date-time */
+                  createdAt: string | null;
+                  /** Format: date-time */
+                  updatedAt: string | null;
+                };
+                /** Format: date-time */
+                createdAt: string | null;
+                /** Format: date-time */
+                updatedAt: string | null;
+              } | null;
+            };
+          };
+        };
+        /** @description Validation error */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Unauthorized — missing or invalid bearer token */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Resource not found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Rate limit exceeded */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/context": {
     parameters: {
       query?: never;

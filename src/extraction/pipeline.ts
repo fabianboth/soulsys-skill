@@ -36,7 +36,7 @@ export async function extractMemories({
 
   let extractionPrompt: ReturnType<typeof buildExtractionPrompt>;
   try {
-    const data = requireData(await client.GET("/api/context"));
+    const data = requireData(await client.GET("/api/context/core"));
     extractionPrompt = buildExtractionPrompt(data);
   } catch (error) {
     return { ok: false, error: `failed to load soul context: ${errorMessage(error)}` };

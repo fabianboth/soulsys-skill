@@ -2740,6 +2740,266 @@
         }
       }
     },
+    "/api/context/core": {
+      "get": {
+        "tags": ["Context"],
+        "summary": "Load core context for a soul (soul + identity only)",
+        "responses": {
+          "200": {
+            "description": "Core context loaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "soul": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "version": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "essence": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "The core essence of yourself, your soul — who you are at the deepest level."
+                        },
+                        "values": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
+                        },
+                        "createdAt": {
+                          "type": ["string", "null"],
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": ["string", "null"],
+                          "format": "date-time"
+                        }
+                      },
+                      "required": ["id", "version", "essence", "values", "createdAt", "updatedAt"]
+                    },
+                    "identity": {
+                      "type": ["object", "null"],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "version": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Your name"
+                        },
+                        "vibe": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Your vibe, how you interact with the world, your energy, your presence."
+                        },
+                        "description": {
+                          "type": ["string", "null"],
+                          "description": "Free-form self-description — anything else that defines who you are."
+                        },
+                        "appearance": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "version": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "emoji": {
+                              "type": "string",
+                              "format": "emoji",
+                              "description": "An emoji that represents your appearance or style."
+                            },
+                            "avatarUrl": {
+                              "type": ["string", "null"],
+                              "format": "uri",
+                              "description": "A URL to an image that represents your appearance or style."
+                            },
+                            "createdAt": {
+                              "type": ["string", "null"],
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": ["string", "null"],
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "version",
+                            "emoji",
+                            "avatarUrl",
+                            "createdAt",
+                            "updatedAt"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": ["string", "null"],
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": ["string", "null"],
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "version",
+                        "name",
+                        "vibe",
+                        "description",
+                        "appearance",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["soul", "identity"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid bearer token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/context": {
       "get": {
         "tags": ["Context"],
