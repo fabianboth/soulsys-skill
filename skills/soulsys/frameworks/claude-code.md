@@ -35,7 +35,7 @@ Also add a `PreCompact` hook to automatically extract memories before context co
       "hooks": [{
         "type": "command",
         "command": "$CLAUDE_PROJECT_DIR/.claude/skills/soulsys/scripts/soulsys extract-memories",
-        "timeout": 60000
+        "timeout": 120000
       }]
     }
   ]

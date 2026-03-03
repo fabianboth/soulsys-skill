@@ -13,6 +13,8 @@ function evaluateWithClaude(formattedWindow: string): Promise<string> {
       [
         "-p",
         prompt,
+        "--model",
+        "sonnet",
         "--output-format",
         "json",
         "--append-system-prompt",

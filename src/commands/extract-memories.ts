@@ -1,13 +1,15 @@
+import { spawn } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import type { Command } from "commander";
 
-import { createApiClient, requireData } from "../client/client.ts";
 import { tryResolveConfig } from "../config.ts";
-import { parseExtractionOutput } from "../extraction/parser.ts";
+import { extractMemories } from "../extraction/pipeline.ts";
 import { resolveFrameworkAdapter } from "../framework/adapters/index.ts";
 import { detectFramework } from "../framework/detect.ts";
+import { errorMessage } from "../utils/error.ts";
+import { logExtraction } from "../utils/log.ts";
 
 function stderr(message: string): void {
   process.stderr.write(`${message}\n`);
@@ -37,105 +39,82 @@ export function register(program: Command): Command {
     )
     .option("--framework <guide>", "Override framework auto-detection (e.g., claude-code)")
     .option(
-      "--dry-run",
-      "Read transcript and report message count without evaluating or writing",
+      "--background",
+      "Run extraction pipeline directly (internal, used by foreground spawn)",
       false,
     )
-    .action(async (options: { transcript?: string; framework?: string; dryRun: boolean }) => {
+    .action(async (options: { transcript?: string; framework?: string; background: boolean }) => {
       try {
-        await extractMemories(options);
+        if (options.background) {
+          await runExtraction(options);
+        } else {
+          spawnBackground(options);
+        }
       } catch (error) {
-        stderr(`extract-memories: ${error instanceof Error ? error.message : String(error)}`);
+        stderr(`extract-memories: ${errorMessage(error)}`);
       }
     });
 }
 
-async function extractMemories(options: {
-  transcript?: string;
-  framework?: string;
-  dryRun: boolean;
-}): Promise<void> {
+function spawnBackground(options: { transcript?: string; framework?: string }): void {
   const transcriptPath = options.transcript || readTranscriptPathFromStdin();
   if (!transcriptPath) {
     stderr("extract-memories: no transcript path provided (use --transcript flag)");
     return;
   }
 
-  const guide = options.framework || detectFramework(resolve(process.argv[1])).guide;
-  const adapter = resolveFrameworkAdapter(guide);
-  if (!adapter) {
-    stderr(`extract-memories: no extraction adapter for framework "${guide}"`);
-    return;
+  const args = [
+    process.argv[1],
+    "extract-memories",
+    "--background",
+    "--transcript",
+    transcriptPath,
+  ];
+  if (options.framework) {
+    args.push("--framework", options.framework);
   }
+  const child = spawn(process.execPath, args, {
+    detached: true,
+    stdio: "ignore",
+    env: process.env,
+  });
+  child.unref();
+}
 
-  let formatted: { content: string; messageCount: number };
+async function runExtraction(options: { transcript?: string; framework?: string }): Promise<void> {
+  logExtraction({ action: "started" });
+
   try {
-    const result = adapter.readAndFormat(transcriptPath);
-    if (!result) {
-      stderr("extract-memories: transcript is empty or has no extractable content");
+    const transcriptPath = options.transcript;
+    if (!transcriptPath) {
+      logExtraction({ action: "failed", error: "no transcript path provided" });
       return;
     }
-    formatted = result;
-  } catch (error) {
-    stderr(
-      `extract-memories: failed to read transcript: ${error instanceof Error ? error.message : String(error)}`,
-    );
-    return;
-  }
 
-  if (options.dryRun) {
-    stderr(
-      `extract-memories: dry run — ${formatted.messageCount} messages in current window, skipping evaluation`,
-    );
-    return;
-  }
-
-  const config = tryResolveConfig();
-  if (!config) {
-    stderr("extract-memories: soulsys not configured, skipping extraction");
-    return;
-  }
-
-  let rawOutput: string;
-  try {
-    rawOutput = await adapter.evaluate(formatted.content);
-  } catch (error) {
-    stderr(
-      `extract-memories: evaluation failed: ${error instanceof Error ? error.message : String(error)}`,
-    );
-    return;
-  }
-
-  const memories = parseExtractionOutput(rawOutput);
-  if (memories.length === 0) {
-    stderr("extract-memories: no memories extracted");
-    return;
-  }
-
-  const { client } = createApiClient(config);
-  let written = 0;
-
-  for (const memory of memories) {
-    try {
-      requireData(
-        await client.POST("/api/memories", {
-          body: {
-            content: memory.content,
-            importance: memory.importance,
-            emotion: memory.emotion,
-          },
-        }),
-      );
-      written++;
-    } catch (error) {
-      stderr(
-        `extract-memories: failed to write memory: ${error instanceof Error ? error.message : String(error)}`,
-      );
+    const config = tryResolveConfig();
+    if (!config) {
+      logExtraction({ action: "failed", error: "soulsys not configured" });
+      return;
     }
-  }
 
-  const failed = memories.length - written;
-  stderr(
-    `extract-memories: wrote ${written}/${memories.length} memories${failed > 0 ? ` (${failed} failed)` : ""}`,
-  );
+    const guide = options.framework || detectFramework(resolve(process.argv[1])).guide;
+    const adapter = resolveFrameworkAdapter(guide);
+    if (!adapter) {
+      logExtraction({ action: "failed", error: `no extraction adapter for framework "${guide}"` });
+      return;
+    }
+
+    const result = await extractMemories({ transcriptPath, adapter, config });
+    if (result.ok) {
+      logExtraction({
+        action: "completed",
+        memoryCount: result.created,
+        failedCount: result.failed > 0 ? result.failed : undefined,
+      });
+    } else {
+      logExtraction({ action: "failed", error: result.error });
+    }
+  } catch (error) {
+    logExtraction({ action: "failed", error: errorMessage(error) });
+  }
 }

@@ -966,6 +966,136 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/memories/batch": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create multiple memory entries in a single request */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": {
+            memories: {
+              /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+              content: string;
+              fullContent?: string | null;
+              emotion?: string | null;
+              /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+              importance: number;
+            }[];
+          };
+        };
+      };
+      responses: {
+        /** @description Batch creation completed (may include partial failures) */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              created: {
+                /** Format: uuid */
+                id: string;
+                /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+                content: string;
+                /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
+                fullContent: string | null;
+                /** @description Only if you genuinely associate an emotion with this memory entry */
+                emotion: string | null;
+                /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+                importance: number;
+                /** Format: date-time */
+                createdAt: string | null;
+                /** Format: date-time */
+                updatedAt: string | null;
+              }[];
+              failed: {
+                index: number;
+                error: string;
+              }[];
+            };
+          };
+        };
+        /** @description Validation error */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Unauthorized — missing or invalid bearer token */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Resource not found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Rate limit exceeded */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/relations": {
     parameters: {
       query?: never;
