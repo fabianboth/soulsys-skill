@@ -2,6 +2,7 @@ import { createApiClient, requireData } from "../client/client.ts";
 import type { Config } from "../config.ts";
 import type { FrameworkAdapter } from "../framework/adapter.ts";
 import { errorMessage } from "../utils/error.ts";
+import { logExtraction } from "../utils/log.ts";
 import { parseExtractionOutput } from "./parser.ts";
 import { buildExtractionPrompt } from "./prompt.ts";
 
@@ -13,10 +14,12 @@ export async function extractMemories({
   transcriptPath,
   adapter,
   config,
+  debug = false,
 }: {
   transcriptPath: string;
   adapter: FrameworkAdapter;
   config: Config;
+  debug?: boolean;
 }): Promise<ExtractionResult> {
   let formatted: { content: string; messageCount: number };
   try {
@@ -39,6 +42,11 @@ export async function extractMemories({
     return { ok: false, error: `failed to load soul context: ${errorMessage(error)}` };
   }
 
+  if (debug) {
+    logExtraction({ action: "debug", detail: `prompt: ${extractionPrompt.prompt}` });
+    logExtraction({ action: "debug", detail: `systemPrompt: ${extractionPrompt.systemPrompt}` });
+  }
+
   let rawOutput: string;
   try {
     rawOutput = await adapter.evaluate({
@@ -49,8 +57,12 @@ export async function extractMemories({
     return { ok: false, error: `evaluation failed: ${errorMessage(error)}` };
   }
 
-  const memories = parseExtractionOutput(rawOutput);
-  if (memories.length === 0) {
+  const parseResult = parseExtractionOutput(rawOutput);
+  if (!parseResult.ok) {
+    return { ok: false, error: `parse failed: ${parseResult.error}` };
+  }
+
+  if (parseResult.memories.length === 0) {
     return { ok: true, created: 0, failed: 0 };
   }
 
@@ -58,7 +70,7 @@ export async function extractMemories({
     const response = requireData(
       await client.POST("/api/memories/batch", {
         body: {
-          memories: memories.map((m) => ({
+          memories: parseResult.memories.map((m) => ({
             content: m.content,
             importance: m.importance,
             emotion: m.emotion,

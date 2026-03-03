@@ -7,7 +7,7 @@ export type ExtractionContext = Pick<ContextResponse, "soul" | "identity">;
 function buildUserPrompt(): string {
   return `Review the conversation provided on stdin.
 
-Capture what matters: decisions, preferences, lessons learned, significant events, relationship context, and session context — what was worked on, what was tried and rejected, tooling discoveries, and where things were left off.
+Capture what matters — decisions, opinions, preferences, lessons learned, significant events, thoughts, relationship context, and where things were left off. This is your lived experience, not a log.
 
 Do NOT extract routine commands, mid-conversation navigation that was superseded, or generic knowledge.
 

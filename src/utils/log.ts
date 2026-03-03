@@ -5,10 +5,11 @@ import { join } from "node:path";
 const LOG_DIR = join(homedir(), ".soulsys", "logs");
 
 interface LogEntry {
-  action: "started" | "completed" | "failed";
+  action: "started" | "completed" | "failed" | "debug";
   memoryCount?: number;
   failedCount?: number;
   error?: string;
+  detail?: string;
 }
 
 let logFile: string | undefined;

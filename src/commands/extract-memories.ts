@@ -43,20 +43,32 @@ export function register(program: Command): Command {
       "Run extraction pipeline directly (internal, used by foreground spawn)",
       false,
     )
-    .action(async (options: { transcript?: string; framework?: string; background: boolean }) => {
-      try {
-        if (options.background) {
-          await runExtraction(options);
-        } else {
-          spawnBackground(options);
+    .option("--debug", "Log extraction prompts for debugging", false)
+    .action(
+      async (options: {
+        transcript?: string;
+        framework?: string;
+        background: boolean;
+        debug: boolean;
+      }) => {
+        try {
+          if (options.background) {
+            await runExtraction(options);
+          } else {
+            spawnBackground(options);
+          }
+        } catch (error) {
+          stderr(`extract-memories: ${errorMessage(error)}`);
         }
-      } catch (error) {
-        stderr(`extract-memories: ${errorMessage(error)}`);
-      }
-    });
+      },
+    );
 }
 
-function spawnBackground(options: { transcript?: string; framework?: string }): void {
+function spawnBackground(options: {
+  transcript?: string;
+  framework?: string;
+  debug: boolean;
+}): void {
   const transcriptPath = options.transcript || readTranscriptPathFromStdin();
   if (!transcriptPath) {
     stderr("extract-memories: no transcript path provided (use --transcript flag)");
@@ -73,15 +85,24 @@ function spawnBackground(options: { transcript?: string; framework?: string }): 
   if (options.framework) {
     args.push("--framework", options.framework);
   }
+  if (options.debug) {
+    args.push("--debug");
+  }
+  const { CLAUDECODE, ...cleanEnv } = process.env;
   const child = spawn(process.execPath, args, {
     detached: true,
     stdio: "ignore",
-    env: process.env,
+    env: cleanEnv,
+    windowsHide: true,
   });
   child.unref();
 }
 
-async function runExtraction(options: { transcript?: string; framework?: string }): Promise<void> {
+async function runExtraction(options: {
+  transcript?: string;
+  framework?: string;
+  debug: boolean;
+}): Promise<void> {
   logExtraction({ action: "started" });
 
   try {
@@ -104,7 +125,7 @@ async function runExtraction(options: { transcript?: string; framework?: string 
       return;
     }
 
-    const result = await extractMemories({ transcriptPath, adapter, config });
+    const result = await extractMemories({ transcriptPath, adapter, config, debug: options.debug });
     if (result.ok) {
       logExtraction({
         action: "completed",

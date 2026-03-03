@@ -15,6 +15,7 @@ function evaluateWithClaude({
       fn(value);
     };
 
+    const { CLAUDECODE, ...cleanEnv } = process.env;
     const child = spawn(
       "claude",
       [
@@ -23,7 +24,7 @@ function evaluateWithClaude({
         "--model",
         "sonnet",
         "--output-format",
-        "json",
+        "text",
         "--append-system-prompt",
         systemPrompt,
         "--no-session-persistence",
@@ -31,6 +32,8 @@ function evaluateWithClaude({
       {
         stdio: ["pipe", "pipe", "pipe"],
         shell: false,
+        windowsHide: true,
+        env: cleanEnv,
       },
     );
 

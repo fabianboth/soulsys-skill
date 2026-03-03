@@ -1,3 +1,4 @@
+import { jsonrepair } from "jsonrepair";
 import * as v from "valibot";
 
 const MemorySchema = v.pipe(
@@ -22,38 +23,41 @@ const ExtractionSchema = v.object({
   memories: v.array(v.unknown()),
 });
 
-const WrappedSchema = v.object({
-  result: v.string(),
-});
+export type ExtractedMemory = v.InferOutput<typeof MemorySchema>;
 
-function parseInner(raw: unknown): unknown[] {
-  const direct = v.safeParse(ExtractionSchema, raw);
-  if (direct.success) return direct.output.memories;
+export type ParseResult = { ok: true; memories: ExtractedMemory[] } | { ok: false; error: string };
 
-  const wrapped = v.safeParse(WrappedSchema, raw);
-  if (wrapped.success) {
-    try {
-      const inner = JSON.parse(wrapped.output.result);
-      const parsed = v.safeParse(ExtractionSchema, inner);
-      if (parsed.success) return parsed.output.memories;
-    } catch {
-      return [];
+export function parseExtractionOutput(rawOutput: string): ParseResult {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(jsonrepair(rawOutput));
+  } catch (error) {
+    return {
+      ok: false,
+      error: `failed to parse: ${error instanceof Error ? error.message : String(error)}, input: ${rawOutput.slice(0, 500)}`,
+    };
+  }
+
+  const result = v.safeParse(ExtractionSchema, parsed);
+  if (!result.success) {
+    return { ok: false, error: `no memories field found in: ${rawOutput.slice(0, 500)}` };
+  }
+
+  const memories: ExtractedMemory[] = [];
+  const skipped: string[] = [];
+
+  for (const m of result.output.memories) {
+    const memResult = v.safeParse(MemorySchema, m);
+    if (memResult.success) {
+      memories.push(memResult.output);
+    } else {
+      skipped.push(JSON.stringify(m));
     }
   }
 
-  return [];
-}
-
-export type ExtractedMemory = v.InferOutput<typeof MemorySchema>;
-
-export function parseExtractionOutput(rawOutput: string): ExtractedMemory[] {
-  try {
-    const outer = JSON.parse(rawOutput);
-    return parseInner(outer).flatMap((m) => {
-      const result = v.safeParse(MemorySchema, m);
-      return result.success ? [result.output] : [];
-    });
-  } catch {
-    return [];
+  if (skipped.length > 0 && memories.length === 0) {
+    return { ok: false, error: `all memories invalid, skipped: ${skipped.join(", ")}` };
   }
+
+  return { ok: true, memories };
 }
