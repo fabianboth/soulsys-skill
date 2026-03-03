@@ -1,15 +1,12 @@
 import { randomUUID } from "node:crypto";
 
-import type { paths } from "../../src/client/generated/api.d.ts";
+import type { ContextResponse } from "../../src/context/format.ts";
 import {
   formatContext,
   formatCoreContext,
   formatMemoryInstructions,
-} from "../../src/commands/load-context.ts";
+} from "../../src/context/format.ts";
 import { describe, expect, it } from "bun:test";
-
-type ContextResponse =
-  paths["/api/context"]["get"]["responses"]["200"]["content"]["application/json"];
 
 function makeSoul(essence = "test"): ContextResponse["soul"] {
   const now = new Date().toISOString();

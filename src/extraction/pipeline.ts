@@ -3,6 +3,7 @@ import type { Config } from "../config.ts";
 import type { FrameworkAdapter } from "../framework/adapter.ts";
 import { errorMessage } from "../utils/error.ts";
 import { parseExtractionOutput } from "./parser.ts";
+import { buildExtractionPrompt } from "./prompt.ts";
 
 export type ExtractionResult =
   | { ok: true; created: number; failed: number }
@@ -28,9 +29,22 @@ export async function extractMemories({
     return { ok: false, error: `failed to read transcript: ${errorMessage(error)}` };
   }
 
+  const { client } = createApiClient(config);
+
+  let extractionPrompt: ReturnType<typeof buildExtractionPrompt>;
+  try {
+    const data = requireData(await client.GET("/api/context"));
+    extractionPrompt = buildExtractionPrompt(data);
+  } catch (error) {
+    return { ok: false, error: `failed to load soul context: ${errorMessage(error)}` };
+  }
+
   let rawOutput: string;
   try {
-    rawOutput = await adapter.evaluate(formatted.content);
+    rawOutput = await adapter.evaluate({
+      formattedContent: formatted.content,
+      extractionPrompt,
+    });
   } catch (error) {
     return { ok: false, error: `evaluation failed: ${errorMessage(error)}` };
   }
@@ -41,7 +55,6 @@ export async function extractMemories({
   }
 
   try {
-    const { client } = createApiClient(config);
     const response = requireData(
       await client.POST("/api/memories/batch", {
         body: {

@@ -1,7 +1,14 @@
+export type ExtractionPrompt = { prompt: string; systemPrompt: string };
+
+export type EvaluateInput = {
+  formattedContent: string;
+  extractionPrompt: ExtractionPrompt;
+};
+
 export type FrameworkAdapter = {
   readonly name: string;
   readAndFormat(transcriptPath: string): FormattedTranscript | null;
-  evaluate(formattedContent: string): Promise<string>;
+  evaluate(input: EvaluateInput): Promise<string>;
 };
 
 export type FormattedTranscript = {

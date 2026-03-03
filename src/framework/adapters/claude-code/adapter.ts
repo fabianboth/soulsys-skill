@@ -1,13 +1,20 @@
 import { spawn } from "node:child_process";
 
-import { buildExtractionPrompt } from "../../../extraction/prompt.ts";
-import type { FormattedTranscript, FrameworkAdapter } from "../../adapter.ts";
+import type { EvaluateInput, FormattedTranscript, FrameworkAdapter } from "../../adapter.ts";
 import { extractTranscriptWindow } from "./transcript.ts";
 
-function evaluateWithClaude(formattedWindow: string): Promise<string> {
-  const { prompt, systemPrompt } = buildExtractionPrompt();
-
+function evaluateWithClaude({
+  formattedContent,
+  extractionPrompt: { prompt, systemPrompt },
+}: EvaluateInput): Promise<string> {
   return new Promise((resolve, reject) => {
+    let settled = false;
+    const settle = <T>(fn: (value: T) => void, value: T): void => {
+      if (settled) return;
+      settled = true;
+      fn(value);
+    };
+
     const child = spawn(
       "claude",
       [
@@ -39,19 +46,22 @@ function evaluateWithClaude(formattedWindow: string): Promise<string> {
     });
 
     child.on("error", (err) => {
-      reject(new Error(`Failed to spawn claude: ${err.message}`));
+      settle(reject, new Error(`Failed to spawn claude: ${err.message}`));
+    });
+
+    child.stdin.on("error", (err) => {
+      settle(reject, new Error(`Failed to write transcript to claude stdin: ${err.message}`));
     });
 
     child.on("close", (code) => {
       if (code !== 0) {
-        reject(new Error(`claude -p exited with code ${code}: ${stderr}`));
+        settle(reject, new Error(`claude -p exited with code ${code}: ${stderr}`));
       } else {
-        resolve(stdout);
+        settle(resolve, stdout);
       }
     });
 
-    child.stdin.write(formattedWindow);
-    child.stdin.end();
+    child.stdin.end(formattedContent);
   });
 }
 
@@ -69,8 +79,8 @@ export function createClaudeCodeAdapter(): FrameworkAdapter {
       };
     },
 
-    evaluate(formattedContent: string): Promise<string> {
-      return evaluateWithClaude(formattedContent);
+    evaluate(input: EvaluateInput): Promise<string> {
+      return evaluateWithClaude(input);
     },
   };
 }
