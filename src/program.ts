@@ -8,6 +8,7 @@ import { register as registerAddMemoryFile } from "./commands/add-memory-file.ts
 import { register as registerAddRelation } from "./commands/add-relation.ts";
 import { register as registerCreateIdentity } from "./commands/create-identity.ts";
 import { register as registerDetectFramework } from "./commands/detect-framework.ts";
+import { register as registerDoctor } from "./commands/doctor.ts";
 import { register as registerExtractMemories } from "./commands/extract-memories.ts";
 import { register as registerInit } from "./commands/init.ts";
 import { register as registerLoadContext } from "./commands/load-context.ts";
@@ -46,3 +47,4 @@ export const updateRelationCmd = registerUpdateRelation(program);
 export const extractMemoriesCmd = registerExtractMemories(program);
 export const loadContextCmd = registerLoadContext(program);
 export const searchMemoryCmd = registerSearchMemory(program);
+export const doctorCmd = registerDoctor(program);

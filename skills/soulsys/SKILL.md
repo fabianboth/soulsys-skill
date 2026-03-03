@@ -68,6 +68,11 @@ Search memories by semantic similarity
 - <query>: Search query text
 - --limit <n>: Maximum number of results (1-50) (default: "10")
 
+### doctor
+
+Check soulsys setup health and optionally fix issues
+- --fix: Automatically repair detected issues
+
 ## Memory Workflow
 
 ### Saving

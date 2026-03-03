@@ -13,8 +13,8 @@ if [[ "$TARGET" != /* ]]; then
   TARGET="$REPO_ROOT/$TARGET"
 fi
 
-mkdir -p "$TARGET/scripts" "$TARGET/frameworks"
+mkdir -p "$TARGET/scripts" "$TARGET/templates"
 cp "$SRC/SKILL.md" "$SRC/BOOTSTRAP.md" "$SRC/package.json" "$TARGET/"
 cp "$SRC/scripts/soulsys" "$SRC/scripts/soulsys.js" "$TARGET/scripts/"
-cp "$SRC/frameworks/"*.md "$TARGET/frameworks/"
+cp "$SRC/templates/"* "$TARGET/templates/"
 echo "✓ Installed to $TARGET"

@@ -1,4 +1,6 @@
-import { detectFramework } from "../../src/framework/detect.ts";
+import { resolve } from "node:path";
+
+import { detectFramework, resolveInstallation } from "../../src/framework/detect.ts";
 import { describe, expect, it } from "bun:test";
 
 describe("detectFramework", () => {
@@ -71,5 +73,48 @@ describe("detectFramework", () => {
       expect(result.framework).toBe(expected);
       expect(result.guide).toBe("generic");
     }
+  });
+});
+
+describe("resolveInstallation", () => {
+  it("resolves Unix dotdir paths correctly", () => {
+    const result = resolveInstallation(
+      "/home/user/project/.claude/skills/soulsys/scripts/soulsys.js",
+    );
+    expect(result).not.toBeNull();
+    expect(result?.framework).toBe("claude-code");
+    expect(result?.guide).toBe("claude-code");
+    expect(result?.paths.projectRoot).toBe(resolve("/home/user/project"));
+    expect(result?.paths.skillRoot).toBe(resolve("/home/user/project/.claude/skills/soulsys"));
+    expect(result?.paths.parentDir).toBe(".claude");
+  });
+
+  it("resolves Windows backslash paths correctly", () => {
+    const result = resolveInstallation(
+      "C:\\Users\\dev\\project\\.claude\\skills\\soulsys\\scripts\\soulsys.js",
+    );
+    expect(result).not.toBeNull();
+    expect(result?.paths.parentDir).toBe(".claude");
+  });
+
+  it("resolves OpenClaw paths (bare skills/ directory)", () => {
+    const result = resolveInstallation("/home/user/myproject/skills/soulsys/scripts/soulsys.js");
+    expect(result).not.toBeNull();
+    expect(result?.framework).toBe("openclaw");
+    expect(result?.paths.projectRoot).toBe(resolve("/home/user/myproject"));
+    expect(result?.paths.skillRoot).toBe(resolve("/home/user/myproject/skills/soulsys"));
+    expect(result?.paths.parentDir).toBe("myproject");
+  });
+
+  it("returns null for unrecognized paths", () => {
+    expect(resolveInstallation("/some/random/path/soulsys.js")).toBeNull();
+    expect(resolveInstallation("/home/user/project/.claude/soulsys/scripts/soulsys.js")).toBeNull();
+  });
+
+  it("includes resolved scriptPath", () => {
+    const input = "/home/user/project/.claude/skills/soulsys/scripts/soulsys.js";
+    const result = resolveInstallation(input);
+    expect(result).not.toBeNull();
+    expect(result?.paths.scriptPath).toBe(resolve(input));
   });
 });

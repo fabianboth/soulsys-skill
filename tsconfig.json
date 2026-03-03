@@ -12,6 +12,6 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src", "tests", "scripts"],
+  "include": ["src", "tests", "scripts", "skills"],
   "exclude": ["dist", "node_modules"]
 }
