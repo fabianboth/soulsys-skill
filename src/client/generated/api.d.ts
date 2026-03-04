@@ -656,6 +656,8 @@ export interface paths {
                 /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
                 importance: number;
                 /** Format: date-time */
+                outdatedAt: string | null;
+                /** Format: date-time */
                 createdAt: string | null;
                 /** Format: date-time */
                 updatedAt: string | null;
@@ -764,6 +766,8 @@ export interface paths {
               emotion: string | null;
               /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
               importance: number;
+              /** Format: date-time */
+              outdatedAt: string | null;
               /** Format: date-time */
               createdAt: string | null;
               /** Format: date-time */
@@ -889,6 +893,8 @@ export interface paths {
                 emotion: string | null;
                 /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
                 importance: number;
+                /** Format: date-time */
+                outdatedAt: string | null;
                 /** Format: date-time */
                 createdAt: string | null;
                 /** Format: date-time */
@@ -1017,6 +1023,8 @@ export interface paths {
                 /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
                 importance: number;
                 /** Format: date-time */
+                outdatedAt: string | null;
+                /** Format: date-time */
                 createdAt: string | null;
                 /** Format: date-time */
                 updatedAt: string | null;
@@ -1025,6 +1033,121 @@ export interface paths {
                 index: number;
                 error: string;
               }[];
+            };
+          };
+        };
+        /** @description Validation error */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Unauthorized — missing or invalid bearer token */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Resource not found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Rate limit exceeded */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/memories/{memoryId}/outdate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Mark a memory as outdated */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memoryId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Memory marked as outdated */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** Format: uuid */
+              id: string;
+              /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+              content: string;
+              /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
+              fullContent: string | null;
+              /** @description Only if you genuinely associate an emotion with this memory entry */
+              emotion: string | null;
+              /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+              importance: number;
+              /** Format: date-time */
+              outdatedAt: string | null;
+              /** Format: date-time */
+              createdAt: string | null;
+              /** Format: date-time */
+              updatedAt: string | null;
             };
           };
         };

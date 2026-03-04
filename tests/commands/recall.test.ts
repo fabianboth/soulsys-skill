@@ -9,6 +9,7 @@ function makeResult(overrides: Partial<Parameters<typeof formatSearchResults>[0]
     content: "test memory content",
     emotion: null as string | null,
     importance: 5,
+    outdatedAt: null as string | null,
     similarity: 0.85,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

@@ -10,6 +10,7 @@ import { register as registerCreateIdentity } from "./commands/create-identity.t
 import { register as registerDetectFramework } from "./commands/detect-framework.ts";
 import { register as registerDoctor } from "./commands/doctor.ts";
 import { register as registerExtractMemories } from "./commands/extract-memories.ts";
+import { register as registerForget } from "./commands/forget.ts";
 import { register as registerInit } from "./commands/init.ts";
 import { register as registerLoadContext } from "./commands/load-context.ts";
 import { register as registerRecall } from "./commands/recall.ts";
@@ -45,6 +46,7 @@ export const addMemoryFileCmd = registerAddMemoryFile(program);
 export const addRelationCmd = registerAddRelation(program);
 export const updateRelationCmd = registerUpdateRelation(program);
 export const extractMemoriesCmd = registerExtractMemories(program);
+export const forgetCmd = registerForget(program);
 export const loadContextCmd = registerLoadContext(program);
 export const recallCmd = registerRecall(program);
 export const doctorCmd = registerDoctor(program);

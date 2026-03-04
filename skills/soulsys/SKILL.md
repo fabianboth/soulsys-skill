@@ -57,6 +57,11 @@ Update a relation (partial — unset fields are preserved)
 - --name <name>: The name of the entity that you have a relationship with.
 - --summary <text>: Evolving understanding of this entity and your relation with it based on your interactions.
 
+### forget
+
+Forget a memory that is no longer true — wrong, outdated, or superseded
+- <id>: Memory UUID to forget
+
 ### load-context
 
 Output the full soul state as compact markdown for context injection
@@ -88,3 +93,9 @@ Use `recall` the way you'd use grep — early and often. Don't wait for a reason
 Run it via a subagent so it doesn't interrupt your flow: dispatch `recall "<query>"` and fold the results into your thinking.
 
 You won't always find something. That's fine — a quick miss costs nothing. But a missed memory that could have helped costs a lot.
+
+### Forgetting
+
+Memories go stale. When you load context and spot something wrong, forget it. When you recall a memory and realize it no longer holds, forget it. When you learn something that contradicts what you remember, forget the old one.
+
+Don't wait — clean up in the moment, the same way you save in the moment. `forget <id>` is all it takes. A clean memory is worth more than a complete one.
