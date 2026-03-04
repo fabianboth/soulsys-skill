@@ -1,9 +1,11 @@
 export function getGuide(): string {
-  return `ACTION REQUIRED — Review and update your AGENTS.md:
+  return `ACTION REQUIRED — Review and update your AGENTS.md.
+
+Before making changes, create a backup: copy AGENTS.md to AGENTS.md.bk (if .bk already exists, skip — a backup is already in place)
 
 1. Replace file-based memory reads (SOUL.md, MEMORY.md, memory/ files) with:
    - \`soulsys load-context\` at session start (handled by bootstrap hook)
-   - \`soulsys search-memory\` for recall during conversations
+   - \`soulsys recall\` for recall during conversations
 
 2. Replace file-based memory writes (MEMORY.md, memory/YYYY-MM-DD.md) with:
    - \`soulsys add-memory "<content>" --importance <1-10>\`

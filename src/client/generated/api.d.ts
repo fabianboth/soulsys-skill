@@ -649,7 +649,7 @@ export interface paths {
               entries: {
                 /** Format: uuid */
                 id: string;
-                /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+                /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
                 content: string;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
                 emotion: string | null;
@@ -737,7 +737,7 @@ export interface paths {
       requestBody?: {
         content: {
           "application/json": {
-            /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+            /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
             content: string;
             fullContent?: string | null;
             emotion?: string | null;
@@ -756,7 +756,7 @@ export interface paths {
             "application/json": {
               /** Format: uuid */
               id: string;
-              /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+              /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
               content: string;
               /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent: string | null;
@@ -883,7 +883,7 @@ export interface paths {
               results: {
                 /** Format: uuid */
                 id: string;
-                /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+                /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
                 content: string;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
                 emotion: string | null;
@@ -987,7 +987,7 @@ export interface paths {
         content: {
           "application/json": {
             memories: {
-              /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+              /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
               content: string;
               fullContent?: string | null;
               emotion?: string | null;
@@ -1008,7 +1008,7 @@ export interface paths {
               created: {
                 /** Format: uuid */
                 id: string;
-                /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+                /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
                 content: string;
                 /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
                 fullContent: string | null;
@@ -1749,13 +1749,13 @@ export interface paths {
                 keyMemories: {
                   /** Format: uuid */
                   id: string;
-                  /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+                  /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
                   content: string;
                 }[];
                 recentMemories: {
                   /** Format: uuid */
                   id: string;
-                  /** @description The memory entry, a specific event, experience, or piece of information that you want to remember */
+                  /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
                   content: string;
                 }[];
               } | null;

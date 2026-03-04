@@ -18,7 +18,7 @@ export const APPEARANCE_DESCRIPTIONS = {
 
 export const MEMORY_DESCRIPTIONS = {
   content:
-    "The memory entry, a specific event, experience, or piece of information that you want to remember",
+    "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term",
   fullContent:
     "Optional full document you want to associate, e.g. a conversation transcript or detailed notes.",
   emotion: "Only if you genuinely associate an emotion with this memory entry",

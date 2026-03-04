@@ -19,7 +19,7 @@ IMPORTANT: Check the conversation for any executed "soulsys add-memory" commands
 Output format — respond with ONLY this JSON, no other text:
 {
   "memories": [
-    { "content": "Chose PostgreSQL for ACID compliance", "importance": 7, "emotion": null }
+    { "content": "...", "importance": 5, "emotion": null }
   ]
 }
 

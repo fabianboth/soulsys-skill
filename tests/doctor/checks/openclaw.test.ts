@@ -25,8 +25,13 @@ function fullOpenClawConfig() {
       defaults: {
         compaction: {
           memoryFlush: {
-            systemPrompt: "test",
-            prompt: "test",
+            systemPrompt:
+              "You are saving memories before context compaction. Review what happened and preserve what matters using soulsys add-memory.",
+            prompt: `Review the conversation above and extract memories worth keeping using soulsys add-memory.
+
+Capture: decisions made, opinions expressed, preferences discovered, lessons learned, significant events, relationship context, and where things were left off. This is your lived experience, not a log.
+
+Skip: routine commands, mid-conversation navigation that was superseded, generic knowledge, and anything already saved via soulsys add-memory earlier in this conversation.`,
           },
         },
       },
@@ -92,6 +97,28 @@ describe("openclaw checker", () => {
     const results = await openclawChecker.check(makePaths());
     const bootstrapConfig = results.find((r) => r.name === "Bootstrap hook config");
     expect(bootstrapConfig?.status).toBe("fail");
+  });
+
+  it("fails when bootstrap path is wrong", async () => {
+    const config = fullOpenClawConfig();
+    config.hooks["agent:bootstrap"] = "./wrong/path.ts";
+    writeOpenClaw(config);
+    writeBootstrapHook();
+    const results = await openclawChecker.check(makePaths());
+    const bootstrapConfig = results.find((r) => r.name === "Bootstrap hook config");
+    expect(bootstrapConfig?.status).toBe("fail");
+    expect(bootstrapConfig?.message).toContain("mismatch");
+  });
+
+  it("fails when memoryFlush prompt is wrong", async () => {
+    const config = fullOpenClawConfig();
+    config.agents.defaults.compaction.memoryFlush.prompt = "wrong prompt";
+    writeOpenClaw(config);
+    writeBootstrapHook();
+    const results = await openclawChecker.check(makePaths());
+    const memoryFlush = results.find((r) => r.name === "Memory flush config");
+    expect(memoryFlush?.status).toBe("fail");
+    expect(memoryFlush?.message).toContain("prompt mismatch");
   });
 
   it("fails when memoryFlush is missing from openclaw.json", async () => {
@@ -174,6 +201,19 @@ describe("openclaw checker fix", () => {
     expect(results.every((r) => r.status === "pass")).toBe(true);
     expect(existsSync(join(TEST_DIR, "openclaw.json"))).toBe(true);
     expect(existsSync(join(TEST_DIR, "hooks", "soulsys-bootstrap.ts"))).toBe(true);
+  });
+
+  it("fixes wrong bootstrap path and memoryFlush prompt", async () => {
+    const config = fullOpenClawConfig();
+    config.hooks["agent:bootstrap"] = "./wrong/path.ts";
+    config.agents.defaults.compaction.memoryFlush.prompt = "wrong";
+    writeOpenClaw(config);
+    writeBootstrapHook();
+    const results = await openclawChecker.fix(makePaths());
+    expect(results.every((r) => r.status === "pass")).toBe(true);
+    const data = JSON.parse(readFileSync(join(TEST_DIR, "openclaw.json"), "utf-8"));
+    expect(data.hooks["agent:bootstrap"]).toBe("./hooks/soulsys-bootstrap.ts");
+    expect(data.agents.defaults.compaction.memoryFlush.prompt).toContain("soulsys add-memory");
   });
 
   it("skips bootstrap hook creation when template is missing", async () => {

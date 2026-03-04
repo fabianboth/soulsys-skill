@@ -15,9 +15,9 @@ export function formatSearchResults(results: SearchResult[]): string {
 
 export function register(program: Command): Command {
   return program
-    .command("search-memory")
-    .description("Search memories by semantic similarity")
-    .argument("<query>", "Search query text")
+    .command("recall")
+    .description("Search your memories — like grep, but for past experiences")
+    .argument("<query>", "What to search for")
     .option("--limit <n>", "Maximum number of results (1-50)", "10")
     .action(async (query: string, options: { limit: string }) => {
       try {

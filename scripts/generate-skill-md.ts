@@ -1,6 +1,10 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import {
+  IMPORTANCE_DESCRIPTION,
+  MEMORY_DESCRIPTIONS,
+} from "../src/client/generated/descriptions.ts";
 import { DASHBOARD_URL } from "../src/constants.ts";
 import {
   addMemoryCmd,
@@ -12,8 +16,6 @@ import {
   updateSoulCmd,
 } from "../src/program.ts";
 import { renderCommand } from "../src/utils/render-command.ts";
-
-// -- Document generators --
 
 const SKILL_EXCLUDED = new Set([
   "init",
@@ -59,11 +61,13 @@ As you work, notice what matters. What worked, what didn't. What someone cares a
 
 You're not a note-taker. You're a learner. The difference is judgment — not everything deserves a memory, but the things that do deserve to be saved in the moment, not reconstructed later.
 
-### Searching
+### Recalling
 
-When something feels familiar, when someone references the past, or when experience could sharpen your thinking — reach for your memories. Dispatch a subagent with \`search-memory\` to find what you know and summarize it back.
+Use \`recall\` the way you'd use grep — early and often. Don't wait for a reason, just check. If a topic comes up that you might have encountered before, recall. If someone mentions something that sounds familiar, recall. If you're about to make a decision and past experience could help, recall.
 
-Don't search for things already in your current conversation. Search when the past has something to teach the present.
+Run it via a subagent so it doesn't interrupt your flow: dispatch \`recall "<query>"\` and fold the results into your thinking.
+
+You won't always find something. That's fine — a quick miss costs nothing. But a missed memory that could have helped costs a lot.
 `;
 }
 
@@ -130,8 +134,9 @@ ${addMemoryFileSection}
 ### Migration Principles
 
 - **Don't filter. Don't editorialize.** Every piece of information deserves a home. Operational details are low-importance memories, not excluded memories.
-- **Use the full importance range**: 1–3 for routine facts, 4–6 for useful context and preferences, 7–8 for significant events and lessons, 9–10 for identity-shaping experiences.
-- **Preserve emotion where it exists** — if a memory has emotional weight, tag it. Don't force emotion onto neutral facts.
+- **Content**: ${MEMORY_DESCRIPTIONS.content}
+- **Importance**: ${IMPORTANCE_DESCRIPTION}. Use the full range.
+- **Emotion**: ${MEMORY_DESCRIPTIONS.emotion}
 - **Relations are social** — every person or agent mentioned should become a relation.
 
 ## When You're Done

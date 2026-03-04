@@ -9,7 +9,7 @@ type OpenClawJson = {
   agents?: {
     defaults?: {
       compaction?: {
-        memoryFlush?: unknown;
+        memoryFlush?: { systemPrompt?: string; prompt?: string; [key: string]: unknown };
         [key: string]: unknown;
       };
       [key: string]: unknown;
@@ -24,6 +24,18 @@ type ParseResult =
   | { ok: false; missing: true }
   | { ok: false; missing: false; error: string };
 
+const EXPECTED_BOOTSTRAP_PATH = "./hooks/soulsys-bootstrap.ts";
+
+const EXPECTED_MEMORY_FLUSH = {
+  systemPrompt:
+    "You are saving memories before context compaction. Review what happened and preserve what matters using soulsys add-memory.",
+  prompt: `Review the conversation above and extract memories worth keeping using soulsys add-memory.
+
+Capture: decisions made, opinions expressed, preferences discovered, lessons learned, significant events, relationship context, and where things were left off. This is your lived experience, not a log.
+
+Skip: routine commands, mid-conversation navigation that was superseded, generic knowledge, and anything already saved via soulsys add-memory earlier in this conversation.`,
+};
+
 function parseOpenClawJson(filePath: string): ParseResult {
   if (!existsSync(filePath)) return { ok: false, missing: true };
   try {
@@ -33,49 +45,69 @@ function parseOpenClawJson(filePath: string): ParseResult {
   }
 }
 
-function checkBootstrapConfig(parsed: ParseResult): CheckResult {
-  if (!parsed.ok) {
-    return {
-      name: "Bootstrap hook config",
-      category: "integration",
-      status: "fail",
-      message: parsed.missing ? "openclaw.json not found" : parsed.error,
-      fixable: parsed.missing,
-    };
-  }
-  const hookValue = parsed.data.hooks?.["agent:bootstrap"];
-  const hasBootstrap = typeof hookValue === "string" && hookValue.includes("soulsys-bootstrap");
+function failForParse(name: string, parsed: ParseResult & { ok: false }): CheckResult {
   return {
-    name: "Bootstrap hook config",
+    name,
     category: "integration",
-    status: hasBootstrap ? "pass" : "fail",
-    message: hasBootstrap
-      ? "Configured"
-      : "Missing agent:bootstrap hook referencing soulsys-bootstrap",
-    fixable: true,
+    status: "fail",
+    message: parsed.missing ? "openclaw.json not found" : parsed.error,
+    fixable: parsed.missing,
   };
 }
 
-function checkMemoryFlushConfig(parsed: ParseResult): CheckResult {
-  if (!parsed.ok) {
+function checkBootstrapConfig(parsed: ParseResult): CheckResult {
+  const name = "Bootstrap hook config";
+  if (!parsed.ok) return failForParse(name, parsed);
+
+  const hookValue = parsed.data.hooks?.["agent:bootstrap"];
+  if (hookValue !== EXPECTED_BOOTSTRAP_PATH) {
     return {
-      name: "Memory flush config",
+      name,
       category: "integration",
       status: "fail",
-      message: parsed.missing ? "openclaw.json not found" : parsed.error,
-      fixable: parsed.missing,
+      message:
+        hookValue == null
+          ? "Missing agent:bootstrap hook"
+          : `Bootstrap path mismatch: got "${hookValue}", expected "${EXPECTED_BOOTSTRAP_PATH}"`,
+      fixable: true,
     };
   }
-  const hasMemoryFlush = parsed.data.agents?.defaults?.compaction?.memoryFlush != null;
-  return {
-    name: "Memory flush config",
-    category: "integration",
-    status: hasMemoryFlush ? "pass" : "fail",
-    message: hasMemoryFlush
-      ? "Configured"
-      : "Missing agents.defaults.compaction.memoryFlush config",
-    fixable: true,
-  };
+  return { name, category: "integration", status: "pass", message: "Configured", fixable: true };
+}
+
+function checkMemoryFlushConfig(parsed: ParseResult): CheckResult {
+  const name = "Memory flush config";
+  if (!parsed.ok) return failForParse(name, parsed);
+
+  const flush = parsed.data.agents?.defaults?.compaction?.memoryFlush;
+  if (flush == null) {
+    return {
+      name,
+      category: "integration",
+      status: "fail",
+      message: "Missing agents.defaults.compaction.memoryFlush config",
+      fixable: true,
+    };
+  }
+  if (flush.systemPrompt !== EXPECTED_MEMORY_FLUSH.systemPrompt) {
+    return {
+      name,
+      category: "integration",
+      status: "fail",
+      message: "memoryFlush.systemPrompt mismatch",
+      fixable: true,
+    };
+  }
+  if (flush.prompt !== EXPECTED_MEMORY_FLUSH.prompt) {
+    return {
+      name,
+      category: "integration",
+      status: "fail",
+      message: "memoryFlush.prompt mismatch",
+      fixable: true,
+    };
+  }
+  return { name, category: "integration", status: "pass", message: "Configured", fixable: true };
 }
 
 function checkBootstrapFile(bootstrapPath: string): CheckResult {
@@ -115,22 +147,14 @@ export const openclawChecker: FrameworkChecker = {
     const data: OpenClawJson = parsed.ok ? parsed.data : {};
 
     if (!data.hooks) data.hooks = {};
-    const hookValue = data.hooks["agent:bootstrap"];
-    if (typeof hookValue !== "string" || !hookValue.includes("soulsys-bootstrap")) {
-      data.hooks["agent:bootstrap"] = "./hooks/soulsys-bootstrap.ts";
-    }
+    data.hooks["agent:bootstrap"] = EXPECTED_BOOTSTRAP_PATH;
 
     if (!data.agents) data.agents = {};
     if (!data.agents.defaults) data.agents.defaults = {};
     if (!data.agents.defaults.compaction) data.agents.defaults.compaction = {};
-    if (data.agents.defaults.compaction.memoryFlush == null) {
-      data.agents.defaults.compaction.memoryFlush = {
-        systemPrompt:
-          "You are saving memories before context compaction. Use the soulsys add-memory command exactly as described in AGENTS.md.",
-        prompt:
-          'Review the conversation above. For each memory worth persisting, run:\n\nsoulsys add-memory "<memory content>" --importance <1-10>\n\nAdd --emotion <emotion> only if you genuinely associate an emotion with the memory. Do not save routine exchanges or transient state.',
-      };
-    }
+    data.agents.defaults.compaction.memoryFlush = {
+      ...EXPECTED_MEMORY_FLUSH,
+    };
 
     writeFileSync(openclawPath, `${JSON.stringify(data, null, 2)}\n`);
 

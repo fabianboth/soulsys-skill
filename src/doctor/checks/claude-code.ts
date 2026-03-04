@@ -4,9 +4,11 @@ import { join } from "node:path";
 import type { ProjectPaths } from "../../framework/detect.ts";
 import type { CheckResult, FrameworkChecker } from "../types.ts";
 
+type Hook = { type?: string; command?: string; timeout?: number };
+
 type HookEntry = {
   matcher?: string;
-  hooks?: { type?: string; command?: string; timeout?: number }[];
+  hooks?: Hook[];
 };
 
 type SettingsJson = {
@@ -18,6 +20,36 @@ type ParseResult =
   | { ok: true; data: SettingsJson }
   | { ok: false; missing: true }
   | { ok: false; missing: false; error: string };
+
+type ExpectedHook = {
+  name: string;
+  event: string;
+  matcher: string;
+  command: string;
+  timeout?: number;
+};
+
+const EXPECTED_HOOKS: ExpectedHook[] = [
+  {
+    name: "SessionStart startup hook",
+    event: "SessionStart",
+    matcher: "startup|clear",
+    command: "load-context",
+  },
+  {
+    name: "SessionStart compact hook",
+    event: "SessionStart",
+    matcher: "compact",
+    command: "load-context --core",
+  },
+  {
+    name: "PreCompact hook",
+    event: "PreCompact",
+    matcher: "",
+    command: "extract-memories",
+    timeout: 120000,
+  },
+];
 
 function parseSettings(settingsPath: string): ParseResult {
   if (!existsSync(settingsPath)) return { ok: false, missing: true };
@@ -32,103 +64,124 @@ function parseSettings(settingsPath: string): ParseResult {
   }
 }
 
-function findHookEntry(
+function findMatchingHook(
   entries: HookEntry[] | undefined,
-  matcherContains: string | null,
-  commandContains: string,
-): boolean {
-  if (!Array.isArray(entries)) return false;
-  return entries.some((entry) => {
-    const matcherOk =
-      matcherContains === null ||
-      (typeof entry.matcher === "string" && entry.matcher.includes(matcherContains));
-    if (!matcherOk || !Array.isArray(entry.hooks)) return false;
-    return entry.hooks.some(
-      (h) => typeof h.command === "string" && h.command.includes(commandContains),
+  expectedCommand: string,
+): { entry: HookEntry; hook: Hook } | null {
+  if (!Array.isArray(entries)) return null;
+  for (const entry of entries) {
+    if (!Array.isArray(entry.hooks)) continue;
+    for (const h of entry.hooks) {
+      if (typeof h.command === "string" && h.command.endsWith(` ${expectedCommand}`)) {
+        return { entry, hook: h };
+      }
+    }
+  }
+  return null;
+}
+
+function checkHook(parsed: ParseResult, expected: ExpectedHook, scriptPrefix: string): CheckResult {
+  const base = { name: expected.name, category: "hooks" as const, fixable: true };
+
+  if (!parsed.ok) {
+    return {
+      ...base,
+      status: "fail",
+      message: parsed.missing ? ".claude/settings.json not found" : parsed.error,
+      fixable: parsed.missing,
+    };
+  }
+
+  const entries = parsed.data.hooks?.[expected.event];
+  const match = findMatchingHook(entries, expected.command);
+
+  if (!match) {
+    return { ...base, status: "fail", message: `Missing ${expected.command} hook` };
+  }
+
+  const expectedCommand = `${scriptPrefix} ${expected.command}`;
+  if (match.hook.command !== expectedCommand) {
+    return {
+      ...base,
+      status: "fail",
+      message: `Command mismatch: got "${match.hook.command}", expected "${expectedCommand}"`,
+    };
+  }
+
+  if (match.entry.matcher !== expected.matcher) {
+    return {
+      ...base,
+      status: "fail",
+      message: `Matcher mismatch: got "${match.entry.matcher}", expected "${expected.matcher}"`,
+    };
+  }
+
+  if (expected.timeout !== undefined && match.hook.timeout !== expected.timeout) {
+    return {
+      ...base,
+      status: "fail",
+      message: `Timeout mismatch: got ${match.hook.timeout ?? "unset"}, expected ${expected.timeout}`,
+    };
+  }
+
+  return { ...base, status: "pass", message: "Configured" };
+}
+
+function fixHooks(data: SettingsJson, scriptPrefix: string): void {
+  if (!data.hooks || typeof data.hooks !== "object" || Array.isArray(data.hooks)) {
+    data.hooks = {};
+  }
+
+  if (Array.isArray(data.hooks.SessionStart)) {
+    data.hooks.SessionStart = data.hooks.SessionStart.map((entry) => {
+      if (
+        typeof entry.matcher !== "string" ||
+        !entry.matcher.includes("startup") ||
+        !Array.isArray(entry.hooks)
+      )
+        return entry;
+      const filtered = entry.hooks.filter(
+        (h) => !(typeof h.command === "string" && h.command.endsWith(" load-context --core")),
+      );
+      return { ...entry, hooks: filtered };
+    }).filter(
+      (entry) =>
+        !(typeof entry.matcher === "string" && entry.matcher.includes("startup")) ||
+        (Array.isArray(entry.hooks) && entry.hooks.length > 0),
     );
-  });
-}
-
-function checkStartupHook(parsed: ParseResult): CheckResult {
-  if (!parsed.ok) {
-    return {
-      name: "SessionStart startup hook",
-      category: "hooks",
-      status: "fail",
-      message: parsed.missing ? ".claude/settings.json not found" : parsed.error,
-      fixable: parsed.missing,
-    };
   }
-  const hooks = parsed.data.hooks;
-  const hasStartup = findHookEntry(hooks?.SessionStart, "startup", "soulsys load-context");
-  const hasCore =
-    hasStartup && findHookEntry(hooks?.SessionStart, "startup", "soulsys load-context --core");
-  return {
-    name: "SessionStart startup hook",
-    category: "hooks",
-    status: hasStartup && !hasCore ? "pass" : "fail",
-    message:
-      hasStartup && !hasCore
-        ? "Configured"
-        : hasStartup
-          ? "Startup hook should not use --core flag"
-          : "Missing soulsys load-context hook for startup|clear",
-    fixable: true,
-  };
-}
 
-function checkCompactHook(parsed: ParseResult): CheckResult {
-  if (!parsed.ok) {
-    return {
-      name: "SessionStart compact hook",
-      category: "hooks",
-      status: "fail",
-      message: parsed.missing ? ".claude/settings.json not found" : parsed.error,
-      fixable: parsed.missing,
-    };
-  }
-  const hasCompact = findHookEntry(
-    parsed.data.hooks?.SessionStart,
-    "compact",
-    "soulsys load-context --core",
-  );
-  return {
-    name: "SessionStart compact hook",
-    category: "hooks",
-    status: hasCompact ? "pass" : "fail",
-    message: hasCompact ? "Configured" : "Missing soulsys load-context --core hook for compact",
-    fixable: true,
-  };
-}
+  for (const expected of EXPECTED_HOOKS) {
+    if (!Array.isArray(data.hooks[expected.event])) {
+      data.hooks[expected.event] = [];
+    }
 
-function checkPreCompactHook(parsed: ParseResult): CheckResult {
-  if (!parsed.ok) {
-    return {
-      name: "PreCompact hook",
-      category: "hooks",
-      status: "fail",
-      message: parsed.missing ? ".claude/settings.json not found" : parsed.error,
-      fixable: parsed.missing,
-    };
+    const entries = data.hooks[expected.event];
+    const match = findMatchingHook(entries, expected.command);
+    const expectedCommand = `${scriptPrefix} ${expected.command}`;
+
+    if (match) {
+      match.hook.command = expectedCommand;
+      match.hook.type = "command";
+      if (expected.timeout !== undefined) {
+        match.hook.timeout = expected.timeout;
+      }
+      match.entry.matcher = expected.matcher;
+    } else {
+      const hook: Hook = { type: "command", command: expectedCommand };
+      if (expected.timeout !== undefined) {
+        hook.timeout = expected.timeout;
+      }
+      entries.push({ matcher: expected.matcher, hooks: [hook] });
+    }
   }
-  const hasPreCompact = findHookEntry(
-    parsed.data.hooks?.PreCompact,
-    null,
-    "soulsys extract-memories",
-  );
-  return {
-    name: "PreCompact hook",
-    category: "hooks",
-    status: hasPreCompact ? "pass" : "fail",
-    message: hasPreCompact ? "Configured" : "Missing soulsys extract-memories hook for PreCompact",
-    fixable: true,
-  };
 }
 
 export const claudeCodeChecker: FrameworkChecker = {
   async check(paths: ProjectPaths): Promise<CheckResult[]> {
     const parsed = parseSettings(join(paths.projectRoot, ".claude", "settings.json"));
-    return [checkStartupHook(parsed), checkCompactHook(parsed), checkPreCompactHook(parsed)];
+    const scriptPrefix = `$CLAUDE_PROJECT_DIR/${paths.parentDir}/skills/soulsys/scripts/soulsys`;
+    return EXPECTED_HOOKS.map((expected) => checkHook(parsed, expected, scriptPrefix));
   },
 
   async fix(paths: ProjectPaths): Promise<CheckResult[]> {
@@ -140,55 +193,9 @@ export const claudeCodeChecker: FrameworkChecker = {
     }
 
     const data: SettingsJson = parsed.ok ? parsed.data : {};
-    if (!data.hooks || typeof data.hooks !== "object" || Array.isArray(data.hooks)) {
-      data.hooks = {};
-    }
-
     const scriptPrefix = `$CLAUDE_PROJECT_DIR/${paths.parentDir}/skills/soulsys/scripts/soulsys`;
 
-    if (!Array.isArray(data.hooks.SessionStart)) data.hooks.SessionStart = [];
-
-    // Remove --core hooks from startup entries, preserving unrelated hooks in the same entry
-    data.hooks.SessionStart = data.hooks.SessionStart.map((entry) => {
-      if (
-        typeof entry.matcher !== "string" ||
-        !entry.matcher.includes("startup") ||
-        !Array.isArray(entry.hooks)
-      )
-        return entry;
-      const filtered = entry.hooks.filter(
-        (h) =>
-          !(typeof h.command === "string" && h.command.includes("soulsys load-context --core")),
-      );
-      return { ...entry, hooks: filtered };
-    }).filter(
-      (entry) =>
-        !(typeof entry.matcher === "string" && entry.matcher.includes("startup")) ||
-        (Array.isArray(entry.hooks) && entry.hooks.length > 0),
-    );
-
-    if (!findHookEntry(data.hooks.SessionStart, "startup", "soulsys load-context")) {
-      data.hooks.SessionStart.push({
-        matcher: "startup|clear",
-        hooks: [{ type: "command", command: `${scriptPrefix} load-context` }],
-      });
-    }
-
-    if (!findHookEntry(data.hooks.SessionStart, "compact", "soulsys load-context --core")) {
-      data.hooks.SessionStart.push({
-        matcher: "compact",
-        hooks: [{ type: "command", command: `${scriptPrefix} load-context --core` }],
-      });
-    }
-
-    if (!Array.isArray(data.hooks.PreCompact)) data.hooks.PreCompact = [];
-
-    if (!findHookEntry(data.hooks.PreCompact, null, "soulsys extract-memories")) {
-      data.hooks.PreCompact.push({
-        matcher: "",
-        hooks: [{ type: "command", command: `${scriptPrefix} extract-memories`, timeout: 60000 }],
-      });
-    }
+    fixHooks(data, scriptPrefix);
 
     const dir = join(paths.projectRoot, ".claude");
     mkdirSync(dir, { recursive: true });

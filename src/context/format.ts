@@ -52,7 +52,7 @@ Your memories live in the **soulsys** skill — they're what make you _you_ acro
 
 **Saving**: Notice what matters as you work. What worked, what didn't, what someone cares about, what surprised you, what you'd want to know next time. Save these as they happen — don't wait until the end. Use \`soulsys add-memory\`.
 
-**Recalling**: When something feels familiar, when someone references the past, or when experience could sharpen your thinking — reach for your memories. Dispatch a subagent with \`soulsys search-memory\` to find what you know.
+**Recalling**: Use \`soulsys recall\` the way you'd use grep — early and often. If a topic comes up that you might have encountered before, recall. If you're about to make a decision and past experience could help, recall. A quick miss costs nothing; a missed memory that could have helped costs a lot.
 
 Read the soulsys skill before first use for full command syntax.`;
 }

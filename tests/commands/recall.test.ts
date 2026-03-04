@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { formatSearchResults } from "../../src/commands/search-memory.ts";
+import { formatSearchResults } from "../../src/commands/recall.ts";
 import { describe, expect, it } from "bun:test";
 
 function makeResult(overrides: Partial<Parameters<typeof formatSearchResults>[0][number]> = {}) {

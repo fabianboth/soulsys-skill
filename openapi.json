@@ -1154,7 +1154,7 @@
                           },
                           "content": {
                             "type": "string",
-                            "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                            "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                           },
                           "emotion": {
                             "type": ["string", "null"],
@@ -1329,7 +1329,7 @@
                   "content": {
                     "type": "string",
                     "maxLength": 2000,
-                    "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                    "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                   },
                   "fullContent": {
                     "type": ["string", "null"],
@@ -1365,7 +1365,7 @@
                     },
                     "content": {
                       "type": "string",
-                      "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                      "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                     },
                     "fullContent": {
                       "type": ["string", "null"],
@@ -1595,7 +1595,7 @@
                           },
                           "content": {
                             "type": "string",
-                            "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                            "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                           },
                           "emotion": {
                             "type": ["string", "null"],
@@ -1781,7 +1781,7 @@
                         "content": {
                           "type": "string",
                           "maxLength": 2000,
-                          "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                          "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                         },
                         "fullContent": {
                           "type": ["string", "null"],
@@ -1828,7 +1828,7 @@
                           },
                           "content": {
                             "type": "string",
-                            "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                            "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                           },
                           "fullContent": {
                             "type": ["string", "null"],
@@ -3154,7 +3154,7 @@
                               },
                               "content": {
                                 "type": "string",
-                                "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                                "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                               }
                             },
                             "required": ["id", "content"]
@@ -3171,7 +3171,7 @@
                               },
                               "content": {
                                 "type": "string",
-                                "description": "The memory entry, a specific event, experience, or piece of information that you want to remember"
+                                "description": "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term"
                               }
                             },
                             "required": ["id", "content"]

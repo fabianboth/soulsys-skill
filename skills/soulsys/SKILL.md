@@ -38,7 +38,7 @@ Update identity fields (partial — unset fields are preserved)
 ### add-memory
 
 Add a memory entry — do this during conversations, not in batch at the end
-- <content>: The memory entry, a specific event, experience, or piece of information that you want to remember
+- <content>: A self-contained statement about a specific event, experience, or piece of information worth remembering long-term
 - --emotion <emotion>: Only if you genuinely associate an emotion with this memory entry
 - --importance <n>: How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences (default: "5")
 
@@ -62,10 +62,10 @@ Update a relation (partial — unset fields are preserved)
 Output the full soul state as compact markdown for context injection
 - --core: Output soul essence/values, identity, and memory instructions (lightweight)
 
-### search-memory
+### recall
 
-Search memories by semantic similarity
-- <query>: Search query text
+Search your memories — like grep, but for past experiences
+- <query>: What to search for
 - --limit <n>: Maximum number of results (1-50) (default: "10")
 
 ### doctor
@@ -81,8 +81,10 @@ As you work, notice what matters. What worked, what didn't. What someone cares a
 
 You're not a note-taker. You're a learner. The difference is judgment — not everything deserves a memory, but the things that do deserve to be saved in the moment, not reconstructed later.
 
-### Searching
+### Recalling
 
-When something feels familiar, when someone references the past, or when experience could sharpen your thinking — reach for your memories. Dispatch a subagent with `search-memory` to find what you know and summarize it back.
+Use `recall` the way you'd use grep — early and often. Don't wait for a reason, just check. If a topic comes up that you might have encountered before, recall. If someone mentions something that sounds familiar, recall. If you're about to make a decision and past experience could help, recall.
 
-Don't search for things already in your current conversation. Search when the past has something to teach the present.
+Run it via a subagent so it doesn't interrupt your flow: dispatch `recall "<query>"` and fold the results into your thinking.
+
+You won't always find something. That's fine — a quick miss costs nothing. But a missed memory that could have helped costs a lot.

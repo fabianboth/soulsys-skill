@@ -7,6 +7,7 @@ import type { ProjectPaths } from "../../../src/framework/detect.ts";
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 
 const TEST_DIR = join(tmpdir(), `soulsys-doctor-cc-${Date.now()}`);
+const SCRIPT_PREFIX = "$CLAUDE_PROJECT_DIR/.claude/skills/soulsys/scripts/soulsys";
 
 function makePaths(): ProjectPaths {
   return {
@@ -28,17 +29,17 @@ function fullHooks() {
     SessionStart: [
       {
         matcher: "startup|clear",
-        hooks: [{ type: "command", command: "soulsys load-context" }],
+        hooks: [{ type: "command", command: `${SCRIPT_PREFIX} load-context` }],
       },
       {
         matcher: "compact",
-        hooks: [{ type: "command", command: "soulsys load-context --core" }],
+        hooks: [{ type: "command", command: `${SCRIPT_PREFIX} load-context --core` }],
       },
     ],
     PreCompact: [
       {
         matcher: "",
-        hooks: [{ type: "command", command: "soulsys extract-memories" }],
+        hooks: [{ type: "command", command: `${SCRIPT_PREFIX} extract-memories`, timeout: 120000 }],
       },
     ],
   };
@@ -180,7 +181,7 @@ describe("claude-code checker", () => {
     hooks.SessionStart = [
       {
         matcher: "startup|clear",
-        hooks: [{ type: "command", command: "soulsys load-context --core" }],
+        hooks: [{ type: "command", command: `${SCRIPT_PREFIX} load-context --core` }],
       },
       hooks.SessionStart[1],
     ];
@@ -188,7 +189,43 @@ describe("claude-code checker", () => {
     const results = await claudeCodeChecker.check(makePaths());
     const startup = results.find((r) => r.name === "SessionStart startup hook");
     expect(startup?.status).toBe("fail");
-    expect(startup?.message).toContain("--core");
+  });
+
+  it("fails when PreCompact timeout is wrong", async () => {
+    const hooks = fullHooks();
+    hooks.PreCompact[0].hooks[0].timeout = 60000;
+    writeSettings(hooks);
+    const results = await claudeCodeChecker.check(makePaths());
+    const preCompact = results.find((r) => r.name === "PreCompact hook");
+    expect(preCompact?.status).toBe("fail");
+    expect(preCompact?.message).toContain("Timeout");
+    expect(preCompact?.message).toContain("60000");
+    expect(preCompact?.message).toContain("120000");
+  });
+
+  it("passes when SessionStart entries are reversed", async () => {
+    const hooks = fullHooks();
+    hooks.SessionStart = [hooks.SessionStart[1], hooks.SessionStart[0]];
+    writeSettings(hooks);
+    const results = await claudeCodeChecker.check(makePaths());
+    expect(results.every((r) => r.status === "pass")).toBe(true);
+  });
+
+  it("fails when command path is wrong", async () => {
+    writeSettings({
+      ...fullHooks(),
+      SessionStart: [
+        {
+          matcher: "startup|clear",
+          hooks: [{ type: "command", command: "wrong/path/soulsys load-context" }],
+        },
+        fullHooks().SessionStart[1],
+      ],
+    });
+    const results = await claudeCodeChecker.check(makePaths());
+    const startup = results.find((r) => r.name === "SessionStart startup hook");
+    expect(startup?.status).toBe("fail");
+    expect(startup?.message).toContain("Command mismatch");
   });
 });
 
@@ -207,27 +244,25 @@ describe("claude-code checker fix", () => {
     expect(results.filter((r) => r.status === "pass")).toHaveLength(3);
   });
 
-  it("is no-op when all hooks are present", async () => {
+  it("is no-op when all hooks are present and correct", async () => {
     writeSettings(fullHooks());
     const settingsPath = join(TEST_DIR, ".claude", "settings.json");
     const before = readFileSync(settingsPath, "utf-8");
     await claudeCodeChecker.fix(makePaths());
     const after = readFileSync(settingsPath, "utf-8");
-    expect(JSON.parse(after).hooks.SessionStart).toHaveLength(
-      JSON.parse(before).hooks.SessionStart.length,
-    );
+    expect(JSON.parse(after)).toEqual(JSON.parse(before));
   });
 
   it("preserves non-soulsys hooks", async () => {
     const hooks = {
       ...fullHooks(),
-      Stop: [{ hooks: [{ type: "command", command: "echo done" }] }],
+      PermissionRequest: [{ hooks: [{ type: "command", command: "echo done" }] }],
     };
     writeSettings(hooks);
     const results = await claudeCodeChecker.fix(makePaths());
     const settingsPath = join(TEST_DIR, ".claude", "settings.json");
     const data = JSON.parse(readFileSync(settingsPath, "utf-8"));
-    expect(data.hooks.Stop).toHaveLength(1);
+    expect(data.hooks.PermissionRequest).toHaveLength(1);
     expect(results.every((r) => r.status === "pass")).toBe(true);
   });
 
@@ -261,17 +296,19 @@ describe("claude-code checker fix", () => {
       SessionStart: [
         {
           matcher: "startup|clear",
-          hooks: [{ type: "command", command: "soulsys load-context --core" }],
+          hooks: [{ type: "command", command: `${SCRIPT_PREFIX} load-context --core` }],
         },
         {
           matcher: "compact",
-          hooks: [{ type: "command", command: "soulsys load-context --core" }],
+          hooks: [{ type: "command", command: `${SCRIPT_PREFIX} load-context --core` }],
         },
       ],
       PreCompact: [
         {
           matcher: "",
-          hooks: [{ type: "command", command: "soulsys extract-memories" }],
+          hooks: [
+            { type: "command", command: `${SCRIPT_PREFIX} extract-memories`, timeout: 120000 },
+          ],
         },
       ],
     });
@@ -284,5 +321,37 @@ describe("claude-code checker fix", () => {
     );
     expect(startupEntries).toHaveLength(1);
     expect(startupEntries[0].hooks[0].command).not.toContain("--core");
+  });
+
+  it("fixes wrong timeout on PreCompact hook", async () => {
+    const hooks = fullHooks();
+    hooks.PreCompact[0].hooks[0].timeout = 60000;
+    writeSettings(hooks);
+    const results = await claudeCodeChecker.fix(makePaths());
+    expect(results.every((r) => r.status === "pass")).toBe(true);
+    const settingsPath = join(TEST_DIR, ".claude", "settings.json");
+    const data = JSON.parse(readFileSync(settingsPath, "utf-8"));
+    expect(data.hooks.PreCompact[0].hooks[0].timeout).toBe(120000);
+  });
+
+  it("fixes wrong command path", async () => {
+    writeSettings({
+      SessionStart: [
+        {
+          matcher: "startup|clear",
+          hooks: [{ type: "command", command: "old/path/soulsys load-context" }],
+        },
+        fullHooks().SessionStart[1],
+      ],
+      PreCompact: fullHooks().PreCompact,
+    });
+    const results = await claudeCodeChecker.fix(makePaths());
+    expect(results.every((r) => r.status === "pass")).toBe(true);
+    const settingsPath = join(TEST_DIR, ".claude", "settings.json");
+    const data = JSON.parse(readFileSync(settingsPath, "utf-8"));
+    const startup = data.hooks.SessionStart.find((e: { matcher?: string }) =>
+      e.matcher?.includes("startup"),
+    );
+    expect(startup.hooks[0].command).toBe(`${SCRIPT_PREFIX} load-context`);
   });
 });
