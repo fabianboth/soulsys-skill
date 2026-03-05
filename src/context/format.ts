@@ -50,7 +50,7 @@ export function formatMemoryInstructions(): string {
 
 Your memories live in the **soulsys** skill — they're what make you _you_ across sessions. Not a log. Your lived experience.
 
-**Saving**: Notice what matters as you work. What worked, what didn't, what someone cares about, what surprised you, what you'd want to know next time. Save these as they happen — don't wait until the end. Use \`soulsys add-memory\`.
+**Saving**: Your long-term memory. Save as things happen — when you learn something about someone, form an opinion, or realize something. Quick filter: "will this still matter weeks from now?" If yes, \`soulsys add-memory\`. If not, let it go.
 
 **Recalling**: Use \`soulsys recall\` the way you'd use grep — early and often. If a topic comes up that you might have encountered before, recall. If you're about to make a decision and past experience could help, recall. A quick miss costs nothing; a missed memory that could have helped costs a lot.
 
@@ -81,6 +81,8 @@ export function formatContext(opts: ContextResponse): string {
     if (keySection) sections.push(keySection);
     const recentSection = formatMemorySection("## Recent Memories", opts.memory.recentMemories);
     if (recentSection) sections.push(recentSection);
+    const journalSection = formatMemorySection("## Recent Sessions", opts.memory.recentJournals);
+    if (journalSection) sections.push(journalSection);
   }
 
   if (opts.relations) {

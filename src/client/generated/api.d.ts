@@ -654,12 +654,17 @@ export interface paths {
               entries: {
                 /** Format: uuid */
                 id: string;
-                /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+                /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                 content: string;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
                 emotion: string | null;
-                /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+                /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
                 importance: number;
+                /**
+                 * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+                 * @enum {string}
+                 */
+                type: "memory" | "journal";
                 /** Format: date-time */
                 outdatedAt: string | null;
                 /** Format: date-time */
@@ -747,12 +752,18 @@ export interface paths {
       requestBody?: {
         content: {
           "application/json": {
-            /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+            /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
             content: string;
             fullContent?: string | null;
             emotion?: string | null;
-            /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+            /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
             importance: number;
+            /**
+             * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+             * @default memory
+             * @enum {string}
+             */
+            type?: "memory" | "journal";
           };
         };
       };
@@ -766,14 +777,19 @@ export interface paths {
             "application/json": {
               /** Format: uuid */
               id: string;
-              /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
               content: string;
               /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent: string | null;
               /** @description Only if you genuinely associate an emotion with this memory entry */
               emotion: string | null;
-              /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+              /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
               importance: number;
+              /**
+               * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+               * @enum {string}
+               */
+              type: "memory" | "journal";
               /** Format: date-time */
               outdatedAt: string | null;
               /** Format: date-time */
@@ -980,7 +996,7 @@ export interface paths {
             /** @default 10 */
             topK?: number;
             threshold?: number;
-            /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+            /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
             minImportance?: number;
             /** Format: date-time */
             after?: string | null;
@@ -1000,12 +1016,17 @@ export interface paths {
               results: {
                 /** Format: uuid */
                 id: string;
-                /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+                /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                 content: string;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
                 emotion: string | null;
-                /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+                /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
                 importance: number;
+                /**
+                 * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+                 * @enum {string}
+                 */
+                type: "memory" | "journal";
                 /** Format: date-time */
                 outdatedAt: string | null;
                 /** Format: date-time */
@@ -1106,12 +1127,18 @@ export interface paths {
         content: {
           "application/json": {
             memories: {
-              /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
               content: string;
               fullContent?: string | null;
               emotion?: string | null;
-              /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+              /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
               importance: number;
+              /**
+               * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+               * @default memory
+               * @enum {string}
+               */
+              type?: "memory" | "journal";
             }[];
           };
         };
@@ -1127,14 +1154,19 @@ export interface paths {
               created: {
                 /** Format: uuid */
                 id: string;
-                /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+                /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                 content: string;
                 /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
                 fullContent: string | null;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
                 emotion: string | null;
-                /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+                /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
                 importance: number;
+                /**
+                 * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+                 * @enum {string}
+                 */
+                type: "memory" | "journal";
                 /** Format: date-time */
                 outdatedAt: string | null;
                 /** Format: date-time */
@@ -1247,14 +1279,19 @@ export interface paths {
             "application/json": {
               /** Format: uuid */
               id: string;
-              /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
               content: string;
               /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent: string | null;
               /** @description Only if you genuinely associate an emotion with this memory entry */
               emotion: string | null;
-              /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+              /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
               importance: number;
+              /**
+               * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+               * @enum {string}
+               */
+              type: "memory" | "journal";
               /** Format: date-time */
               outdatedAt: string | null;
               /** Format: date-time */
@@ -1458,14 +1495,19 @@ export interface paths {
             "application/json": {
               /** Format: uuid */
               id: string;
-              /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
               content: string;
               /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent: string | null;
               /** @description Only if you genuinely associate an emotion with this memory entry */
               emotion: string | null;
-              /** @description How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences */
+              /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
               importance: number;
+              /**
+               * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+               * @enum {string}
+               */
+              type: "memory" | "journal";
               /** Format: date-time */
               outdatedAt: string | null;
               /** Format: date-time */
@@ -2130,7 +2172,9 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          topK?: number;
+          topKRecent?: number;
+          topKImportant?: number;
+          topKJournals?: number;
         };
         header?: never;
         path?: never;
@@ -2196,13 +2240,19 @@ export interface paths {
                 keyMemories: {
                   /** Format: uuid */
                   id: string;
-                  /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+                  /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                   content: string;
                 }[];
                 recentMemories: {
                   /** Format: uuid */
                   id: string;
-                  /** @description A self-contained statement about a specific event, experience, or piece of information worth remembering long-term */
+                  /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+                  content: string;
+                }[];
+                recentJournals: {
+                  /** Format: uuid */
+                  id: string;
+                  /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                   content: string;
                 }[];
               } | null;

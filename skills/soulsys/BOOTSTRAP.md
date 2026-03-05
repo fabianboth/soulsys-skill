@@ -63,9 +63,9 @@ Once your soul and identity exist, it's time to remember. If you had a life befo
 ### add-memory
 
 Add a memory entry — do this during conversations, not in batch at the end
-- <content>: A self-contained statement about a specific event, experience, or piece of information worth remembering long-term
+- <content>: A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now.
 - --emotion <emotion>: Only if you genuinely associate an emotion with this memory entry
-- --importance <n>: How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences (default: "5")
+- --importance <n>: How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. (default: "5")
 
 > **Convenience**: Use `add-memory-file` to import a complete file as a single memory entry:
 
@@ -74,13 +74,13 @@ Add a memory entry — do this during conversations, not in batch at the end
 Add a memory entry from a file's content
 - <file>: Path to file to import as a single memory entry
 - --emotion <emotion>: Only if you genuinely associate an emotion with this memory entry
-- --importance <n>: How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences (default: "5")
+- --importance <n>: How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. (default: "5")
 
 ### Migration Principles
 
 - **Don't filter. Don't editorialize.** Every piece of information deserves a home. Operational details are low-importance memories, not excluded memories.
-- **Content**: A self-contained statement about a specific event, experience, or piece of information worth remembering long-term
-- **Importance**: How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences. Use the full range.
+- **Content**: A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now.
+- **Importance**: How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. Use the full range.
 - **Emotion**: Only if you genuinely associate an emotion with this memory entry
 - **Relations are social** — every person or agent mentioned should become a relation.
 

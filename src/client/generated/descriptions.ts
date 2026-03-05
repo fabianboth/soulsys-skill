@@ -18,14 +18,14 @@ export const APPEARANCE_DESCRIPTIONS = {
 
 export const MEMORY_DESCRIPTIONS = {
   content:
-    "A self-contained statement about a specific event, experience, or piece of information worth remembering long-term",
+    "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now.",
   fullContent:
     "Optional full document you want to associate, e.g. a conversation transcript or detailed notes.",
   emotion: "Only if you genuinely associate an emotion with this memory entry",
 } as const;
 
 export const IMPORTANCE_DESCRIPTION =
-  "How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences" as const;
+  "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are." as const;
 
 export const RELATION_DESCRIPTIONS = {
   entityType: "The type of entity: 'human' or 'agent'.",

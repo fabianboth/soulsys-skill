@@ -67,6 +67,7 @@ describe("formatContext", () => {
       memory: {
         keyMemories: [keyMemory],
         recentMemories: [recentMemory],
+        recentJournals: [],
       },
       relations: { relations: [] },
     });
@@ -83,6 +84,7 @@ describe("formatContext", () => {
       memory: {
         keyMemories: [],
         recentMemories: [makeMemory("something")],
+        recentJournals: [],
       },
       relations: { relations: [] },
     });
@@ -131,6 +133,39 @@ describe("formatContext", () => {
     expect(output).not.toContain("## Relations");
   });
 
+  it("renders journals as Recent Sessions section", () => {
+    const journal = makeMemory("Worked on memory quality feature");
+
+    const output = formatContext({
+      soul: makeSoul(),
+      identity: makeIdentity(),
+      memory: {
+        keyMemories: [],
+        recentMemories: [],
+        recentJournals: [journal],
+      },
+      relations: { relations: [] },
+    });
+    expect(output).toContain("## Recent Sessions");
+    expect(output).toContain(`\`${journal.id}\` Worked on memory quality feature`);
+    expect(output).not.toContain("Key Memories");
+    expect(output).not.toContain("Recent Memories");
+  });
+
+  it("omits Recent Sessions section when journals are empty", () => {
+    const output = formatContext({
+      soul: makeSoul(),
+      identity: makeIdentity(),
+      memory: {
+        keyMemories: [makeMemory("something")],
+        recentMemories: [],
+        recentJournals: [],
+      },
+      relations: { relations: [] },
+    });
+    expect(output).not.toContain("Recent Sessions");
+  });
+
   it("includes memory instructions with soulsys reference", () => {
     const output = formatContext({
       soul: makeSoul(),
@@ -138,6 +173,7 @@ describe("formatContext", () => {
       memory: {
         keyMemories: [makeMemory("something")],
         recentMemories: [],
+        recentJournals: [],
       },
       relations: { relations: [] },
     });

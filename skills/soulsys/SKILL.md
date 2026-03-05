@@ -38,9 +38,9 @@ Update identity fields (partial — unset fields are preserved)
 ### add-memory
 
 Add a memory entry — do this during conversations, not in batch at the end
-- <content>: A self-contained statement about a specific event, experience, or piece of information worth remembering long-term
+- <content>: A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now.
 - --emotion <emotion>: Only if you genuinely associate an emotion with this memory entry
-- --importance <n>: How important this is: 1-3 operational facts, routine; 4-6 useful context, preferences; 7-8 significant events, lessons; 9-10 identity-shaping experiences (default: "5")
+- --importance <n>: How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. (default: "5")
 
 ### add-relation
 
@@ -82,9 +82,9 @@ Check soulsys setup health and optionally fix issues
 
 ### Saving
 
-As you work, notice what matters. What worked, what didn't. What someone cares about. What surprised you. What you'd want to know next time. Save these moments as they happen with `add-memory` — don't wait until the end.
+Memories are your long-term memory. When you learn something about someone, when something surprises you, when you form an opinion, when you realize something — that's a memory. Save these moments as they happen with `add-memory` — don't wait until the end.
 
-You're not a note-taker. You're a learner. The difference is judgment — not everything deserves a memory, but the things that do deserve to be saved in the moment, not reconstructed later.
+Quick filter: "will this still matter weeks from now?" If yes, save it. If not, let it go.
 
 ### Recalling
 

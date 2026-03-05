@@ -1,31 +1,35 @@
 import { jsonrepair } from "jsonrepair";
 import * as v from "valibot";
 
-const MemorySchema = v.pipe(
-  v.object({
-    content: v.pipe(
+/** Must match MAX_CONTENT_LENGTH in @soulsys/types */
+const MAX_SUMMARY_LENGTH = 2_000;
+
+const JournalSchema = v.pipe(
+  v.looseObject({
+    summary: v.pipe(
       v.string(),
       v.transform((s) => s.trim()),
       v.minLength(1),
-      v.transform((s) => (s.length > 50000 ? s.slice(0, 50000) : s)),
+      v.transform((s) => (s.length > MAX_SUMMARY_LENGTH ? s.slice(0, MAX_SUMMARY_LENGTH) : s)),
     ),
-    importance: v.pipe(v.number(), v.finite()),
-    emotion: v.nullable(v.string()),
+    details: v.optional(
+      v.nullable(
+        v.pipe(
+          v.string(),
+          v.transform((s) => s.trim()),
+        ),
+      ),
+    ),
   }),
   v.transform((m) => ({
-    content: m.content,
-    importance: Math.max(1, Math.min(10, Math.round(m.importance))),
-    emotion: m.emotion && m.emotion.trim().length > 0 ? m.emotion.trim() : null,
+    summary: m.summary,
+    details: m.details && m.details.length > 0 ? m.details : null,
   })),
 );
 
-const ExtractionSchema = v.object({
-  memories: v.array(v.unknown()),
-});
+export type JournalEntry = v.InferOutput<typeof JournalSchema>;
 
-export type ExtractedMemory = v.InferOutput<typeof MemorySchema>;
-
-export type ParseResult = { ok: true; memories: ExtractedMemory[] } | { ok: false; error: string };
+export type ParseResult = { ok: true; entry: JournalEntry | null } | { ok: false; error: string };
 
 export function parseExtractionOutput(rawOutput: string): ParseResult {
   let parsed: unknown;
@@ -38,26 +42,18 @@ export function parseExtractionOutput(rawOutput: string): ParseResult {
     };
   }
 
-  const result = v.safeParse(ExtractionSchema, parsed);
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    return { ok: false, error: `unexpected output type: ${rawOutput.slice(0, 500)}` };
+  }
+
+  if (!("summary" in parsed)) {
+    return { ok: true, entry: null };
+  }
+
+  const result = v.safeParse(JournalSchema, parsed);
   if (!result.success) {
-    return { ok: false, error: `no memories field found in: ${rawOutput.slice(0, 500)}` };
+    return { ok: false, error: `invalid journal entry: ${rawOutput.slice(0, 500)}` };
   }
 
-  const memories: ExtractedMemory[] = [];
-  const skipped: string[] = [];
-
-  for (const m of result.output.memories) {
-    const memResult = v.safeParse(MemorySchema, m);
-    if (memResult.success) {
-      memories.push(memResult.output);
-    } else {
-      skipped.push(JSON.stringify(m));
-    }
-  }
-
-  if (skipped.length > 0 && memories.length === 0) {
-    return { ok: false, error: `all memories invalid, skipped: ${skipped.join(", ")}` };
-  }
-
-  return { ok: true, memories };
+  return { ok: true, entry: result.output };
 }

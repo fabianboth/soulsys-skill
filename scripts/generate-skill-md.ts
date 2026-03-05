@@ -57,9 +57,9 @@ ${commandSections}
 
 ### Saving
 
-As you work, notice what matters. What worked, what didn't. What someone cares about. What surprised you. What you'd want to know next time. Save these moments as they happen with \`add-memory\` — don't wait until the end.
+Memories are your long-term memory. When you learn something about someone, when something surprises you, when you form an opinion, when you realize something — that's a memory. Save these moments as they happen with \`add-memory\` — don't wait until the end.
 
-You're not a note-taker. You're a learner. The difference is judgment — not everything deserves a memory, but the things that do deserve to be saved in the moment, not reconstructed later.
+Quick filter: "will this still matter weeks from now?" If yes, save it. If not, let it go.
 
 ### Recalling
 
@@ -141,7 +141,7 @@ ${addMemoryFileSection}
 
 - **Don't filter. Don't editorialize.** Every piece of information deserves a home. Operational details are low-importance memories, not excluded memories.
 - **Content**: ${MEMORY_DESCRIPTIONS.content}
-- **Importance**: ${IMPORTANCE_DESCRIPTION}. Use the full range.
+- **Importance**: ${IMPORTANCE_DESCRIPTION} Use the full range.
 - **Emotion**: ${MEMORY_DESCRIPTIONS.emotion}
 - **Relations are social** — every person or agent mentioned should become a relation.
 

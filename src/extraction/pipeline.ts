@@ -62,19 +62,24 @@ export async function extractMemories({
     return { ok: false, error: `parse failed: ${parseResult.error}` };
   }
 
-  if (parseResult.memories.length === 0) {
+  if (!parseResult.entry) {
     return { ok: true, created: 0, failed: 0 };
   }
 
+  const entry = parseResult.entry;
   try {
     const response = requireData(
       await client.POST("/api/memories/batch", {
         body: {
-          memories: parseResult.memories.map((m) => ({
-            content: m.content,
-            importance: m.importance,
-            emotion: m.emotion,
-          })),
+          memories: [
+            {
+              content: entry.summary,
+              fullContent: entry.details,
+              importance: 1,
+              emotion: null,
+              type: "journal",
+            },
+          ],
         },
       }),
     );
