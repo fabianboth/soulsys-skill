@@ -3,6 +3,16 @@ import { resolve } from "node:path";
 const dir = import.meta.dirname;
 const pkg = await Bun.file(resolve(dir, "..", "package.json")).json();
 
+const expectedVersion = (await Bun.file(resolve(dir, "..", ".bun-version")).text()).trim();
+const actualVersion = Bun.version;
+if (actualVersion !== expectedVersion) {
+  console.error(
+    `Bun version mismatch: expected ${expectedVersion} (from .bun-version), got ${actualVersion}.\n` +
+      `Minified output differs across versions. Please install the correct version.`,
+  );
+  process.exit(1);
+}
+
 const result = await Bun.build({
   entrypoints: [resolve(dir, "..", "src", "cli.ts")],
   outdir: resolve(dir, "..", "skills", "soulsys", "scripts"),
