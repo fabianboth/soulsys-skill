@@ -179,7 +179,7 @@ describe("formatContext", () => {
       },
       relations: { relations: [] },
     });
-    expect(output).toContain("## Memory");
+    expect(output).toContain("## Soulsys");
     expect(output).toContain("soulsys");
     expect(output).toContain("soulsys recall");
   });
@@ -191,7 +191,7 @@ describe("formatContext", () => {
       memory: null,
       relations: null,
     });
-    expect(output).toContain("## Memory");
+    expect(output).toContain("## Soulsys");
     expect(output).toContain("soulsys");
     expect(output).toContain("soulsys recall");
   });
@@ -217,7 +217,7 @@ describe("formatCoreContext", () => {
       soul: makeSoul(),
       identity: makeIdentity(),
     });
-    expect(output).toContain("## Memory");
+    expect(output).toContain("## Soulsys");
     expect(output).toContain("soulsys");
     expect(output).toContain("soulsys recall");
   });
@@ -231,7 +231,7 @@ describe("formatCoreContext", () => {
     expect(output).toContain("my essence");
     expect(output).toContain("## Identity");
     expect(output).toContain("Name: Test");
-    expect(output).toContain("## Memory");
+    expect(output).toContain("## Soulsys");
     expect(output).toContain("soulsys");
     expect(output).not.toContain("Key Memories");
     expect(output).not.toContain("Recent Memories");
@@ -246,7 +246,7 @@ describe("formatCoreContext", () => {
     expect(output).toContain("# Soul");
     expect(output).toContain("core essence");
     expect(output).not.toContain("## Identity");
-    expect(output).toContain("## Memory");
+    expect(output).toContain("## Soulsys");
     expect(output).toContain("soulsys recall");
   });
 });
@@ -254,10 +254,11 @@ describe("formatCoreContext", () => {
 describe("formatMemoryInstructions", () => {
   it("returns static markdown with command syntax", () => {
     const instructions = formatMemoryInstructions();
-    expect(instructions).toContain("## Memory");
+    expect(instructions).toContain("## Soulsys");
     expect(instructions).toContain("soulsys");
-    expect(instructions).toContain("soulsys add-memory");
+    expect(instructions).toContain("soulsys remember");
     expect(instructions).toContain("soulsys recall");
+    expect(instructions).toContain("soulsys forget");
     expect(instructions).toContain("Read the soulsys skill before first use");
   });
 });

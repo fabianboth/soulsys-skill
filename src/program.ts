@@ -3,7 +3,6 @@ import { resolve } from "node:path";
 
 import { Command } from "commander";
 
-import { register as registerAddMemory } from "./commands/add-memory.ts";
 import { register as registerAddMemoryFile } from "./commands/add-memory-file.ts";
 import { register as registerAddRelation } from "./commands/add-relation.ts";
 import { register as registerCreateIdentity } from "./commands/create-identity.ts";
@@ -15,6 +14,7 @@ import { register as registerGetFullMemory } from "./commands/get-full-memory.ts
 import { register as registerInit } from "./commands/init.ts";
 import { register as registerLoadContext } from "./commands/load-context.ts";
 import { register as registerRecall } from "./commands/recall.ts";
+import { register as registerRemember } from "./commands/remember.ts";
 import { register as registerUpdateIdentity } from "./commands/update-identity.ts";
 import { register as registerUpdateRelation } from "./commands/update-relation.ts";
 import { register as registerUpdateSoul } from "./commands/update-soul.ts";
@@ -42,7 +42,7 @@ export const initCmd = registerInit(program);
 export const updateSoulCmd = registerUpdateSoul(program);
 export const createIdentityCmd = registerCreateIdentity(program);
 export const updateIdentityCmd = registerUpdateIdentity(program);
-export const addMemoryCmd = registerAddMemory(program);
+export const rememberCmd = registerRemember(program);
 export const addMemoryFileCmd = registerAddMemoryFile(program);
 export const addRelationCmd = registerAddRelation(program);
 export const updateRelationCmd = registerUpdateRelation(program);

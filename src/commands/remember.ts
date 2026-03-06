@@ -8,8 +8,8 @@ import { parseImportance } from "../utils/parse-importance.ts";
 
 export function register(program: Command): Command {
   return program
-    .command("add-memory")
-    .description("Add a memory entry — do this during conversations, not in batch at the end")
+    .command("remember")
+    .description("Save a memory — something worth carrying across sessions")
     .argument("<content>", MEMORY_DESCRIPTIONS.content)
     .option("--emotion <emotion>", MEMORY_DESCRIPTIONS.emotion)
     .option("--importance <n>", IMPORTANCE_DESCRIPTION, "5")
@@ -27,7 +27,7 @@ export function register(program: Command): Command {
             },
           }),
         );
-        confirm(`Memory added (id: ${data.id})`);
+        confirm(`Remembered (id: ${data.id})`);
       } catch (error) {
         handleError(error);
       }

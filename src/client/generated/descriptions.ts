@@ -23,7 +23,7 @@ export const APPEARANCE_DESCRIPTIONS = {
 
 export const MEMORY_DESCRIPTIONS = {
   content:
-    "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now.",
+    "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns.",
   fullContent:
     "Optional full document you want to associate, e.g. a conversation transcript or detailed notes.",
   emotion: "Only if you genuinely associate an emotion with this memory entry",

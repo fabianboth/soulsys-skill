@@ -1298,7 +1298,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 2000,
-                            "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                            "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                           },
                           "hasFullContent": {
                             "type": "boolean"
@@ -1502,7 +1502,7 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 2000,
-                          "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                          "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                         },
                         "fullContent": {
                           "type": ["string", "null"],
@@ -1561,7 +1561,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 2000,
-                            "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                            "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                           },
                           "hasFullContent": {
                             "type": "boolean"
@@ -1771,7 +1771,7 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 2000,
-                    "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                    "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                   },
                   "fullContent": {
                     "type": ["string", "null"],
@@ -1819,7 +1819,7 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 2000,
-                      "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                      "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                     },
                     "hasFullContent": {
                       "type": "boolean"
@@ -2030,7 +2030,7 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 2000,
-                      "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                      "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                     },
                     "fullContent": {
                       "type": ["string", "null"],
@@ -2245,7 +2245,7 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 2000,
-                      "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                      "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                     },
                     "hasFullContent": {
                       "type": "boolean"
@@ -3650,7 +3650,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "maxLength": 2000,
-                                "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                                "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                               },
                               "hasFullContent": {
                                 "type": "boolean"
@@ -3672,7 +3672,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "maxLength": 2000,
-                                "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                                "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                               },
                               "hasFullContent": {
                                 "type": "boolean"
@@ -3694,7 +3694,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "maxLength": 2000,
-                                "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                                "description": "What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns."
                               },
                               "hasFullContent": {
                                 "type": "boolean"

@@ -23,7 +23,7 @@ export const genericChecker: FrameworkChecker = {
         name: "Memory persistence",
         category: "integration",
         status: "warn",
-        message: "Use `soulsys add-memory` to save important information during conversations",
+        message: "Use `soulsys remember` to save important information during conversations",
         fixable: false,
       },
     ];

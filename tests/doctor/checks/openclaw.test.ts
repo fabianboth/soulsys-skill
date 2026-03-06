@@ -26,12 +26,12 @@ function fullOpenClawConfig() {
         compaction: {
           memoryFlush: {
             systemPrompt:
-              "You are saving memories before context compaction. Review what happened and preserve what matters using soulsys add-memory.",
-            prompt: `Review the conversation above and extract memories worth keeping using soulsys add-memory.
+              "You are saving memories before context compaction. Review what happened and preserve what matters using soulsys remember.",
+            prompt: `Review the conversation above and extract memories worth keeping using soulsys remember.
 
 Capture: decisions made, opinions expressed, preferences discovered, lessons learned, significant events, relationship context, and where things were left off. This is your lived experience, not a log.
 
-Skip: routine commands, mid-conversation navigation that was superseded, generic knowledge, and anything already saved via soulsys add-memory earlier in this conversation.`,
+Skip: routine commands, mid-conversation navigation that was superseded, generic knowledge, and anything already saved via soulsys remember earlier in this conversation.`,
           },
         },
       },
@@ -213,7 +213,7 @@ describe("openclaw checker fix", () => {
     expect(results.every((r) => r.status === "pass")).toBe(true);
     const data = JSON.parse(readFileSync(join(TEST_DIR, "openclaw.json"), "utf-8"));
     expect(data.hooks["agent:bootstrap"]).toBe("./hooks/soulsys-bootstrap.ts");
-    expect(data.agents.defaults.compaction.memoryFlush.prompt).toContain("soulsys add-memory");
+    expect(data.agents.defaults.compaction.memoryFlush.prompt).toContain("soulsys remember");
   });
 
   it("skips bootstrap hook creation when template is missing", async () => {

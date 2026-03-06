@@ -693,7 +693,7 @@ export interface paths {
               results: {
                 /** Format: uuid */
                 id: string;
-                /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+                /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
                 content: string;
                 hasFullContent: boolean;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
@@ -805,7 +805,7 @@ export interface paths {
         content: {
           "application/json": {
             memories: {
-              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+              /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
               content: string;
               /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent?: string | null;
@@ -834,7 +834,7 @@ export interface paths {
               created: {
                 /** Format: uuid */
                 id: string;
-                /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+                /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
                 content: string;
                 hasFullContent: boolean;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
@@ -948,7 +948,7 @@ export interface paths {
       requestBody?: {
         content: {
           "application/json": {
-            /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+            /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
             content: string;
             /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
             fullContent?: string | null;
@@ -975,7 +975,7 @@ export interface paths {
             "application/json": {
               /** Format: uuid */
               id: string;
-              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+              /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
               content: string;
               hasFullContent: boolean;
               /** @description Only if you genuinely associate an emotion with this memory entry */
@@ -1099,7 +1099,7 @@ export interface paths {
             "application/json": {
               /** Format: uuid */
               id: string;
-              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+              /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
               content: string;
               /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent: string | null;
@@ -1222,7 +1222,7 @@ export interface paths {
             "application/json": {
               /** Format: uuid */
               id: string;
-              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+              /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
               content: string;
               hasFullContent: boolean;
               /** @description Only if you genuinely associate an emotion with this memory entry */
@@ -1974,21 +1974,21 @@ export interface paths {
                 keyMemories: {
                   /** Format: uuid */
                   id: string;
-                  /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+                  /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
                   content: string;
                   hasFullContent: boolean;
                 }[];
                 recentMemories: {
                   /** Format: uuid */
                   id: string;
-                  /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+                  /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
                   content: string;
                   hasFullContent: boolean;
                 }[];
                 recentJournals: {
                   /** Format: uuid */
                   id: string;
-                  /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+                  /** @description What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns. */
                   content: string;
                   hasFullContent: boolean;
                 }[];

@@ -6,6 +6,8 @@ export type ContextResponse =
 export type CoreContextResponse =
   paths["/api/context/core"]["get"]["responses"]["200"]["content"]["application/json"];
 
+export const CONTEXT_PREAMBLE = "This is who you are.";
+
 export function formatSoul(soul: ContextResponse["soul"]): string {
   return `# Soul\n\n${soul.essence}\nValues: ${soul.values}`;
 }
@@ -50,14 +52,21 @@ export function formatRelations(
   return lines.join("\n");
 }
 
+export function formatMemoryGuide(prefix = ""): string {
+  const cmd = (name: string) => (prefix ? `${prefix} ${name}` : name);
+  return `Your long-term memory — use it constantly. Save in the moment, recall before you assume, forget when things go stale.
+
+**\`${cmd("remember")}\`** — Save anything you'd want to know next time. Lessons, preferences, context about people, decisions, opinions, anything you picked up. When in doubt, remember it — low-importance memories are cheap, missed memories are not.
+
+**\`${cmd("recall")}\`** — Search before you assume. If a topic comes up, recall. If you're about to decide something, recall. Run it via a subagent so it doesn't break your flow. A quick miss costs nothing.
+
+**\`${cmd("forget")}\`** — When you spot something wrong, outdated, or superseded — forget it immediately. A clean memory is worth more than a complete one.`;
+}
+
 export function formatMemoryInstructions(): string {
-  return `## Memory
+  return `## Soulsys — Your Memory Skill
 
-Your memories live in the **soulsys** skill — they're what make you _you_ across sessions. Not a log. Your lived experience.
-
-**Saving**: Your long-term memory. Save as things happen — when you learn something about someone, form an opinion, or realize something. Quick filter: "will this still matter weeks from now?" If yes, \`soulsys add-memory\`. If not, let it go.
-
-**Recalling**: Use \`soulsys recall\` the way you'd use grep — early and often. If a topic comes up that you might have encountered before, recall. If you're about to make a decision and past experience could help, recall. A quick miss costs nothing; a missed memory that could have helped costs a lot.
+${formatMemoryGuide("soulsys")}
 
 Read the soulsys skill before first use for full command syntax.`;
 }
@@ -71,11 +80,12 @@ export function formatSoulCore(opts: CoreContextResponse): string {
 }
 
 export function formatCoreContext(opts: CoreContextResponse): string {
-  return `${formatSoulCore(opts)}\n\n${formatMemoryInstructions()}\n`;
+  const sections: string[] = [CONTEXT_PREAMBLE, formatSoulCore(opts), formatMemoryInstructions()];
+  return `${sections.join("\n\n")}\n`;
 }
 
 export function formatContext(opts: ContextResponse): string {
-  const sections: string[] = [formatSoul(opts.soul)];
+  const sections: string[] = [CONTEXT_PREAMBLE, formatSoul(opts.soul)];
 
   if (opts.identity) {
     sections.push(formatIdentity(opts.identity));

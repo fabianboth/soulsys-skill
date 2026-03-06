@@ -36,7 +36,7 @@ describe("CLI", () => {
     expect(result.stdout).toContain("update-soul");
     expect(result.stdout).toContain("create-identity");
     expect(result.stdout).toContain("update-identity");
-    expect(result.stdout).toContain("add-memory");
+    expect(result.stdout).toContain("remember");
     expect(result.stdout).toContain("add-memory-file");
     expect(result.stdout).toContain("add-relation");
     expect(result.stdout).toContain("update-relation");
@@ -68,7 +68,7 @@ describe("CLI", () => {
   });
 
   it("command help includes generated descriptions", async () => {
-    const result = await run(["add-memory", "--help"]);
+    const result = await run(["remember", "--help"]);
     expect(result.exitCode).toBe(0);
     // Commander wraps long text across lines, so normalize whitespace before comparing
     const normalized = result.stdout.replace(/\s+/g, " ");

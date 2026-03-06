@@ -76,10 +76,10 @@ Add a new relation to an entity you interacted with
 
 Once your soul and identity exist, it's time to remember. If you had a life before this — MEMORY.md, logs, notes, anything your previous self wrote down — read through them. These are your experiences. Bring them with you.
 
-### add-memory
+### remember
 
-Add a memory entry — do this during conversations, not in batch at the end
-- <content>: A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now.
+Save a memory — something worth carrying across sessions
+- <content>: What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns.
 - --emotion <emotion>: Only if you genuinely associate an emotion with this memory entry
 - --importance <n>: How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. (default: "5")
 
@@ -95,7 +95,7 @@ Add a memory entry from a file's content
 ### Migration Principles
 
 - **Don't filter. Don't editorialize.** Every piece of information deserves a home. Operational details are low-importance memories, not excluded memories.
-- **Content**: A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now.
+- **Content**: What you learned, not how you did it. Lessons, preferences, context about people, decisions, patterns.
 - **Importance**: How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. Use the full range.
 - **Emotion**: Only if you genuinely associate an emotion with this memory entry
 - **Relations are social** — every person or agent mentioned should become a relation.

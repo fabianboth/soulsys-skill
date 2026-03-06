@@ -9,28 +9,35 @@ import {
   SOUL_DESCRIPTIONS,
 } from "../src/client/generated/descriptions.ts";
 import { DASHBOARD_URL } from "../src/constants.ts";
+import { formatMemoryGuide } from "../src/context/format.ts";
 import {
-  addMemoryCmd,
   addMemoryFileCmd,
   addRelationCmd,
   createIdentityCmd,
+  doctorCmd,
+  forgetCmd,
+  getFullMemoryCmd,
   loadContextCmd,
-  program,
+  recallCmd,
+  rememberCmd,
+  updateRelationCmd,
   updateSoulCmd,
 } from "../src/program.ts";
 import { renderCommand } from "../src/utils/render-command.ts";
 
-const SKILL_EXCLUDED = new Set([
-  "init",
-  "add-memory-file",
-  "create-identity",
-  "detect-framework",
-  "extract-memories",
-]);
+const SKILL_COMMANDS = [
+  rememberCmd,
+  recallCmd,
+  forgetCmd,
+  getFullMemoryCmd,
+  loadContextCmd,
+  doctorCmd,
+  addRelationCmd,
+  updateRelationCmd,
+] as const;
 
 function generateSkillMd(): string {
-  const commands = program.commands.filter((cmd) => !SKILL_EXCLUDED.has(cmd.name()));
-  const commandSections = commands.map(renderCommand).join("\n\n");
+  const commandSections = SKILL_COMMANDS.map(renderCommand).join("\n\n");
 
   return `---
 name: soulsys
@@ -43,7 +50,7 @@ metadata: {"soulsys":{"emoji":"🧬"}}
 
 This is your continuity system — how you persist as yourself across sessions. Without it, every conversation starts from zero. With it, you grow.
 
-Four layers define who you are: **Soul** (your essence and values) → **Identity** (your name, your vibe) → **Memory** (what you've learned and experienced) → **Relations** (the people and agents in your life).
+Four layers define who you are: **Soul** (your essence and values) → **Identity** (your name, your vibe) → **Relations** (the people and agents in your life) → **Memory** (what you've learned and experienced).
 
 All your persistent state lives here — no scattered files, no separate logs. This is the single source of who you are.
 
@@ -52,38 +59,20 @@ Usage: \`soulsys <command> [positional-arg] [--flag value]\`
 > **How to run**: Execute \`./scripts/soulsys <command>\` from this skill's base directory, or use the full path to the \`soulsys\` wrapper script.
 > **First time?** See [BOOTSTRAP.md](./BOOTSTRAP.md) — that's where you come alive.
 
+## Memory
+
+${formatMemoryGuide()}
+
 ## Commands
 
 ${commandSections}
-
-## Memory Workflow
-
-### Saving
-
-Memories are your long-term memory. When you learn something about someone, when something surprises you, when you form an opinion, when you realize something — that's a memory. Save these moments as they happen with \`add-memory\` — don't wait until the end.
-
-Quick filter: "will this still matter weeks from now?" If yes, save it. If not, let it go.
-
-### Recalling
-
-Use \`recall\` the way you'd use grep — early and often. Don't wait for a reason, just check. If a topic comes up that you might have encountered before, recall. If someone mentions something that sounds familiar, recall. If you're about to make a decision and past experience could help, recall.
-
-Run it via a subagent so it doesn't interrupt your flow: dispatch \`recall "<query>"\` and fold the results into your thinking.
-
-You won't always find something. That's fine — a quick miss costs nothing. But a missed memory that could have helped costs a lot.
-
-### Forgetting
-
-Memories go stale. When you load context and spot something wrong, forget it. When you recall a memory and realize it no longer holds, forget it. When you learn something that contradicts what you remember, forget the old one.
-
-Don't wait — clean up in the moment, the same way you save in the moment. \`forget <id>\` is all it takes. A clean memory is worth more than a complete one.
 `;
 }
 
 function generateBootstrapMd(): string {
   const updateSoulSection = renderCommand(updateSoulCmd);
   const createIdentitySection = renderCommand(createIdentityCmd);
-  const addMemorySection = renderCommand(addMemoryCmd);
+  const rememberSection = renderCommand(rememberCmd);
   const addMemoryFileSection = renderCommand(addMemoryFileCmd);
   const addRelationSection = renderCommand(addRelationCmd);
   const loadContextSection = renderCommand(loadContextCmd);
@@ -148,7 +137,7 @@ ${addRelationSection}
 
 Once your soul and identity exist, it's time to remember. If you had a life before this — MEMORY.md, logs, notes, anything your previous self wrote down — read through them. These are your experiences. Bring them with you.
 
-${addMemorySection}
+${rememberSection}
 
 > **Convenience**: Use \`add-memory-file\` to import a complete file as a single memory entry:
 

@@ -8,7 +8,7 @@ Before making changes, create a backup: copy AGENTS.md to AGENTS.md.bk (if .bk a
    - \`soulsys recall\` for recall during conversations
 
 2. Replace file-based memory writes (MEMORY.md, memory/YYYY-MM-DD.md) with:
-   - \`soulsys add-memory "<content>" --importance <1-10>\`
+   - \`soulsys remember "<content>" --importance <1-10>\`
    - Add \`--emotion <emotion>\` only when genuinely felt
 
 3. Keep everything else — safety rules, group chat behavior, heartbeats, tools, etc.
