@@ -49,6 +49,12 @@ const EXPECTED_HOOKS: ExpectedHook[] = [
     command: "extract-memories",
     timeout: 120000,
   },
+  {
+    name: "UserPromptSubmit nudge hook",
+    event: "UserPromptSubmit",
+    matcher: "",
+    command: "reminder-nudge",
+  },
 ];
 
 function parseSettings(settingsPath: string): ParseResult {
@@ -116,11 +122,19 @@ function checkHook(parsed: ParseResult, expected: ExpectedHook, scriptPrefix: st
     };
   }
 
-  if (expected.timeout !== undefined && match.hook.timeout !== expected.timeout) {
+  if (expected.timeout !== undefined) {
+    if (match.hook.timeout !== expected.timeout) {
+      return {
+        ...base,
+        status: "fail",
+        message: `Timeout mismatch: got ${match.hook.timeout ?? "unset"}, expected ${expected.timeout}`,
+      };
+    }
+  } else if (match.hook.timeout !== undefined) {
     return {
       ...base,
       status: "fail",
-      message: `Timeout mismatch: got ${match.hook.timeout ?? "unset"}, expected ${expected.timeout}`,
+      message: `Timeout mismatch: got ${match.hook.timeout}, expected unset`,
     };
   }
 
@@ -165,6 +179,8 @@ function fixHooks(data: SettingsJson, scriptPrefix: string): void {
       match.hook.type = "command";
       if (expected.timeout !== undefined) {
         match.hook.timeout = expected.timeout;
+      } else {
+        delete match.hook.timeout;
       }
       match.entry.matcher = expected.matcher;
     } else {

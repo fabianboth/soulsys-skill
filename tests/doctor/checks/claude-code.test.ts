@@ -42,6 +42,12 @@ function fullHooks() {
         hooks: [{ type: "command", command: `${SCRIPT_PREFIX} extract-memories`, timeout: 120000 }],
       },
     ],
+    UserPromptSubmit: [
+      {
+        matcher: "",
+        hooks: [{ type: "command", command: `${SCRIPT_PREFIX} reminder-nudge` }],
+      },
+    ],
   };
 }
 
@@ -63,7 +69,7 @@ describe("claude-code checker", () => {
 
   it("fails when settings.json is missing", async () => {
     const results = await claudeCodeChecker.check(makePaths());
-    expect(results).toHaveLength(3);
+    expect(results).toHaveLength(4);
     expect(results.every((r) => r.status === "fail")).toBe(true);
     expect(results.every((r) => r.message.includes("settings.json not found"))).toBe(true);
   });
@@ -73,7 +79,7 @@ describe("claude-code checker", () => {
     mkdirSync(settingsDir, { recursive: true });
     writeFileSync(join(settingsDir, "settings.json"), "not-json");
     const results = await claudeCodeChecker.check(makePaths());
-    expect(results).toHaveLength(3);
+    expect(results).toHaveLength(4);
     expect(results.every((r) => r.status === "fail")).toBe(true);
     expect(results.every((r) => r.message.includes("Invalid JSON"))).toBe(true);
     expect(results.every((r) => r.fixable === false)).toBe(true);
@@ -84,7 +90,7 @@ describe("claude-code checker", () => {
     mkdirSync(settingsDir, { recursive: true });
     writeFileSync(join(settingsDir, "settings.json"), "[]");
     const results = await claudeCodeChecker.check(makePaths());
-    expect(results).toHaveLength(3);
+    expect(results).toHaveLength(4);
     expect(results.every((r) => r.status === "fail")).toBe(true);
     expect(results.every((r) => r.message.includes("Invalid JSON"))).toBe(true);
     expect(results.every((r) => r.fixable === false)).toBe(true);
@@ -98,7 +104,7 @@ describe("claude-code checker", () => {
       JSON.stringify({ hooks: { SessionStart: {}, PreCompact: 123 } }, null, 2),
     );
     const results = await claudeCodeChecker.check(makePaths());
-    expect(results).toHaveLength(3);
+    expect(results).toHaveLength(4);
     expect(results.every((r) => r.status === "fail")).toBe(true);
   });
 
@@ -125,7 +131,7 @@ describe("claude-code checker", () => {
       ),
     );
     const results = await claudeCodeChecker.check(makePaths());
-    expect(results).toHaveLength(3);
+    expect(results).toHaveLength(4);
     expect(results.every((r) => r.status === "fail")).toBe(true);
   });
 
@@ -241,7 +247,7 @@ describe("claude-code checker fix", () => {
   it("adds missing hooks to existing settings.json", async () => {
     writeSettings({});
     const results = await claudeCodeChecker.fix(makePaths());
-    expect(results.filter((r) => r.status === "pass")).toHaveLength(3);
+    expect(results.filter((r) => r.status === "pass")).toHaveLength(4);
   });
 
   it("is no-op when all hooks are present and correct", async () => {
@@ -288,7 +294,7 @@ describe("claude-code checker fix", () => {
     const results = await claudeCodeChecker.fix(makePaths());
     const settingsPath = join(TEST_DIR, ".claude", "settings.json");
     expect(readFileSync(settingsPath, "utf-8")).toBeTruthy();
-    expect(results.filter((r) => r.status === "pass")).toHaveLength(3);
+    expect(results.filter((r) => r.status === "pass")).toHaveLength(4);
   });
 
   it("removes startup hook that incorrectly uses --core flag", async () => {
@@ -353,5 +359,93 @@ describe("claude-code checker fix", () => {
       e.matcher?.includes("startup"),
     );
     expect(startup.hooks[0].command).toBe(`${SCRIPT_PREFIX} load-context`);
+  });
+});
+
+describe("claude-code checker — nudge hook", () => {
+  beforeEach(() => {
+    mkdirSync(TEST_DIR, { recursive: true });
+  });
+
+  afterEach(() => {
+    rmSync(TEST_DIR, { recursive: true, force: true });
+  });
+
+  it("fails when UserPromptSubmit nudge hook is missing", async () => {
+    const hooks = fullHooks();
+    delete (hooks as Record<string, unknown>).UserPromptSubmit;
+    writeSettings(hooks);
+    const results = await claudeCodeChecker.check(makePaths());
+    const nudge = results.find((r) => r.name === "UserPromptSubmit nudge hook");
+    expect(nudge?.status).toBe("fail");
+    expect(nudge?.message).toContain("Missing reminder-nudge hook");
+  });
+
+  it("passes when nudge hook is correctly configured", async () => {
+    writeSettings(fullHooks());
+    const results = await claudeCodeChecker.check(makePaths());
+    const nudge = results.find((r) => r.name === "UserPromptSubmit nudge hook");
+    expect(nudge?.status).toBe("pass");
+  });
+
+  it("fix adds nudge hook when missing", async () => {
+    const hooks = fullHooks();
+    delete (hooks as Record<string, unknown>).UserPromptSubmit;
+    writeSettings(hooks);
+    const results = await claudeCodeChecker.fix(makePaths());
+    const nudge = results.find((r) => r.name === "UserPromptSubmit nudge hook");
+    expect(nudge?.status).toBe("pass");
+
+    const settingsPath = join(TEST_DIR, ".claude", "settings.json");
+    const data = JSON.parse(readFileSync(settingsPath, "utf-8"));
+    expect(data.hooks.UserPromptSubmit).toHaveLength(1);
+    expect(data.hooks.UserPromptSubmit[0].matcher).toBe("");
+    expect(data.hooks.UserPromptSubmit[0].hooks[0].command).toBe(`${SCRIPT_PREFIX} reminder-nudge`);
+  });
+
+  it("fix preserves existing non-soulsys UserPromptSubmit hooks", async () => {
+    const hooks = {
+      ...fullHooks(),
+      UserPromptSubmit: [
+        { matcher: "custom-pattern", hooks: [{ type: "command", command: "my-custom-hook" }] },
+        fullHooks().UserPromptSubmit[0],
+      ],
+    };
+    writeSettings(hooks);
+    const results = await claudeCodeChecker.fix(makePaths());
+    expect(results.every((r) => r.status === "pass")).toBe(true);
+
+    const settingsPath = join(TEST_DIR, ".claude", "settings.json");
+    const data = JSON.parse(readFileSync(settingsPath, "utf-8"));
+    expect(data.hooks.UserPromptSubmit).toHaveLength(2);
+    const custom = data.hooks.UserPromptSubmit.find(
+      (e: { matcher?: string }) => e.matcher === "custom-pattern",
+    );
+    expect(custom).toBeTruthy();
+    expect(custom.hooks[0].command).toBe("my-custom-hook");
+  });
+
+  it("fix removes stale timeout from nudge hook", async () => {
+    writeSettings({
+      ...fullHooks(),
+      UserPromptSubmit: [
+        {
+          matcher: "",
+          hooks: [{ type: "command", command: `${SCRIPT_PREFIX} reminder-nudge`, timeout: 999 }],
+        },
+      ],
+    });
+    const checkResults = await claudeCodeChecker.check(makePaths());
+    const nudgeCheck = checkResults.find((r) => r.name === "UserPromptSubmit nudge hook");
+    expect(nudgeCheck?.status).toBe("fail");
+    expect(nudgeCheck?.message).toContain("Timeout mismatch");
+
+    const fixResults = await claudeCodeChecker.fix(makePaths());
+    const nudgeFix = fixResults.find((r) => r.name === "UserPromptSubmit nudge hook");
+    expect(nudgeFix?.status).toBe("pass");
+
+    const settingsPath = join(TEST_DIR, ".claude", "settings.json");
+    const data = JSON.parse(readFileSync(settingsPath, "utf-8"));
+    expect(data.hooks.UserPromptSubmit[0].hooks[0].timeout).toBeUndefined();
   });
 });
