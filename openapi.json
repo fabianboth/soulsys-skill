@@ -1131,664 +1131,6 @@
         }
       }
     },
-    "/api/memories": {
-      "get": {
-        "tags": ["Memories"],
-        "summary": "List memories (paginated)",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": false,
-            "name": "cursor",
-            "in": "query"
-          },
-          {
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 50,
-              "default": 20
-            },
-            "required": false,
-            "name": "limit",
-            "in": "query"
-          },
-          {
-            "schema": {
-              "type": "string",
-              "enum": ["active", "outdated", "all"],
-              "default": "active"
-            },
-            "required": false,
-            "name": "status",
-            "in": "query"
-          },
-          {
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
-            "required": false,
-            "name": "date",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Paginated list of memories",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "entries": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid"
-                          },
-                          "content": {
-                            "type": "string",
-                            "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
-                          },
-                          "emotion": {
-                            "type": ["string", "null"],
-                            "description": "Only if you genuinely associate an emotion with this memory entry"
-                          },
-                          "importance": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "maximum": 10,
-                            "description": "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are."
-                          },
-                          "type": {
-                            "type": "string",
-                            "enum": ["memory", "journal"],
-                            "description": "Entry type: 'memory' for agent-saved memories, 'journal' for session summaries"
-                          },
-                          "outdatedAt": {
-                            "type": ["string", "null"],
-                            "format": "date-time"
-                          },
-                          "createdAt": {
-                            "type": ["string", "null"],
-                            "format": "date-time"
-                          },
-                          "updatedAt": {
-                            "type": ["string", "null"],
-                            "format": "date-time"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "content",
-                          "emotion",
-                          "importance",
-                          "type",
-                          "outdatedAt",
-                          "createdAt",
-                          "updatedAt"
-                        ]
-                      }
-                    },
-                    "nextCursor": {
-                      "type": ["string", "null"],
-                      "format": "uuid"
-                    },
-                    "totalCount": {
-                      "type": "integer",
-                      "minimum": 0
-                    }
-                  },
-                  "required": ["entries", "nextCursor"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized — missing or invalid bearer token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": ["Memories"],
-        "summary": "Add a memory entry",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "content": {
-                    "type": "string",
-                    "maxLength": 2000,
-                    "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
-                  },
-                  "fullContent": {
-                    "type": ["string", "null"],
-                    "maxLength": 1048576
-                  },
-                  "emotion": {
-                    "type": ["string", "null"],
-                    "maxLength": 2000
-                  },
-                  "importance": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 10,
-                    "description": "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are."
-                  },
-                  "type": {
-                    "type": "string",
-                    "enum": ["memory", "journal"],
-                    "default": "memory",
-                    "description": "Entry type: 'memory' for agent-saved memories, 'journal' for session summaries"
-                  }
-                },
-                "required": ["content", "importance"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Memory created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "content": {
-                      "type": "string",
-                      "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
-                    },
-                    "fullContent": {
-                      "type": ["string", "null"],
-                      "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
-                    },
-                    "emotion": {
-                      "type": ["string", "null"],
-                      "description": "Only if you genuinely associate an emotion with this memory entry"
-                    },
-                    "importance": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 10,
-                      "description": "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are."
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": ["memory", "journal"],
-                      "description": "Entry type: 'memory' for agent-saved memories, 'journal' for session summaries"
-                    },
-                    "outdatedAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    },
-                    "createdAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "content",
-                    "fullContent",
-                    "emotion",
-                    "importance",
-                    "type",
-                    "outdatedAt",
-                    "createdAt",
-                    "updatedAt"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized — missing or invalid bearer token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/memories/calendar": {
-      "get": {
-        "tags": ["Memories"],
-        "summary": "Get per-day memory counts for calendar heatmap",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
-            "required": true,
-            "name": "startDate",
-            "in": "query"
-          },
-          {
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
-            "required": true,
-            "name": "endDate",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Per-day memory counts",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "days": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "date": {
-                            "type": "string",
-                            "format": "date"
-                          },
-                          "count": {
-                            "type": "integer",
-                            "minimum": 0
-                          }
-                        },
-                        "required": ["date", "count"]
-                      }
-                    }
-                  },
-                  "required": ["days"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized — missing or invalid bearer token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/memories/search": {
       "post": {
         "tags": ["Memories"],
@@ -1854,10 +1196,15 @@
                           },
                           "content": {
                             "type": "string",
+                            "maxLength": 2000,
                             "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                          },
+                          "hasFullContent": {
+                            "type": "boolean"
                           },
                           "emotion": {
                             "type": ["string", "null"],
+                            "maxLength": 2000,
                             "description": "Only if you genuinely associate an emotion with this memory entry"
                           },
                           "importance": {
@@ -1890,6 +1237,7 @@
                         "required": [
                           "id",
                           "content",
+                          "hasFullContent",
                           "emotion",
                           "importance",
                           "type",
@@ -2055,11 +1403,13 @@
                         },
                         "fullContent": {
                           "type": ["string", "null"],
-                          "maxLength": 1048576
+                          "maxLength": 1048576,
+                          "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
                         },
                         "emotion": {
                           "type": ["string", "null"],
-                          "maxLength": 2000
+                          "maxLength": 2000,
+                          "description": "Only if you genuinely associate an emotion with this memory entry"
                         },
                         "importance": {
                           "type": "integer",
@@ -2104,14 +1454,15 @@
                           },
                           "content": {
                             "type": "string",
+                            "maxLength": 2000,
                             "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                           },
-                          "fullContent": {
-                            "type": ["string", "null"],
-                            "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
+                          "hasFullContent": {
+                            "type": "boolean"
                           },
                           "emotion": {
                             "type": ["string", "null"],
+                            "maxLength": 2000,
                             "description": "Only if you genuinely associate an emotion with this memory entry"
                           },
                           "importance": {
@@ -2141,7 +1492,7 @@
                         "required": [
                           "id",
                           "content",
-                          "fullContent",
+                          "hasFullContent",
                           "emotion",
                           "importance",
                           "type",
@@ -2168,6 +1519,455 @@
                     }
                   },
                   "required": ["created", "failed"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid bearer token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/memories": {
+      "post": {
+        "tags": ["Memories"],
+        "summary": "Add a memory entry",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "maxLength": 2000,
+                    "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                  },
+                  "fullContent": {
+                    "type": ["string", "null"],
+                    "maxLength": 1048576,
+                    "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
+                  },
+                  "emotion": {
+                    "type": ["string", "null"],
+                    "maxLength": 2000,
+                    "description": "Only if you genuinely associate an emotion with this memory entry"
+                  },
+                  "importance": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10,
+                    "description": "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are."
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["memory", "journal"],
+                    "default": "memory",
+                    "description": "Entry type: 'memory' for agent-saved memories, 'journal' for session summaries"
+                  }
+                },
+                "required": ["content", "importance"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Memory created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "content": {
+                      "type": "string",
+                      "maxLength": 2000,
+                      "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                    },
+                    "hasFullContent": {
+                      "type": "boolean"
+                    },
+                    "emotion": {
+                      "type": ["string", "null"],
+                      "maxLength": 2000,
+                      "description": "Only if you genuinely associate an emotion with this memory entry"
+                    },
+                    "importance": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10,
+                      "description": "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are."
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["memory", "journal"],
+                      "description": "Entry type: 'memory' for agent-saved memories, 'journal' for session summaries"
+                    },
+                    "outdatedAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    },
+                    "createdAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "content",
+                    "hasFullContent",
+                    "emotion",
+                    "importance",
+                    "type",
+                    "outdatedAt",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid bearer token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["path", "message"]
+                      }
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Embedding service failure"
+          }
+        }
+      }
+    },
+    "/api/memories/{memoryId}": {
+      "get": {
+        "tags": ["Memories"],
+        "summary": "Get a single memory entry with full content",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "memoryId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Memory entry with full content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "content": {
+                      "type": "string",
+                      "maxLength": 2000,
+                      "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                    },
+                    "fullContent": {
+                      "type": ["string", "null"],
+                      "maxLength": 1048576,
+                      "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
+                    },
+                    "hasFullContent": {
+                      "type": "boolean"
+                    },
+                    "emotion": {
+                      "type": ["string", "null"],
+                      "maxLength": 2000,
+                      "description": "Only if you genuinely associate an emotion with this memory entry"
+                    },
+                    "importance": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10,
+                      "description": "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are."
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["memory", "journal"],
+                      "description": "Entry type: 'memory' for agent-saved memories, 'journal' for session summaries"
+                    },
+                    "outdatedAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    },
+                    "createdAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "content",
+                    "fullContent",
+                    "hasFullContent",
+                    "emotion",
+                    "importance",
+                    "type",
+                    "outdatedAt",
+                    "createdAt",
+                    "updatedAt"
+                  ]
                 }
               }
             }
@@ -2328,14 +2128,15 @@
                     },
                     "content": {
                       "type": "string",
+                      "maxLength": 2000,
                       "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                     },
-                    "fullContent": {
-                      "type": ["string", "null"],
-                      "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
+                    "hasFullContent": {
+                      "type": "boolean"
                     },
                     "emotion": {
                       "type": ["string", "null"],
+                      "maxLength": 2000,
                       "description": "Only if you genuinely associate an emotion with this memory entry"
                     },
                     "importance": {
@@ -2365,358 +2166,7 @@
                   "required": [
                     "id",
                     "content",
-                    "fullContent",
-                    "emotion",
-                    "importance",
-                    "type",
-                    "outdatedAt",
-                    "createdAt",
-                    "updatedAt"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized — missing or invalid bearer token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/memories/{memoryId}": {
-      "delete": {
-        "tags": ["Memories"],
-        "summary": "Permanently delete a memory",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "memoryId",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Memory deleted"
-          },
-          "400": {
-            "description": "Validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized — missing or invalid bearer token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "path": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["path", "message"]
-                      }
-                    }
-                  },
-                  "required": ["error"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/memories/{memoryId}/reactivate": {
-      "post": {
-        "tags": ["Memories"],
-        "summary": "Un-forget a memory (clear outdatedAt)",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "memoryId",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Memory reactivated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "content": {
-                      "type": "string",
-                      "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
-                    },
-                    "fullContent": {
-                      "type": ["string", "null"],
-                      "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
-                    },
-                    "emotion": {
-                      "type": ["string", "null"],
-                      "description": "Only if you genuinely associate an emotion with this memory entry"
-                    },
-                    "importance": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 10,
-                      "description": "How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are."
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": ["memory", "journal"],
-                      "description": "Entry type: 'memory' for agent-saved memories, 'journal' for session summaries"
-                    },
-                    "outdatedAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    },
-                    "createdAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": ["string", "null"],
-                      "format": "date-time"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "content",
-                    "fullContent",
+                    "hasFullContent",
                     "emotion",
                     "importance",
                     "type",
@@ -4019,10 +3469,14 @@
                               },
                               "content": {
                                 "type": "string",
+                                "maxLength": 2000,
                                 "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                              },
+                              "hasFullContent": {
+                                "type": "boolean"
                               }
                             },
-                            "required": ["id", "content"]
+                            "required": ["id", "content", "hasFullContent"]
                           }
                         },
                         "recentMemories": {
@@ -4036,10 +3490,14 @@
                               },
                               "content": {
                                 "type": "string",
+                                "maxLength": 2000,
                                 "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                              },
+                              "hasFullContent": {
+                                "type": "boolean"
                               }
                             },
-                            "required": ["id", "content"]
+                            "required": ["id", "content", "hasFullContent"]
                           }
                         },
                         "recentJournals": {
@@ -4053,10 +3511,14 @@
                               },
                               "content": {
                                 "type": "string",
+                                "maxLength": 2000,
                                 "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
+                              },
+                              "hasFullContent": {
+                                "type": "boolean"
                               }
                             },
-                            "required": ["id", "content"]
+                            "required": ["id", "content", "hasFullContent"]
                           }
                         }
                       },

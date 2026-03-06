@@ -29,7 +29,8 @@ export function formatMemorySection(
   if (memories.length === 0) return "";
   const lines: string[] = [title, ""];
   for (const m of memories) {
-    lines.push(`- \`${m.id}\` ${m.content}`);
+    const full = m.hasFullContent ? " [hasFullContent]" : "";
+    lines.push(`- \`${m.id}\`${full} ${m.content}`);
   }
   return lines.join("\n");
 }

@@ -10,7 +10,12 @@ type SearchResult =
 
 export function formatSearchResults(results: SearchResult[]): string {
   if (results.length === 0) return "No matching memories found.";
-  return results.map((r) => `- \`${r.id}\` [importance: ${r.importance}] ${r.content}`).join("\n");
+  return results
+    .map((r) => {
+      const full = r.hasFullContent ? " [hasFullContent]" : "";
+      return `- \`${r.id}\`${full} ${r.content}`;
+    })
+    .join("\n");
 }
 
 export function register(program: Command): Command {

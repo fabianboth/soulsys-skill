@@ -10,6 +10,7 @@ function makeResult(overrides: Partial<Parameters<typeof formatSearchResults>[0]
     emotion: null as string | null,
     importance: 5,
     type: "memory" as const,
+    hasFullContent: false,
     outdatedAt: null as string | null,
     similarity: 0.85,
     createdAt: new Date().toISOString(),
@@ -19,14 +20,14 @@ function makeResult(overrides: Partial<Parameters<typeof formatSearchResults>[0]
 }
 
 describe("formatSearchResults", () => {
-  it("formats multiple results with id, importance, and content", () => {
+  it("formats multiple results with id and content", () => {
     const results = [
-      makeResult({ content: "first memory", importance: 7 }),
-      makeResult({ content: "second memory", importance: 3 }),
+      makeResult({ content: "first memory" }),
+      makeResult({ content: "second memory" }),
     ];
     const output = formatSearchResults(results);
-    expect(output).toContain(`\`${results[0].id}\` [importance: 7] first memory`);
-    expect(output).toContain(`\`${results[1].id}\` [importance: 3] second memory`);
+    expect(output).toContain(`\`${results[0].id}\` first memory`);
+    expect(output).toContain(`\`${results[1].id}\` second memory`);
     expect(output.split("\n")).toHaveLength(2);
   });
 
@@ -36,19 +37,21 @@ describe("formatSearchResults", () => {
   });
 
   it("handles results with emotion field", () => {
-    const result = makeResult({ content: "emotional memory", emotion: "joy", importance: 8 });
+    const result = makeResult({ content: "emotional memory", emotion: "joy" });
     const output = formatSearchResults([result]);
-    expect(output).toContain("[importance: 8] emotional memory");
+    expect(output).toContain("emotional memory");
     expect(output).toContain(`\`${result.id}\``);
   });
 
-  it("includes importance and content for each result", () => {
-    const results = [
-      makeResult({ content: "low importance", importance: 1 }),
-      makeResult({ content: "high importance", importance: 10 }),
-    ];
-    const output = formatSearchResults(results);
-    expect(output).toContain("[importance: 1] low importance");
-    expect(output).toContain("[importance: 10] high importance");
+  it("shows hint when memory has full content", () => {
+    const result = makeResult({ content: "journal entry", hasFullContent: true });
+    const output = formatSearchResults([result]);
+    expect(output).toContain("[hasFullContent]");
+  });
+
+  it("omits hint when memory has no full content", () => {
+    const result = makeResult({ content: "simple memory", hasFullContent: false });
+    const output = formatSearchResults([result]);
+    expect(output).not.toContain("[hasFullContent]");
   });
 });

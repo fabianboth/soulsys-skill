@@ -41,8 +41,8 @@ function makeIdentity(): NonNullable<ContextResponse["identity"]> {
   };
 }
 
-function makeMemory(content: string) {
-  return { id: randomUUID(), content };
+function makeMemory(content: string, hasFullContent = false) {
+  return { id: randomUUID(), content, hasFullContent };
 }
 
 describe("formatContext", () => {

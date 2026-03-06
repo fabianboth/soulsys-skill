@@ -622,356 +622,6 @@ export interface paths {
     };
     trace?: never;
   };
-  "/api/memories": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** List memories (paginated) */
-    get: {
-      parameters: {
-        query?: {
-          cursor?: string;
-          limit?: number;
-          status?: "active" | "outdated" | "all";
-          date?: string;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Paginated list of memories */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              entries: {
-                /** Format: uuid */
-                id: string;
-                /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
-                content: string;
-                /** @description Only if you genuinely associate an emotion with this memory entry */
-                emotion: string | null;
-                /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
-                importance: number;
-                /**
-                 * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
-                 * @enum {string}
-                 */
-                type: "memory" | "journal";
-                /** Format: date-time */
-                outdatedAt: string | null;
-                /** Format: date-time */
-                createdAt: string | null;
-                /** Format: date-time */
-                updatedAt: string | null;
-              }[];
-              /** Format: uuid */
-              nextCursor: string | null;
-              totalCount?: number;
-            };
-          };
-        };
-        /** @description Validation error */
-        400: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Unauthorized — missing or invalid bearer token */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Resource not found */
-        404: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Rate limit exceeded */
-        429: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-      };
-    };
-    put?: never;
-    /** Add a memory entry */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: {
-        content: {
-          "application/json": {
-            /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
-            content: string;
-            fullContent?: string | null;
-            emotion?: string | null;
-            /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
-            importance: number;
-            /**
-             * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
-             * @default memory
-             * @enum {string}
-             */
-            type?: "memory" | "journal";
-          };
-        };
-      };
-      responses: {
-        /** @description Memory created */
-        201: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              /** Format: uuid */
-              id: string;
-              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
-              content: string;
-              /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
-              fullContent: string | null;
-              /** @description Only if you genuinely associate an emotion with this memory entry */
-              emotion: string | null;
-              /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
-              importance: number;
-              /**
-               * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
-               * @enum {string}
-               */
-              type: "memory" | "journal";
-              /** Format: date-time */
-              outdatedAt: string | null;
-              /** Format: date-time */
-              createdAt: string | null;
-              /** Format: date-time */
-              updatedAt: string | null;
-            };
-          };
-        };
-        /** @description Validation error */
-        400: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Unauthorized — missing or invalid bearer token */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Resource not found */
-        404: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Rate limit exceeded */
-        429: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/memories/calendar": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** Get per-day memory counts for calendar heatmap */
-    get: {
-      parameters: {
-        query: {
-          startDate: string;
-          endDate: string;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Per-day memory counts */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              days: {
-                /** Format: date */
-                date: string;
-                count: number;
-              }[];
-            };
-          };
-        };
-        /** @description Validation error */
-        400: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Unauthorized — missing or invalid bearer token */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Resource not found */
-        404: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Rate limit exceeded */
-        429: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   "/api/memories/search": {
     parameters: {
       query?: never;
@@ -1018,6 +668,7 @@ export interface paths {
                 id: string;
                 /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                 content: string;
+                hasFullContent: boolean;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
                 emotion: string | null;
                 /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
@@ -1129,7 +780,9 @@ export interface paths {
             memories: {
               /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
               content: string;
+              /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent?: string | null;
+              /** @description Only if you genuinely associate an emotion with this memory entry */
               emotion?: string | null;
               /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
               importance: number;
@@ -1156,8 +809,7 @@ export interface paths {
                 id: string;
                 /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                 content: string;
-                /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
-                fullContent: string | null;
+                hasFullContent: boolean;
                 /** @description Only if you genuinely associate an emotion with this memory entry */
                 emotion: string | null;
                 /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
@@ -1249,7 +901,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/memories/{memoryId}/outdate": {
+  "/api/memories": {
     parameters: {
       query?: never;
       header?: never;
@@ -1258,8 +910,149 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Mark a memory as outdated */
+    /** Add a memory entry */
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": {
+            /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+            content: string;
+            /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
+            fullContent?: string | null;
+            /** @description Only if you genuinely associate an emotion with this memory entry */
+            emotion?: string | null;
+            /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
+            importance: number;
+            /**
+             * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+             * @default memory
+             * @enum {string}
+             */
+            type?: "memory" | "journal";
+          };
+        };
+      };
+      responses: {
+        /** @description Memory created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** Format: uuid */
+              id: string;
+              /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
+              content: string;
+              hasFullContent: boolean;
+              /** @description Only if you genuinely associate an emotion with this memory entry */
+              emotion: string | null;
+              /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
+              importance: number;
+              /**
+               * @description Entry type: 'memory' for agent-saved memories, 'journal' for session summaries
+               * @enum {string}
+               */
+              type: "memory" | "journal";
+              /** Format: date-time */
+              outdatedAt: string | null;
+              /** Format: date-time */
+              createdAt: string | null;
+              /** Format: date-time */
+              updatedAt: string | null;
+            };
+          };
+        };
+        /** @description Validation error */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Unauthorized — missing or invalid bearer token */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Resource not found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Rate limit exceeded */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              error: string;
+              details?: {
+                path: string;
+                message: string;
+              }[];
+            };
+          };
+        };
+        /** @description Embedding service failure */
+        502: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/memories/{memoryId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get a single memory entry with full content */
+    get: {
       parameters: {
         query?: never;
         header?: never;
@@ -1270,7 +1063,7 @@ export interface paths {
       };
       requestBody?: never;
       responses: {
-        /** @description Memory marked as outdated */
+        /** @description Memory entry with full content */
         200: {
           headers: {
             [name: string]: unknown;
@@ -1283,6 +1076,7 @@ export interface paths {
               content: string;
               /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
               fullContent: string | null;
+              hasFullContent: boolean;
               /** @description Only if you genuinely associate an emotion with this memory entry */
               emotion: string | null;
               /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
@@ -1363,13 +1157,15 @@ export interface paths {
         };
       };
     };
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
     patch?: never;
     trace?: never;
   };
-  "/api/memories/{memoryId}": {
+  "/api/memories/{memoryId}/outdate": {
     parameters: {
       query?: never;
       header?: never;
@@ -1378,103 +1174,7 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    post?: never;
-    /** Permanently delete a memory */
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          memoryId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Memory deleted */
-        204: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Validation error */
-        400: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Unauthorized — missing or invalid bearer token */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Resource not found */
-        404: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-        /** @description Rate limit exceeded */
-        429: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": {
-              error: string;
-              details?: {
-                path: string;
-                message: string;
-              }[];
-            };
-          };
-        };
-      };
-    };
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/memories/{memoryId}/reactivate": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    /** Un-forget a memory (clear outdatedAt) */
+    /** Mark a memory as outdated */
     post: {
       parameters: {
         query?: never;
@@ -1486,7 +1186,7 @@ export interface paths {
       };
       requestBody?: never;
       responses: {
-        /** @description Memory reactivated */
+        /** @description Memory marked as outdated */
         200: {
           headers: {
             [name: string]: unknown;
@@ -1497,8 +1197,7 @@ export interface paths {
               id: string;
               /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
               content: string;
-              /** @description Optional full document you want to associate, e.g. a conversation transcript or detailed notes. */
-              fullContent: string | null;
+              hasFullContent: boolean;
               /** @description Only if you genuinely associate an emotion with this memory entry */
               emotion: string | null;
               /** @description How much this memory shapes who you are. 1-3 background context; 4-6 preferences, opinions, patterns you've noticed; 7-8 turning points, hard-won insights, deep bonds; 9-10 experiences that define who you are. */
@@ -2242,18 +1941,21 @@ export interface paths {
                   id: string;
                   /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                   content: string;
+                  hasFullContent: boolean;
                 }[];
                 recentMemories: {
                   /** Format: uuid */
                   id: string;
                   /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                   content: string;
+                  hasFullContent: boolean;
                 }[];
                 recentJournals: {
                   /** Format: uuid */
                   id: string;
                   /** @description A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now. */
                   content: string;
+                  hasFullContent: boolean;
                 }[];
               } | null;
               relations: {

@@ -62,6 +62,11 @@ Update a relation (partial — unset fields are preserved)
 Forget a memory that is no longer true — wrong, outdated, or superseded
 - <id>: Memory UUID to forget
 
+### get-full-memory
+
+Retrieve full content of a memory by ID
+- <id>: Memory UUID to retrieve
+
 ### load-context
 
 Output the full soul state as compact markdown for context injection
