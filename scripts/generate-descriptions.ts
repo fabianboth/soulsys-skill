@@ -92,6 +92,8 @@ const descriptions = {
     name: getDescription(identity.req, identity.res, "name"),
     vibe: getDescription(identity.req, identity.res, "vibe"),
     description: getDescription(identity.req, identity.res, "description"),
+    creature: getDescription(identity.req, identity.res, "creature"),
+    communicationStyle: getDescription(identity.req, identity.res, "communicationStyle"),
   },
   APPEARANCE_DESCRIPTIONS: {
     emoji: getNestedDescription(identity.req, identity.res, "appearance", "emoji"),

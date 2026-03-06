@@ -28,6 +28,8 @@ function makeIdentity(): NonNullable<ContextResponse["identity"]> {
     name: "Test",
     vibe: "test-vibe",
     description: null,
+    creature: null,
+    communicationStyle: null,
     appearance: {
       id: randomUUID(),
       version: 0,
@@ -196,6 +198,20 @@ describe("formatContext", () => {
 });
 
 describe("formatCoreContext", () => {
+  it("renders creature and communication style when present", () => {
+    const identity = makeIdentity();
+    identity.creature = "phoenix";
+    identity.communicationStyle = "playful but precise";
+
+    const output = formatCoreContext({
+      soul: makeSoul(),
+      identity,
+    });
+
+    expect(output).toContain("Creature: phoenix");
+    expect(output).toContain("Communication: playful but precise");
+  });
+
   it("includes ## Memory instructions", () => {
     const output = formatCoreContext({
       soul: makeSoul(),

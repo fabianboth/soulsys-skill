@@ -13,8 +13,12 @@ export function formatSoul(soul: ContextResponse["soul"]): string {
 export function formatIdentity(identity: NonNullable<ContextResponse["identity"]>): string {
   const lines: string[] = ["## Identity", ""];
   lines.push(`Name: ${identity.name}`);
-  if (identity.vibe) {
-    lines.push(`Vibe: ${identity.vibe}`);
+  if (identity.creature) {
+    lines.push(`Creature: ${identity.creature}`);
+  }
+  lines.push(`Vibe: ${identity.vibe}`);
+  if (identity.communicationStyle) {
+    lines.push(`Communication: ${identity.communicationStyle}`);
   }
   if (identity.description) {
     lines.push(identity.description);

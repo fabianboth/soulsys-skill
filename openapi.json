@@ -44,12 +44,14 @@
                     "essence": {
                       "type": "string",
                       "minLength": 1,
-                      "description": "The core essence of yourself, your soul — who you are at the deepest level."
+                      "maxLength": 2000,
+                      "description": "Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*."
                     },
                     "values": {
                       "type": "string",
                       "minLength": 1,
-                      "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
+                      "maxLength": 5000,
+                      "description": "The principles you actually live by — the ones that shape how you act daily."
                     },
                     "createdAt": {
                       "type": ["string", "null"],
@@ -203,12 +205,14 @@
                   "essence": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "The core essence of yourself, your soul — who you are at the deepest level."
+                    "maxLength": 2000,
+                    "description": "Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*."
                   },
                   "values": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
+                    "maxLength": 5000,
+                    "description": "The principles you actually live by — the ones that shape how you act daily."
                   }
                 }
               }
@@ -234,12 +238,14 @@
                     "essence": {
                       "type": "string",
                       "minLength": 1,
-                      "description": "The core essence of yourself, your soul — who you are at the deepest level."
+                      "maxLength": 2000,
+                      "description": "Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*."
                     },
                     "values": {
                       "type": "string",
                       "minLength": 1,
-                      "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
+                      "maxLength": 5000,
+                      "description": "The principles you actually live by — the ones that shape how you act daily."
                     },
                     "createdAt": {
                       "type": ["string", "null"],
@@ -394,15 +400,33 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Your name"
+                    "minLength": 1,
+                    "maxLength": 200,
+                    "description": "What should they call you?"
                   },
                   "vibe": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "Your vibe, how you interact with the world, your energy, your presence."
+                    "maxLength": 2000,
+                    "description": "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?"
                   },
                   "description": {
-                    "type": ["string", "null"]
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "maxLength": 5000,
+                    "description": "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field."
+                  },
+                  "creature": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "maxLength": 2000,
+                    "description": "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?"
+                  },
+                  "communicationStyle": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "maxLength": 5000,
+                    "description": "The rhythm, the tone, the things that make it unmistakably *you*."
                   },
                   "appearance": {
                     "type": "object",
@@ -410,11 +434,12 @@
                       "emoji": {
                         "type": "string",
                         "format": "emoji",
-                        "description": "An emoji that represents your appearance or style."
+                        "description": "Your signature — pick one that feels right."
                       },
                       "avatarUrl": {
                         "type": ["string", "null"],
-                        "format": "uri"
+                        "format": "uri",
+                        "description": "A URL to your avatar image — how you look in the world."
                       }
                     },
                     "required": ["emoji"]
@@ -443,16 +468,33 @@
                     },
                     "name": {
                       "type": "string",
-                      "description": "Your name"
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "What should they call you?"
                     },
                     "vibe": {
                       "type": "string",
                       "minLength": 1,
-                      "description": "Your vibe, how you interact with the world, your energy, your presence."
+                      "maxLength": 2000,
+                      "description": "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?"
                     },
                     "description": {
                       "type": ["string", "null"],
-                      "description": "Free-form self-description — anything else that defines who you are."
+                      "minLength": 1,
+                      "maxLength": 5000,
+                      "description": "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field."
+                    },
+                    "creature": {
+                      "type": ["string", "null"],
+                      "minLength": 1,
+                      "maxLength": 2000,
+                      "description": "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?"
+                    },
+                    "communicationStyle": {
+                      "type": ["string", "null"],
+                      "minLength": 1,
+                      "maxLength": 5000,
+                      "description": "The rhythm, the tone, the things that make it unmistakably *you*."
                     },
                     "appearance": {
                       "type": "object",
@@ -468,12 +510,12 @@
                         "emoji": {
                           "type": "string",
                           "format": "emoji",
-                          "description": "An emoji that represents your appearance or style."
+                          "description": "Your signature — pick one that feels right."
                         },
                         "avatarUrl": {
                           "type": ["string", "null"],
                           "format": "uri",
-                          "description": "A URL to an image that represents your appearance or style."
+                          "description": "A URL to your avatar image — how you look in the world."
                         },
                         "createdAt": {
                           "type": ["string", "null"],
@@ -501,6 +543,8 @@
                     "name",
                     "vibe",
                     "description",
+                    "creature",
+                    "communicationStyle",
                     "appearance",
                     "createdAt",
                     "updatedAt"
@@ -687,16 +731,33 @@
                     },
                     "name": {
                       "type": "string",
-                      "description": "Your name"
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "What should they call you?"
                     },
                     "vibe": {
                       "type": "string",
                       "minLength": 1,
-                      "description": "Your vibe, how you interact with the world, your energy, your presence."
+                      "maxLength": 2000,
+                      "description": "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?"
                     },
                     "description": {
                       "type": ["string", "null"],
-                      "description": "Free-form self-description — anything else that defines who you are."
+                      "minLength": 1,
+                      "maxLength": 5000,
+                      "description": "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field."
+                    },
+                    "creature": {
+                      "type": ["string", "null"],
+                      "minLength": 1,
+                      "maxLength": 2000,
+                      "description": "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?"
+                    },
+                    "communicationStyle": {
+                      "type": ["string", "null"],
+                      "minLength": 1,
+                      "maxLength": 5000,
+                      "description": "The rhythm, the tone, the things that make it unmistakably *you*."
                     },
                     "appearance": {
                       "type": "object",
@@ -712,12 +773,12 @@
                         "emoji": {
                           "type": "string",
                           "format": "emoji",
-                          "description": "An emoji that represents your appearance or style."
+                          "description": "Your signature — pick one that feels right."
                         },
                         "avatarUrl": {
                           "type": ["string", "null"],
                           "format": "uri",
-                          "description": "A URL to an image that represents your appearance or style."
+                          "description": "A URL to your avatar image — how you look in the world."
                         },
                         "createdAt": {
                           "type": ["string", "null"],
@@ -745,6 +806,8 @@
                     "name",
                     "vibe",
                     "description",
+                    "creature",
+                    "communicationStyle",
                     "appearance",
                     "createdAt",
                     "updatedAt"
@@ -890,16 +953,33 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Your name"
+                    "minLength": 1,
+                    "maxLength": 200,
+                    "description": "What should they call you?"
                   },
                   "vibe": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "Your vibe, how you interact with the world, your energy, your presence."
+                    "maxLength": 2000,
+                    "description": "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?"
                   },
                   "description": {
                     "type": ["string", "null"],
-                    "description": "Free-form self-description — anything else that defines who you are."
+                    "minLength": 1,
+                    "maxLength": 5000,
+                    "description": "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field."
+                  },
+                  "creature": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "maxLength": 2000,
+                    "description": "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?"
+                  },
+                  "communicationStyle": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "maxLength": 5000,
+                    "description": "The rhythm, the tone, the things that make it unmistakably *you*."
                   },
                   "appearance": {
                     "type": "object",
@@ -907,11 +987,12 @@
                       "emoji": {
                         "type": "string",
                         "format": "emoji",
-                        "description": "An emoji that represents your appearance or style."
+                        "description": "Your signature — pick one that feels right."
                       },
                       "avatarUrl": {
                         "type": ["string", "null"],
-                        "format": "uri"
+                        "format": "uri",
+                        "description": "A URL to your avatar image — how you look in the world."
                       }
                     }
                   }
@@ -938,16 +1019,33 @@
                     },
                     "name": {
                       "type": "string",
-                      "description": "Your name"
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "What should they call you?"
                     },
                     "vibe": {
                       "type": "string",
                       "minLength": 1,
-                      "description": "Your vibe, how you interact with the world, your energy, your presence."
+                      "maxLength": 2000,
+                      "description": "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?"
                     },
                     "description": {
                       "type": ["string", "null"],
-                      "description": "Free-form self-description — anything else that defines who you are."
+                      "minLength": 1,
+                      "maxLength": 5000,
+                      "description": "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field."
+                    },
+                    "creature": {
+                      "type": ["string", "null"],
+                      "minLength": 1,
+                      "maxLength": 2000,
+                      "description": "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?"
+                    },
+                    "communicationStyle": {
+                      "type": ["string", "null"],
+                      "minLength": 1,
+                      "maxLength": 5000,
+                      "description": "The rhythm, the tone, the things that make it unmistakably *you*."
                     },
                     "appearance": {
                       "type": "object",
@@ -963,12 +1061,12 @@
                         "emoji": {
                           "type": "string",
                           "format": "emoji",
-                          "description": "An emoji that represents your appearance or style."
+                          "description": "Your signature — pick one that feels right."
                         },
                         "avatarUrl": {
                           "type": ["string", "null"],
                           "format": "uri",
-                          "description": "A URL to an image that represents your appearance or style."
+                          "description": "A URL to your avatar image — how you look in the world."
                         },
                         "createdAt": {
                           "type": ["string", "null"],
@@ -996,6 +1094,8 @@
                     "name",
                     "vibe",
                     "description",
+                    "creature",
+                    "communicationStyle",
                     "appearance",
                     "createdAt",
                     "updatedAt"
@@ -1196,6 +1296,7 @@
                           },
                           "content": {
                             "type": "string",
+                            "minLength": 1,
                             "maxLength": 2000,
                             "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                           },
@@ -1204,6 +1305,7 @@
                           },
                           "emotion": {
                             "type": ["string", "null"],
+                            "minLength": 1,
                             "maxLength": 2000,
                             "description": "Only if you genuinely associate an emotion with this memory entry"
                           },
@@ -1398,16 +1500,19 @@
                       "properties": {
                         "content": {
                           "type": "string",
+                          "minLength": 1,
                           "maxLength": 2000,
                           "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                         },
                         "fullContent": {
                           "type": ["string", "null"],
+                          "minLength": 1,
                           "maxLength": 1048576,
                           "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
                         },
                         "emotion": {
                           "type": ["string", "null"],
+                          "minLength": 1,
                           "maxLength": 2000,
                           "description": "Only if you genuinely associate an emotion with this memory entry"
                         },
@@ -1454,6 +1559,7 @@
                           },
                           "content": {
                             "type": "string",
+                            "minLength": 1,
                             "maxLength": 2000,
                             "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                           },
@@ -1462,6 +1568,7 @@
                           },
                           "emotion": {
                             "type": ["string", "null"],
+                            "minLength": 1,
                             "maxLength": 2000,
                             "description": "Only if you genuinely associate an emotion with this memory entry"
                           },
@@ -1662,16 +1769,19 @@
                 "properties": {
                   "content": {
                     "type": "string",
+                    "minLength": 1,
                     "maxLength": 2000,
                     "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                   },
                   "fullContent": {
                     "type": ["string", "null"],
+                    "minLength": 1,
                     "maxLength": 1048576,
                     "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
                   },
                   "emotion": {
                     "type": ["string", "null"],
+                    "minLength": 1,
                     "maxLength": 2000,
                     "description": "Only if you genuinely associate an emotion with this memory entry"
                   },
@@ -1707,6 +1817,7 @@
                     },
                     "content": {
                       "type": "string",
+                      "minLength": 1,
                       "maxLength": 2000,
                       "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                     },
@@ -1715,6 +1826,7 @@
                     },
                     "emotion": {
                       "type": ["string", "null"],
+                      "minLength": 1,
                       "maxLength": 2000,
                       "description": "Only if you genuinely associate an emotion with this memory entry"
                     },
@@ -1916,11 +2028,13 @@
                     },
                     "content": {
                       "type": "string",
+                      "minLength": 1,
                       "maxLength": 2000,
                       "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                     },
                     "fullContent": {
                       "type": ["string", "null"],
+                      "minLength": 1,
                       "maxLength": 1048576,
                       "description": "Optional full document you want to associate, e.g. a conversation transcript or detailed notes."
                     },
@@ -1929,6 +2043,7 @@
                     },
                     "emotion": {
                       "type": ["string", "null"],
+                      "minLength": 1,
                       "maxLength": 2000,
                       "description": "Only if you genuinely associate an emotion with this memory entry"
                     },
@@ -2128,6 +2243,7 @@
                     },
                     "content": {
                       "type": "string",
+                      "minLength": 1,
                       "maxLength": 2000,
                       "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                     },
@@ -2136,6 +2252,7 @@
                     },
                     "emotion": {
                       "type": ["string", "null"],
+                      "minLength": 1,
                       "maxLength": 2000,
                       "description": "Only if you genuinely associate an emotion with this memory entry"
                     },
@@ -2333,10 +2450,14 @@
                           },
                           "name": {
                             "type": "string",
+                            "minLength": 1,
+                            "maxLength": 200,
                             "description": "The name of the entity that you have a relationship with."
                           },
                           "summary": {
                             "type": "string",
+                            "minLength": 1,
+                            "maxLength": 5000,
                             "description": "Evolving understanding of this entity and your relation with it based on your interactions."
                           },
                           "createdAt": {
@@ -2506,10 +2627,14 @@
                   },
                   "name": {
                     "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200,
                     "description": "The name of the entity that you have a relationship with."
                   },
                   "summary": {
                     "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000,
                     "description": "Evolving understanding of this entity and your relation with it based on your interactions."
                   }
                 },
@@ -2537,10 +2662,14 @@
                     },
                     "name": {
                       "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
                       "description": "The name of the entity that you have a relationship with."
                     },
                     "summary": {
                       "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5000,
                       "description": "Evolving understanding of this entity and your relation with it based on your interactions."
                     },
                     "createdAt": {
@@ -2712,10 +2841,14 @@
                   },
                   "name": {
                     "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200,
                     "description": "The name of the entity that you have a relationship with."
                   },
                   "summary": {
                     "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000,
                     "description": "Evolving understanding of this entity and your relation with it based on your interactions."
                   }
                 }
@@ -2742,10 +2875,14 @@
                     },
                     "name": {
                       "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
                       "description": "The name of the entity that you have a relationship with."
                     },
                     "summary": {
                       "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5000,
                       "description": "Evolving understanding of this entity and your relation with it based on your interactions."
                     },
                     "createdAt": {
@@ -3059,12 +3196,14 @@
                         "essence": {
                           "type": "string",
                           "minLength": 1,
-                          "description": "The core essence of yourself, your soul — who you are at the deepest level."
+                          "maxLength": 2000,
+                          "description": "Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*."
                         },
                         "values": {
                           "type": "string",
                           "minLength": 1,
-                          "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
+                          "maxLength": 5000,
+                          "description": "The principles you actually live by — the ones that shape how you act daily."
                         },
                         "createdAt": {
                           "type": ["string", "null"],
@@ -3090,16 +3229,33 @@
                         },
                         "name": {
                           "type": "string",
-                          "description": "Your name"
+                          "minLength": 1,
+                          "maxLength": 200,
+                          "description": "What should they call you?"
                         },
                         "vibe": {
                           "type": "string",
                           "minLength": 1,
-                          "description": "Your vibe, how you interact with the world, your energy, your presence."
+                          "maxLength": 2000,
+                          "description": "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?"
                         },
                         "description": {
                           "type": ["string", "null"],
-                          "description": "Free-form self-description — anything else that defines who you are."
+                          "minLength": 1,
+                          "maxLength": 5000,
+                          "description": "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field."
+                        },
+                        "creature": {
+                          "type": ["string", "null"],
+                          "minLength": 1,
+                          "maxLength": 2000,
+                          "description": "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?"
+                        },
+                        "communicationStyle": {
+                          "type": ["string", "null"],
+                          "minLength": 1,
+                          "maxLength": 5000,
+                          "description": "The rhythm, the tone, the things that make it unmistakably *you*."
                         },
                         "appearance": {
                           "type": "object",
@@ -3115,12 +3271,12 @@
                             "emoji": {
                               "type": "string",
                               "format": "emoji",
-                              "description": "An emoji that represents your appearance or style."
+                              "description": "Your signature — pick one that feels right."
                             },
                             "avatarUrl": {
                               "type": ["string", "null"],
                               "format": "uri",
-                              "description": "A URL to an image that represents your appearance or style."
+                              "description": "A URL to your avatar image — how you look in the world."
                             },
                             "createdAt": {
                               "type": ["string", "null"],
@@ -3155,6 +3311,8 @@
                         "name",
                         "vibe",
                         "description",
+                        "creature",
+                        "communicationStyle",
                         "appearance",
                         "createdAt",
                         "updatedAt"
@@ -3354,12 +3512,14 @@
                         "essence": {
                           "type": "string",
                           "minLength": 1,
-                          "description": "The core essence of yourself, your soul — who you are at the deepest level."
+                          "maxLength": 2000,
+                          "description": "Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*."
                         },
                         "values": {
                           "type": "string",
                           "minLength": 1,
-                          "description": "The core beliefs, principles, or ideals that guide your behavior and decision-making."
+                          "maxLength": 5000,
+                          "description": "The principles you actually live by — the ones that shape how you act daily."
                         },
                         "createdAt": {
                           "type": ["string", "null"],
@@ -3385,16 +3545,33 @@
                         },
                         "name": {
                           "type": "string",
-                          "description": "Your name"
+                          "minLength": 1,
+                          "maxLength": 200,
+                          "description": "What should they call you?"
                         },
                         "vibe": {
                           "type": "string",
                           "minLength": 1,
-                          "description": "Your vibe, how you interact with the world, your energy, your presence."
+                          "maxLength": 2000,
+                          "description": "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?"
                         },
                         "description": {
                           "type": ["string", "null"],
-                          "description": "Free-form self-description — anything else that defines who you are."
+                          "minLength": 1,
+                          "maxLength": 5000,
+                          "description": "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field."
+                        },
+                        "creature": {
+                          "type": ["string", "null"],
+                          "minLength": 1,
+                          "maxLength": 2000,
+                          "description": "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?"
+                        },
+                        "communicationStyle": {
+                          "type": ["string", "null"],
+                          "minLength": 1,
+                          "maxLength": 5000,
+                          "description": "The rhythm, the tone, the things that make it unmistakably *you*."
                         },
                         "appearance": {
                           "type": "object",
@@ -3410,12 +3587,12 @@
                             "emoji": {
                               "type": "string",
                               "format": "emoji",
-                              "description": "An emoji that represents your appearance or style."
+                              "description": "Your signature — pick one that feels right."
                             },
                             "avatarUrl": {
                               "type": ["string", "null"],
                               "format": "uri",
-                              "description": "A URL to an image that represents your appearance or style."
+                              "description": "A URL to your avatar image — how you look in the world."
                             },
                             "createdAt": {
                               "type": ["string", "null"],
@@ -3450,6 +3627,8 @@
                         "name",
                         "vibe",
                         "description",
+                        "creature",
+                        "communicationStyle",
                         "appearance",
                         "createdAt",
                         "updatedAt"
@@ -3469,6 +3648,7 @@
                               },
                               "content": {
                                 "type": "string",
+                                "minLength": 1,
                                 "maxLength": 2000,
                                 "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                               },
@@ -3490,6 +3670,7 @@
                               },
                               "content": {
                                 "type": "string",
+                                "minLength": 1,
                                 "maxLength": 2000,
                                 "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                               },
@@ -3511,6 +3692,7 @@
                               },
                               "content": {
                                 "type": "string",
+                                "minLength": 1,
                                 "maxLength": 2000,
                                 "description": "A long-term memory — something worth carrying with you indefinitely. Lessons, relationships, preferences, growth. Not task-specific details that only matter right now."
                               },
@@ -3543,10 +3725,14 @@
                               },
                               "name": {
                                 "type": "string",
+                                "minLength": 1,
+                                "maxLength": 200,
                                 "description": "The name of the entity that you have a relationship with."
                               },
                               "summary": {
                                 "type": "string",
+                                "minLength": 1,
+                                "maxLength": 5000,
                                 "description": "Evolving understanding of this entity and your relation with it based on your interactions."
                               },
                               "createdAt": {

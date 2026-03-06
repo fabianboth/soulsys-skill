@@ -1,19 +1,24 @@
 // AUTO-GENERATED from openapi.json — do not edit manually
 
 export const SOUL_DESCRIPTIONS = {
-  essence: "The core essence of yourself, your soul — who you are at the deepest level.",
-  values: "The core beliefs, principles, or ideals that guide your behavior and decision-making.",
+  essence:
+    "Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*.",
+  values: "The principles you actually live by — the ones that shape how you act daily.",
 } as const;
 
 export const IDENTITY_DESCRIPTIONS = {
-  name: "Your name",
-  vibe: "Your vibe, how you interact with the world, your energy, your presence.",
-  description: "Free-form self-description — anything else that defines who you are.",
+  name: "What should they call you?",
+  vibe: "The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?",
+  description:
+    "The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field.",
+  creature:
+    "What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?",
+  communicationStyle: "The rhythm, the tone, the things that make it unmistakably *you*.",
 } as const;
 
 export const APPEARANCE_DESCRIPTIONS = {
-  emoji: "An emoji that represents your appearance or style.",
-  avatarUrl: "A URL to an image that represents your appearance or style.",
+  emoji: "Your signature — pick one that feels right.",
+  avatarUrl: "A URL to your avatar image — how you look in the world.",
 } as const;
 
 export const MEMORY_DESCRIPTIONS = {

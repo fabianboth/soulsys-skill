@@ -15,6 +15,8 @@ export function register(program: Command): Command {
     .requiredOption("--name <name>", IDENTITY_DESCRIPTIONS.name)
     .requiredOption("--vibe <text>", IDENTITY_DESCRIPTIONS.vibe)
     .option("--description <text>", IDENTITY_DESCRIPTIONS.description)
+    .option("--creature <text>", IDENTITY_DESCRIPTIONS.creature)
+    .option("--communication-style <text>", IDENTITY_DESCRIPTIONS.communicationStyle)
     .option("--emoji <emoji>", APPEARANCE_DESCRIPTIONS.emoji)
     .option("--avatar-url <url>", APPEARANCE_DESCRIPTIONS.avatarUrl)
     .action(
@@ -22,11 +24,14 @@ export function register(program: Command): Command {
         name: string;
         vibe: string;
         description?: string;
+        creature?: string;
+        communicationStyle?: string;
         emoji?: string;
         avatarUrl?: string;
       }) => {
         try {
-          const { name, vibe, description, emoji, avatarUrl } = options;
+          const { name, vibe, description, creature, communicationStyle, emoji, avatarUrl } =
+            options;
 
           const appearance =
             emoji !== undefined || avatarUrl !== undefined
@@ -35,7 +40,7 @@ export function register(program: Command): Command {
 
           const { client } = createApiClient(resolveConfig());
           await client.POST("/api/identity", {
-            body: { name, vibe, description, appearance },
+            body: { name, vibe, description, creature, communicationStyle, appearance },
           });
           confirm("Identity created");
         } catch (error) {

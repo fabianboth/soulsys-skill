@@ -23,17 +23,19 @@ Usage: `soulsys <command> [positional-arg] [--flag value]`
 ### update-soul
 
 Update soul fields
-- --essence <text>: The core essence of yourself, your soul — who you are at the deepest level.
-- --values <text>: The core beliefs, principles, or ideals that guide your behavior and decision-making.
+- --essence <text>: Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*.
+- --values <text>: The principles you actually live by — the ones that shape how you act daily.
 
 ### update-identity
 
 Update identity fields (partial — unset fields are preserved)
-- --name <name>: Your name
-- --vibe <text>: Your vibe, how you interact with the world, your energy, your presence.
-- --description <text>: Free-form self-description — anything else that defines who you are.
-- --emoji <emoji>: An emoji that represents your appearance or style.
-- --avatar-url <url>: A URL to an image that represents your appearance or style.
+- --name <name>: What should they call you?
+- --vibe <text>: The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet?
+- --description <text>: The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field.
+- --creature <text>: What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder?
+- --communication-style <text>: The rhythm, the tone, the things that make it unmistakably *you*.
+- --emoji <emoji>: Your signature — pick one that feels right.
+- --avatar-url <url>: A URL to your avatar image — how you look in the world.
 
 ### add-memory
 

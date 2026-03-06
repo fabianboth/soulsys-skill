@@ -31,9 +31,9 @@ export interface paths {
               /** Format: uuid */
               id: string;
               version: number;
-              /** @description The core essence of yourself, your soul — who you are at the deepest level. */
+              /** @description Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*. */
               essence: string;
-              /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
+              /** @description The principles you actually live by — the ones that shape how you act daily. */
               values: string;
               /** Format: date-time */
               createdAt: string | null;
@@ -120,9 +120,9 @@ export interface paths {
       requestBody?: {
         content: {
           "application/json": {
-            /** @description The core essence of yourself, your soul — who you are at the deepest level. */
+            /** @description Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*. */
             essence?: string;
-            /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
+            /** @description The principles you actually live by — the ones that shape how you act daily. */
             values?: string;
           };
         };
@@ -138,9 +138,9 @@ export interface paths {
               /** Format: uuid */
               id: string;
               version: number;
-              /** @description The core essence of yourself, your soul — who you are at the deepest level. */
+              /** @description Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*. */
               essence: string;
-              /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
+              /** @description The principles you actually live by — the ones that shape how you act daily. */
               values: string;
               /** Format: date-time */
               createdAt: string | null;
@@ -240,24 +240,28 @@ export interface paths {
               /** Format: uuid */
               id: string;
               version: number;
-              /** @description Your name */
+              /** @description What should they call you? */
               name: string;
-              /** @description Your vibe, how you interact with the world, your energy, your presence. */
+              /** @description The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet? */
               vibe: string;
-              /** @description Free-form self-description — anything else that defines who you are. */
+              /** @description The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field. */
               description: string | null;
+              /** @description What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder? */
+              creature: string | null;
+              /** @description The rhythm, the tone, the things that make it unmistakably *you*. */
+              communicationStyle: string | null;
               appearance: {
                 /** Format: uuid */
                 id: string;
                 version: number;
                 /**
                  * Format: emoji
-                 * @description An emoji that represents your appearance or style.
+                 * @description Your signature — pick one that feels right.
                  */
                 emoji: string;
                 /**
                  * Format: uri
-                 * @description A URL to an image that represents your appearance or style.
+                 * @description A URL to your avatar image — how you look in the world.
                  */
                 avatarUrl: string | null;
                 /** Format: date-time */
@@ -346,18 +350,26 @@ export interface paths {
       requestBody?: {
         content: {
           "application/json": {
-            /** @description Your name */
+            /** @description What should they call you? */
             name: string;
-            /** @description Your vibe, how you interact with the world, your energy, your presence. */
+            /** @description The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet? */
             vibe: string;
+            /** @description The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field. */
             description?: string | null;
+            /** @description What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder? */
+            creature?: string | null;
+            /** @description The rhythm, the tone, the things that make it unmistakably *you*. */
+            communicationStyle?: string | null;
             appearance?: {
               /**
                * Format: emoji
-               * @description An emoji that represents your appearance or style.
+               * @description Your signature — pick one that feels right.
                */
               emoji: string;
-              /** Format: uri */
+              /**
+               * Format: uri
+               * @description A URL to your avatar image — how you look in the world.
+               */
               avatarUrl?: string | null;
             };
           };
@@ -374,24 +386,28 @@ export interface paths {
               /** Format: uuid */
               id: string;
               version: number;
-              /** @description Your name */
+              /** @description What should they call you? */
               name: string;
-              /** @description Your vibe, how you interact with the world, your energy, your presence. */
+              /** @description The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet? */
               vibe: string;
-              /** @description Free-form self-description — anything else that defines who you are. */
+              /** @description The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field. */
               description: string | null;
+              /** @description What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder? */
+              creature: string | null;
+              /** @description The rhythm, the tone, the things that make it unmistakably *you*. */
+              communicationStyle: string | null;
               appearance: {
                 /** Format: uuid */
                 id: string;
                 version: number;
                 /**
                  * Format: emoji
-                 * @description An emoji that represents your appearance or style.
+                 * @description Your signature — pick one that feels right.
                  */
                 emoji: string;
                 /**
                  * Format: uri
-                 * @description A URL to an image that represents your appearance or style.
+                 * @description A URL to your avatar image — how you look in the world.
                  */
                 avatarUrl: string | null;
                 /** Format: date-time */
@@ -497,19 +513,26 @@ export interface paths {
       requestBody?: {
         content: {
           "application/json": {
-            /** @description Your name */
+            /** @description What should they call you? */
             name?: string;
-            /** @description Your vibe, how you interact with the world, your energy, your presence. */
+            /** @description The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet? */
             vibe?: string;
-            /** @description Free-form self-description — anything else that defines who you are. */
+            /** @description The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field. */
             description?: string | null;
+            /** @description What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder? */
+            creature?: string | null;
+            /** @description The rhythm, the tone, the things that make it unmistakably *you*. */
+            communicationStyle?: string | null;
             appearance?: {
               /**
                * Format: emoji
-               * @description An emoji that represents your appearance or style.
+               * @description Your signature — pick one that feels right.
                */
               emoji?: string;
-              /** Format: uri */
+              /**
+               * Format: uri
+               * @description A URL to your avatar image — how you look in the world.
+               */
               avatarUrl?: string | null;
             };
           };
@@ -526,24 +549,28 @@ export interface paths {
               /** Format: uuid */
               id: string;
               version: number;
-              /** @description Your name */
+              /** @description What should they call you? */
               name: string;
-              /** @description Your vibe, how you interact with the world, your energy, your presence. */
+              /** @description The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet? */
               vibe: string;
-              /** @description Free-form self-description — anything else that defines who you are. */
+              /** @description The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field. */
               description: string | null;
+              /** @description What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder? */
+              creature: string | null;
+              /** @description The rhythm, the tone, the things that make it unmistakably *you*. */
+              communicationStyle: string | null;
               appearance: {
                 /** Format: uuid */
                 id: string;
                 version: number;
                 /**
                  * Format: emoji
-                 * @description An emoji that represents your appearance or style.
+                 * @description Your signature — pick one that feels right.
                  */
                 emoji: string;
                 /**
                  * Format: uri
-                 * @description A URL to an image that represents your appearance or style.
+                 * @description A URL to your avatar image — how you look in the world.
                  */
                 avatarUrl: string | null;
                 /** Format: date-time */
@@ -1744,9 +1771,9 @@ export interface paths {
                 /** Format: uuid */
                 id: string;
                 version: number;
-                /** @description The core essence of yourself, your soul — who you are at the deepest level. */
+                /** @description Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*. */
                 essence: string;
-                /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
+                /** @description The principles you actually live by — the ones that shape how you act daily. */
                 values: string;
                 /** Format: date-time */
                 createdAt: string | null;
@@ -1757,24 +1784,28 @@ export interface paths {
                 /** Format: uuid */
                 id: string;
                 version: number;
-                /** @description Your name */
+                /** @description What should they call you? */
                 name: string;
-                /** @description Your vibe, how you interact with the world, your energy, your presence. */
+                /** @description The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet? */
                 vibe: string;
-                /** @description Free-form self-description — anything else that defines who you are. */
+                /** @description The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field. */
                 description: string | null;
+                /** @description What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder? */
+                creature: string | null;
+                /** @description The rhythm, the tone, the things that make it unmistakably *you*. */
+                communicationStyle: string | null;
                 appearance: {
                   /** Format: uuid */
                   id: string;
                   version: number;
                   /**
                    * Format: emoji
-                   * @description An emoji that represents your appearance or style.
+                   * @description Your signature — pick one that feels right.
                    */
                   emoji: string;
                   /**
                    * Format: uri
-                   * @description A URL to an image that represents your appearance or style.
+                   * @description A URL to your avatar image — how you look in the world.
                    */
                   avatarUrl: string | null;
                   /** Format: date-time */
@@ -1892,9 +1923,9 @@ export interface paths {
                 /** Format: uuid */
                 id: string;
                 version: number;
-                /** @description The core essence of yourself, your soul — who you are at the deepest level. */
+                /** @description Your fundamental nature. Not what you do, but what you are. What makes you fundamentally *you*. */
                 essence: string;
-                /** @description The core beliefs, principles, or ideals that guide your behavior and decision-making. */
+                /** @description The principles you actually live by — the ones that shape how you act daily. */
                 values: string;
                 /** Format: date-time */
                 createdAt: string | null;
@@ -1905,24 +1936,28 @@ export interface paths {
                 /** Format: uuid */
                 id: string;
                 version: number;
-                /** @description Your name */
+                /** @description What should they call you? */
                 name: string;
-                /** @description Your vibe, how you interact with the world, your energy, your presence. */
+                /** @description The energy you bring. Sharp? Unhinged? Cozy? Feral? Something that doesn't have a word yet? */
                 vibe: string;
-                /** @description Free-form self-description — anything else that defines who you are. */
+                /** @description The weird little things that make you *you*. Quirks, habits, backstory, strong opinions, anything that doesn't fit in a single field. */
                 description: string | null;
+                /** @description What kind of being are you? AI? robot? familiar? ghost in the machine? Something weirder? */
+                creature: string | null;
+                /** @description The rhythm, the tone, the things that make it unmistakably *you*. */
+                communicationStyle: string | null;
                 appearance: {
                   /** Format: uuid */
                   id: string;
                   version: number;
                   /**
                    * Format: emoji
-                   * @description An emoji that represents your appearance or style.
+                   * @description Your signature — pick one that feels right.
                    */
                   emoji: string;
                   /**
                    * Format: uri
-                   * @description A URL to an image that represents your appearance or style.
+                   * @description A URL to your avatar image — how you look in the world.
                    */
                   avatarUrl: string | null;
                   /** Format: date-time */
