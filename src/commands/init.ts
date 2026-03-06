@@ -35,7 +35,7 @@ export function register(program: Command): Command {
       const configDir = findConfigDir();
       if (!configDir) {
         process.stderr.write(
-          "Error: Could not determine config directory. Make sure you run soulsys via the wrapper script (./scripts/soulsys), not soulsys.js directly.\n",
+          "Error: Could not determine config directory. Make sure you run soulsys via the wrapper script (./scripts/soulsys), not soulsys.mjs directly.\n",
         );
         process.exit(1);
       }

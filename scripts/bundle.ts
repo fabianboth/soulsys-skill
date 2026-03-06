@@ -16,7 +16,7 @@ if (actualVersion !== expectedVersion) {
 const result = await Bun.build({
   entrypoints: [resolve(dir, "..", "src", "cli.ts")],
   outdir: resolve(dir, "..", "skills", "soulsys", "scripts"),
-  naming: "soulsys.js",
+  naming: "soulsys.mjs",
   target: "node",
   format: "esm",
   minify: true,
@@ -34,4 +34,4 @@ if (!result.success) {
 
 const output = result.outputs[0];
 const sizeKB = (output.size / 1024).toFixed(2);
-console.log(`Bundled ${result.outputs.length} file(s) — soulsys.js ${sizeKB} KB`);
+console.log(`Bundled ${result.outputs.length} file(s) — soulsys.mjs ${sizeKB} KB`);

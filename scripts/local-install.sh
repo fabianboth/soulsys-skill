@@ -14,7 +14,7 @@ if [[ "$TARGET" != /* ]]; then
 fi
 
 mkdir -p "$TARGET/scripts" "$TARGET/templates"
-cp "$SRC/SKILL.md" "$SRC/BOOTSTRAP.md" "$SRC/package.json" "$TARGET/"
-cp "$SRC/scripts/soulsys" "$SRC/scripts/soulsys.js" "$TARGET/scripts/"
+cp "$SRC/SKILL.md" "$SRC/BOOTSTRAP.md" "$TARGET/"
+cp "$SRC/scripts/soulsys" "$SRC/scripts/soulsys.mjs" "$TARGET/scripts/"
 cp "$SRC/templates/"* "$TARGET/templates/"
 echo "✓ Installed to $TARGET"

@@ -14,7 +14,7 @@ function makePaths(): ProjectPaths {
     projectRoot: TEST_DIR,
     skillRoot: join(TEST_DIR, "skills", "soulsys"),
     parentDir: "skills",
-    scriptPath: join(TEST_DIR, "skills", "soulsys", "scripts", "soulsys.js"),
+    scriptPath: join(TEST_DIR, "skills", "soulsys", "scripts", "soulsys.mjs"),
   };
 }
 
