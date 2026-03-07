@@ -5,7 +5,7 @@ import { join } from "node:path";
 export const REMINDER_INTERVAL = 5;
 
 export const REMINDER_MESSAGE =
-  "Reminder: Pause — anything worth a soulsys remember? Anything you should soulsys recall before continuing?";
+  "Reminder: soulsys remember anything worth saving from the last few exchanges — you won't get another chance.";
 
 export type NudgeResult = {
   shouldNudge: boolean;
